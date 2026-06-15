@@ -3,16 +3,26 @@
 > Houd dit bij aan het einde van elke Claude Code-sessie, zodat de volgende sessie (of een verse context) direct verder kan. Zelfde workflow als je toddler-games.
 
 ## Status (samenvatting)
-- **Fase:** Bouw deel 1 — **Blok B (ingestion) afgerond**. Geldige index lokaal gegenereerd + geverifieerd. PROGRESS-workflow ingericht.
-- **Laatst gewerkt aan:** PROGRESS-workflow (`/progress`-command + CLAUDE.md-sectie) na Blok B1–B7.
-- **Volgende stap:** Eerste commit + GitHub-repo pushen + Pages aanzetten op `gh-pages` (B6 live), dan **Blok C** (app-kern: Codable-modellen + index-download/cache). Blok A (Xcode-project) maakt de eigenaar zelf aan.
+- **Fase:** Bouw deel 2 — **Blok C1 afgerond** (Codable-modellen + index-download/cache). Blok B (ingestion) klaar.
+- **Laatst gewerkt aan:** C1 — `RecallAlert`/`RecallIndex`-modellen, `IndexService` (ETag/cache/fallback), `RecallStore`, minimale feed-UI, gebundelde fixture.
+- **Volgende stap:** GitHub-repo `recallradar` (publiek) pushen + Pages aanzetten op `gh-pages` (B6 live → echte index-URL), dan **Blok C2** (SwiftData-modellen + CloudKit).
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
-- [ ] Blok A — Xcode-project + capabilities (door eigenaar in Xcode)
-- [ ] Blok C — app-kern (Codable + download/cache)
+- [x] Blok A — Xcode-project scaffold (door eigenaar in Xcode) ✅
+- [ ] Blok C — app-kern: [x] C1 modellen+download/cache · [ ] C2 SwiftData · [ ] C3 feed · [ ] C4 detail
 
 ## Logboek (nieuwste boven)
+### 2026-06-15 (sessie 2 — Blok C1)
+- **C1 app-kern gebouwd** in `RecallRadar/RecallRadar/`:
+  - `Models/RecallAlert.swift` + `Models/RecallIndex.swift` — Codable, spiegelt exact het gepubliceerde schema; tolerante datum-decoder (date-only én ISO-datetime); URL-velden als String + computed `URL?` (één fout veld breekt nooit de hele decode).
+  - `Services/IndexService.swift` — actor: GET met `If-None-Match`/ETag, cache in `Caches/`, fallback-keten netwerk → cache → gebundelde fixture → lege index. Gooit nooit.
+  - `Services/RecallStore.swift` — `@Observable` laag (status + "laatst bijgewerkt").
+  - `ContentView.swift` — minimale verificatie-feed (volwaardige feed/filter = C3).
+  - `Resources/index.sample.json` — 24-alert fixture voor first-run/offline/preview.
+- **Geverifieerd:** Swift-modellen decoderen zowel de fixture als de **volledige live index (8.975 alerts)** zonder fouten; hele app type-checkt schoon tegen de iOS 26.5 SDK. Project gebruikt synchronized file groups → nieuwe bestanden zitten automatisch in de build.
+- **Index-URL** in `IndexService` staat op `https://jimmyrentmeester.github.io/recallradar/index.json` (placeholder tot Pages live is).
+
 ### 2026-06-15 (sessie 2 — PROGRESS-workflow)
 - PROGRESS-workflow ingericht: `.claude/commands/progress.md` (`/progress`) + verplichte sectie in `CLAUDE.md`. Vanaf nu PROGRESS bijwerken na elk afgerond blok / einde sessie.
 
