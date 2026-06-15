@@ -1,0 +1,16 @@
+{
+  "name": "recallradar-ingestion",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Recall Radar ingestion: haalt EU Safety Gate (OpenDataSoft) + NVWA op, normaliseert naar het RecallAlert-schema en publiceert een statische index.json (Blok B).",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "ingest": "node src/run.js",
+    "ingest:full": "node src/run.js --full",
+    "verify": "node src/sanity.js",
+    "test": "node --test"
+  }
+}

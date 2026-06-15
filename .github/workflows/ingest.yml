@@ -1,0 +1,57 @@
+name: Ingestion (Safety Gate + NVWA → index.json)
+
+# Blok B6 — dagelijkse cron die de index bouwt en naar de gh-pages branch publiceert.
+on:
+  schedule:
+    - cron: '0 4 * * *' # 04:00 UTC, 1×/dag
+  workflow_dispatch: {} # handmatig draaien vanuit de Actions-tab
+
+permissions:
+  contents: write # nodig om naar de gh-pages branch te pushen
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Vorige gepubliceerde index ophalen zodat incrementeel + fallback werken.
+      - name: Restore vorige index (gh-pages)
+        run: |
+          mkdir -p ingestion/public
+          if git fetch origin gh-pages --depth=1 2>/dev/null; then
+            git --work-tree=ingestion/public checkout origin/gh-pages -- index.json meta.json 2>/dev/null || true
+            git reset -q
+          fi
+          ls -la ingestion/public || true
+
+      - name: Tests
+        working-directory: ingestion
+        run: node --test
+
+      - name: Ingest (incrementeel; valt terug op vorige index bij bronfout)
+        working-directory: ingestion
+        run: node src/run.js
+
+      - name: Sanity-check
+        working-directory: ingestion
+        run: node src/sanity.js
+
+      - name: Publish → gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ingestion/public
+          publish_branch: gh-pages
+          keep_files: false
+          commit_message: 'B6: publiceer index (${{ github.run_number }})'
