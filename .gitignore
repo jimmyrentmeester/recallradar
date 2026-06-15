@@ -1,0 +1,10 @@
+.DS_Store
+**/.DS_Store
+
+# Ingestion
+ingestion/node_modules/
+ingestion/public/
+
+# Xcode user-specific (laat het project zelf staan)
+**/xcuserdata/
+**/*.xcuserstate
