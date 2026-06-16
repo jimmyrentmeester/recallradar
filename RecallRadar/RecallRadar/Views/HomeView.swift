@@ -46,13 +46,15 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             List {
+                brandHeaderSection
                 heroSection
                 if !notifAuthorized && monitoring { notifSection }
                 if !pending.isEmpty { confirmSection }
                 if !forYou.isEmpty { matchesSection }
                 if monitoring { trackedSummarySection } else { getStartedSection }
             }
-            .navigationTitle("Recall Radar")
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: ScoredAlert.self) { s in
                 RecallDetailView(alert: s.alert, index: store.index, tier: s.tier, signals: s.signals)
             }
@@ -68,6 +70,40 @@ struct HomeView: View {
     }
 
     // MARK: - Secties
+
+    /// Gebrande dashboard-header i.p.v. de kale systeem-titel: radar-merkje + naam + versheid.
+    private var brandHeaderSection: some View {
+        Section {
+            HStack(spacing: DS.Space.md) {
+                ZStack {
+                    Circle().fill(DS.Color.brandPrimaryMuted)
+                    Image(systemName: "dot.radiowaves.up.forward")
+                        .font(.title2.weight(.semibold))
+                        .foregroundStyle(DS.Color.brandPrimary)
+                }
+                .frame(width: 48, height: 48)
+                .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Recall Radar")
+                        .font(.largeTitle.bold())
+                        .foregroundStyle(DS.Color.textPrimary)
+                    Text(freshnessText)
+                        .font(.caption)
+                        .foregroundStyle(DS.Color.textSecondary)
+                }
+                Spacer(minLength: 0)
+            }
+            .listRowInsets(EdgeInsets(top: DS.Space.sm, leading: DS.Space.lg, bottom: DS.Space.xs, trailing: DS.Space.lg))
+            .listRowBackground(Color.clear)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Recall Radar. \(freshnessText)")
+        }
+    }
+
+    private var freshnessText: String {
+        store.index.count > 0 ? "Dagelijks bijgewerkt · \(store.lastUpdatedText.replacingOccurrences(of: "Laatst bijgewerkt ", with: ""))"
+                              : "Recalls laden…"
+    }
 
     private var heroSection: some View {
         Section {
