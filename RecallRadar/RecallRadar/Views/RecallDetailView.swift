@@ -8,10 +8,15 @@
 //
 
 import SwiftUI
+import Translation
 
 struct RecallDetailView: View {
     let alert: RecallAlert
     let index: RecallIndex
+
+    // On-device vertaling van de Engelse risico-omschrijving (Safety Gate) → NL.
+    @State private var translatedDesc: String?
+    @State private var translationConfig: TranslationSession.Configuration?
 
     var body: some View {
         ScrollView {
@@ -27,6 +32,17 @@ struct RecallDetailView: View {
         }
         .navigationTitle(index.categoryLabel(alert.category))
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            // Alleen Engelstalige bron (Safety Gate) vertalen; NVWA is al NL.
+            if alert.source == .safetyGate, let d = alert.riskDesc, !d.isEmpty {
+                translationConfig = .init(source: Locale.Language(identifier: "en"),
+                                          target: Locale.Language(identifier: "nl"))
+            }
+        }
+        .translationTask(translationConfig) { session in
+            guard let d = alert.riskDesc, !d.isEmpty else { return }
+            translatedDesc = try? await session.translate(d).targetText
+        }
         .toolbar {
             if let share = shareURL {
                 ShareLink(item: share, subject: Text(alert.displayTitle),
@@ -107,7 +123,11 @@ struct RecallDetailView: View {
             .accessibilityElement(children: .combine)
             .accessibilityLabel("Risico: \(index.riskLabel(alert.riskType)). Categorie: \(index.categoryLabel(alert.category))")
             if let desc = alert.riskDesc, !desc.isEmpty {
-                Text(desc).font(.body).foregroundStyle(.secondary)
+                Text(translatedDesc ?? desc).font(.body).foregroundStyle(.secondary)
+                if translatedDesc != nil {
+                    Text("Automatisch vertaald")
+                        .font(.caption2).foregroundStyle(.tertiary)
+                }
             }
         }
     }
