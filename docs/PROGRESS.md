@@ -16,6 +16,11 @@
 - [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [x] F3 TestFlight — **build live op toestel** · [ ] F3 volledige App Store-release
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — "Wat moet je doen?" = consumentenactie)
+- Feedback: de sectie beschreef de markt-maatregel i.p.v. wat de bezitter moet doen. Opgelost met **`consumerAction()`** (`measures.js`): classificeert de maatregel-actie (EN+NL: recall/reparatie/vernietiging/uit-de-handel/verwijderd/waarschuwing/import), kiest de **meest beschermende** en mapt naar een korte imperatieve actie (bv. recall → "Stop met gebruik en breng het product terug…").
+- Nieuw schema-veld **`action`** (SG + NVWA). Detail toont de actie prominent onder "Wat moet je doen?"; de letterlijke maatregel staat als uitklapbare **"Officiële maatregel"** (transparantie/bron-getrouw).
+- 15 ingestion- + 38 app-tests groen; index live geregenereerd (8.780 acties). **Live geverifieerd in de app.**
+
 ### 2026-06-16 (sessie 2 — Feedback-ronde 2: Batch A + B)
 - **Batch A (toevoeg/bewerk-flow):**
   - Producten **bewerken** — `AddProductView` doet nu add én edit (`editing:`-param, verwijder-knop), tikbare productrijen in de home (`.sheet(item:)`).
