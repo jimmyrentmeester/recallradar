@@ -23,45 +23,57 @@ extension TrackedProduct {
     }
 }
 
+nonisolated enum MatchKind { case product, brandFollow }
+
+nonisolated struct ScoredAlert: Identifiable {
+    let alert: RecallAlert
+    let tier: MatchTier
+    let productID: String?   // uuidString van het matchende product (voor confirm/suppress)
+    let kind: MatchKind
+    var id: String { alert.id }
+}
+
 @MainActor
 enum MatchBridge {
-    /// Genormaliseerde merknamen van gevolgde merken (voor de follow-tak).
     static func brandFollows(_ subs: [Subscription]) -> Set<String> {
         Set(subs.filter { $0.kind == .brand }.map { Normalizer.text($0.value) }.filter { !$0.isEmpty })
     }
-
-    /// Interne categoriecodes van gevolgde categorieën.
     static func categoryFollows(_ subs: [Subscription]) -> Set<String> {
         Set(subs.filter { $0.kind == .category }.map(\.value))
     }
 
-    /// Alle relevante matches: bezit-matches (≥ LAAG) + follow-matches, ontdubbeld per alert
-    /// op de hoogste trede. Nieuwste/hoogste eerst.
-    static func relevantMatches(
+    /// Persoonlijke matches: bezit-matches (≥ MIDDEL) + gevolgde-merk-matches (MIDDEL).
+    /// Categorie-follows zitten hier NIET in — die horen in de feed (Fase 1 §6).
+    /// Ontdubbeld per alert op de hoogste trede.
+    static func personalMatches(
         products: [TrackedProduct],
         subscriptions: [Subscription],
         alerts: [RecallAlert],
         config: MatchingConfig
     ) -> [ScoredAlert] {
-        let matchable = products.map { $0.matchable() }
+        let matchable = products.map { ($0.id.uuidString, $0.matchable()) }
         let brand = brandFollows(subscriptions)
-        let cat = categoryFollows(subscriptions)
 
-        var best: [String: ScoredAlert] = [:] // alert.id → hoogste trede
-        func consider(_ alert: RecallAlert, _ tier: MatchTier, productID: String?) {
-            guard tier > .none else { return }
-            if let existing = best[alert.id], existing.tier >= tier { return }
-            best[alert.id] = ScoredAlert(alert: alert, tier: tier, productID: productID)
+        var best: [String: ScoredAlert] = [:]
+        func consider(_ s: ScoredAlert) {
+            if let e = best[s.alert.id], e.tier >= s.tier { return }
+            best[s.alert.id] = s
         }
 
-        for p in matchable {
+        for (pid, p) in matchable {
             for alert in alerts {
                 let m = MatchingService.evaluate(product: p, alert: alert, config: config)
-                consider(alert, m.tier, productID: m.tier > .none ? p.id : nil)
+                if m.tier >= .medium { // LAAG = feed, niet persoonlijk
+                    consider(ScoredAlert(alert: alert, tier: m.tier, productID: pid, kind: .product))
+                }
             }
         }
+        // Gevolgde merken (geen categorie hier): zachte MIDDEL-melding.
         for alert in alerts {
-            consider(alert, MatchingService.followTier(for: alert, brandFollows: brand, categoryFollows: cat), productID: nil)
+            let t = MatchingService.followTier(for: alert, brandFollows: brand, categoryFollows: [])
+            if t == .medium {
+                consider(ScoredAlert(alert: alert, tier: .medium, productID: nil, kind: .brandFollow))
+            }
         }
 
         return best.values.sorted {
@@ -69,11 +81,4 @@ enum MatchBridge {
             return $0.alert.publishedAt > $1.alert.publishedAt
         }
     }
-}
-
-nonisolated struct ScoredAlert: Identifiable {
-    let alert: RecallAlert
-    let tier: MatchTier
-    let productID: String?
-    var id: String { alert.id }
 }

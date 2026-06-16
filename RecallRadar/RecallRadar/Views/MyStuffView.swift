@@ -23,10 +23,24 @@ struct MyStuffView: View {
 
     private var matches: [ScoredAlert] {
         guard !store.alerts.isEmpty else { return [] }
-        return MatchBridge.relevantMatches(
+        return MatchBridge.personalMatches(
             products: products, subscriptions: subscriptions,
             alerts: store.alerts, config: store.index.matchingConfig
         )
+    }
+
+    /// MIDDEL bezit-matches die nog bevestigd/weggeklikt moeten worden (Fase 1 §7).
+    private var pending: [ScoredAlert] {
+        matches.filter { $0.kind == .product && $0.tier == .medium }
+    }
+    /// Zekere/bevestigde matches + gevolgde-merk-meldingen.
+    private var forYou: [ScoredAlert] {
+        matches.filter { $0.tier == .high || $0.kind == .brandFollow }
+    }
+
+    private func product(for scored: ScoredAlert) -> TrackedProduct? {
+        guard let pid = scored.productID else { return nil }
+        return products.first { $0.id.uuidString == pid }
     }
 
     private var followedCategories: Set<String> {
@@ -39,6 +53,7 @@ struct MyStuffView: View {
     var body: some View {
         NavigationStack {
             List {
+                if !pending.isEmpty { confirmSection }
                 if data.isMonitoringAnything { matchesSection }
                 categoriesSection
                 brandsSection
@@ -57,15 +72,50 @@ struct MyStuffView: View {
         }
     }
 
-    // MARK: - Voor jou (matches)
+    // MARK: - Is dit van jou? (MIDDEL bevestigen, Fase 1 §7)
+
+    private var confirmSection: some View {
+        Section {
+            ForEach(pending) { scored in
+                VStack(alignment: .leading, spacing: 8) {
+                    if let p = product(for: scored) {
+                        Text("Lijkt op: \(p.displayName)")
+                            .font(.caption).foregroundStyle(.secondary)
+                    }
+                    NavigationLink(value: scored.alert) {
+                        RecallRow(alert: scored.alert, index: store.index)
+                    }
+                    HStack {
+                        Button {
+                            if let p = product(for: scored) { data.confirmMatch(p, alertID: scored.alert.id) }
+                        } label: { Label("Ja, van mij", systemImage: "checkmark") }
+                            .buttonStyle(.borderedProminent).controlSize(.small)
+                        Button {
+                            if let p = product(for: scored) { data.suppressMatch(p, alertID: scored.alert.id) }
+                        } label: { Label("Nee", systemImage: "xmark") }
+                            .buttonStyle(.bordered).controlSize(.small)
+                        Spacer()
+                        Text("Weet ik niet").font(.caption).foregroundStyle(.tertiary)
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+        } header: {
+            Text("Is dit van jou?")
+        } footer: {
+            Text("Mogelijke matches met je producten. Bevestig of klik weg — dat verscherpt toekomstige meldingen.")
+        }
+    }
+
+    // MARK: - Voor jou (zekere + gevolgde-merk-matches)
 
     @ViewBuilder private var matchesSection: some View {
         Section {
-            if matches.isEmpty {
+            if forYou.isEmpty {
                 Label("Geen enkele recall raakt jouw spullen", systemImage: "checkmark.shield.fill")
                     .foregroundStyle(.green)
             } else {
-                ForEach(matches.prefix(20)) { scored in
+                ForEach(forYou.prefix(30)) { scored in
                     NavigationLink(value: scored.alert) {
                         HStack {
                             RecallRow(alert: scored.alert, index: store.index)
@@ -75,7 +125,11 @@ struct MyStuffView: View {
                 }
             }
         } header: {
-            Text(matches.isEmpty ? "Voor jou" : "Voor jou · \(matches.count) relevant")
+            Text(forYou.isEmpty ? "Voor jou" : "Voor jou · \(forYou.count)")
+        } footer: {
+            if forYou.isEmpty {
+                Text("Recalls in je gevolgde categorieën vind je in de Feed.")
+            }
         }
     }
 
