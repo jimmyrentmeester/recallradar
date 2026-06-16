@@ -2,9 +2,10 @@
 //  AddProductView.swift
 //  RecallRadar
 //
-//  D2 — Product toevoegen: handmatig (merk/model/categorie/barcode) of via barcode-
-//  scan. Bij een gescande/ingevoerde barcode die de index kent, worden merk en
-//  categorie voorin gevuld (Fase 1 §2.3).
+//  D2 — Product toevoegen of bewerken: handmatig (merk/model/categorie/barcode) of
+//  via barcode-scan. Bij een gescande/ingevoerde barcode die de index kent worden
+//  merk en categorie voorin gevuld (Fase 1 §2.3). Na bewaren volgt direct een
+//  recall-check zodat je meteen weet of dit product geraakt wordt.
 //
 
 import SwiftUI
@@ -12,33 +13,71 @@ import SwiftData
 
 struct AddProductView: View {
     let store: RecallStore
+    var editing: TrackedProduct?
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
-    @State private var brand = ""
-    @State private var model = ""
-    @State private var barcode = ""
-    @State private var category = "overig"
+    @State private var brand: String
+    @State private var model: String
+    @State private var barcode: String
+    @State private var category: String
     @State private var showScanner = false
     @State private var scanNote: String?
+    @State private var needsName = false
+    @State private var matchResult: ScoredAlert?
+    @State private var showMatchAlert = false
+    @FocusState private var nameFocused: Bool
+
+    init(store: RecallStore, editing: TrackedProduct? = nil) {
+        self.store = store
+        self.editing = editing
+        _brand = State(initialValue: editing?.brand ?? "")
+        _model = State(initialValue: editing?.model ?? "")
+        _barcode = State(initialValue: editing?.barcode ?? "")
+        _category = State(initialValue: editing?.category ?? "overig")
+    }
 
     private var categoryCodes: [String] {
-        store.index.categories.keys.sorted {
-            store.index.categoryLabel($0) < store.index.categoryLabel($1)
-        }
+        store.index.categories.keys.sorted { store.index.categoryLabel($0) < store.index.categoryLabel($1) }
+    }
+    private var isEditing: Bool { editing != nil }
+
+    /// Merk-suggesties uit de index (normaliseert input naar bekende merken → minder typo's).
+    private var brandSuggestions: [String] {
+        let q = Normalizer.text(brand)
+        guard q.count >= 2 else { return [] }
+        let matches = store.brandNames.filter { Normalizer.text($0).contains(q) }
+        // Verberg als de invoer al exact een bekend merk is.
+        if matches.contains(where: { Normalizer.text($0) == q }) { return [] }
+        return Array(matches.prefix(5))
     }
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("Product") {
+                Section {
                     TextField("Merk", text: $brand)
                         .textInputAutocapitalization(.words)
+                        .focused($nameFocused)
+                    ForEach(brandSuggestions, id: \.self) { suggestion in
+                        Button { brand = suggestion } label: {
+                            Label(suggestion, systemImage: "magnifyingglass")
+                                .font(.subheadline).foregroundStyle(.tint)
+                        }
+                    }
                     TextField("Model / type (optioneel)", text: $model)
                     Picker("Categorie", selection: $category) {
                         ForEach(categoryCodes, id: \.self) { code in
                             Text(store.index.categoryLabel(code)).tag(code)
                         }
+                    }
+                } header: {
+                    Text("Product")
+                } footer: {
+                    if needsName {
+                        Label("Geef dit product een merk/naam zodat je het herkent — deze barcode staat (nog) niet in de recall-index.",
+                              systemImage: "pencil.line")
+                            .foregroundStyle(.orange)
                     }
                 }
 
@@ -47,12 +86,8 @@ struct AddProductView: View {
                         TextField("Barcode (EAN/UPC)", text: $barcode)
                             .keyboardType(.numberPad)
                         if BarcodeScanner.isScanningAvailable {
-                            Button {
-                                showScanner = true
-                            } label: {
-                                Image(systemName: "barcode.viewfinder")
-                            }
-                            .buttonStyle(.borderless)
+                            Button { showScanner = true } label: { Image(systemName: "barcode.viewfinder") }
+                                .buttonStyle(.borderless)
                         }
                     }
                     if let note = scanNote {
@@ -65,39 +100,40 @@ struct AddProductView: View {
                         Text("Scannen werkt op een echt toestel met camera.")
                     }
                 }
+
+                if isEditing {
+                    Section {
+                        Button("Verwijder product", role: .destructive) {
+                            if let editing { UserDataStore(context).delete(editing); dismiss() }
+                        }
+                    }
+                }
             }
-            .navigationTitle("Product toevoegen")
+            .navigationTitle(isEditing ? "Product bewerken" : "Product toevoegen")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Annuleer") { dismiss() }
-                }
+                ToolbarItem(placement: .cancellationAction) { Button("Annuleer") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Bewaar") { save() }
+                    Button(isEditing ? "Bewaar" : "Voeg toe") { Task { await save() } }
                         .disabled(brand.trimmingCharacters(in: .whitespaces).isEmpty
                                   && barcode.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
-            .sheet(isPresented: $showScanner) {
-                scannerSheet
+            .sheet(isPresented: $showScanner) { scannerSheet }
+            .alert("Mogelijke recall gevonden", isPresented: $showMatchAlert, presenting: matchResult) { _ in
+                Button("Oké") { dismiss() }
+            } message: { m in
+                Text("\(m.alert.displayTitle) — \(store.index.riskLabel(m.alert.riskType)).\n\(confidenceText(m.tier)) Bekijk 'm bij Voor jou of in Verken.")
             }
         }
     }
 
     private var scannerSheet: some View {
         NavigationStack {
-            BarcodeScannerView { payload in
-                applyScanned(payload)
-                showScanner = false
-            }
-            .ignoresSafeArea()
-            .navigationTitle("Scan barcode")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Sluit") { showScanner = false }
-                }
-            }
+            BarcodeScannerView { payload in applyScanned(payload); showScanner = false }
+                .ignoresSafeArea()
+                .navigationTitle("Scan barcode").navigationBarTitleDisplayMode(.inline)
+                .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Sluit") { showScanner = false } } }
         }
     }
 
@@ -107,28 +143,49 @@ struct AddProductView: View {
             return
         }
         barcode = valid
-        prefillFromIndex(barcode: valid)
-    }
-
-    /// Vult merk/categorie voorin als de index deze barcode kent.
-    private func prefillFromIndex(barcode: String) {
-        if let hit = store.alerts.first(where: { $0.barcode == barcode }) {
+        if let hit = store.alerts.first(where: { $0.barcode == valid }) {
             if brand.isEmpty, let b = hit.displayBrand { brand = b }
             category = hit.category
+            needsName = false
             scanNote = "Gevonden in de index: \(hit.displayTitle)."
         } else {
-            scanNote = "Barcode \(barcode) herkend (nog niet in de recall-index)."
+            needsName = brand.trimmingCharacters(in: .whitespaces).isEmpty
+            nameFocused = needsName
+            scanNote = "Barcode \(valid) herkend (nog niet in de recall-index)."
         }
     }
 
-    private func save() {
-        let store = UserDataStore(context)
-        store.addProduct(
-            brand: brand,
-            model: model,
-            category: category,
-            barcode: barcode.isEmpty ? nil : Normalizer.barcode(barcode) ?? barcode
-        )
-        dismiss()
+    private func confidenceText(_ tier: MatchTier) -> String {
+        switch tier {
+        case .high: "Sterke match."
+        case .medium: "Mogelijke match — bevestig of dit van jou is."
+        case .low: "Zwakke match (lage zekerheid)."
+        case .none: ""
+        }
+    }
+
+    private func save() async {
+        let data = UserDataStore(context)
+        let cleanBarcode = barcode.isEmpty ? nil : (Normalizer.barcode(barcode) ?? barcode)
+        if let editing {
+            data.update(editing, brand: brand, model: model, category: category, barcode: cleanBarcode)
+        } else {
+            data.addProduct(brand: brand, model: model, category: category, barcode: cleanBarcode)
+        }
+
+        // Directe recall-check (off-main) — meteen weten of dit product geraakt wordt.
+        let probe = MatchableProduct(id: "probe", brand: brand, model: model, category: category, barcode: cleanBarcode)
+        let alerts = store.alerts
+        let config = store.index.matchingConfig
+        let hit = await Task.detached(priority: .userInitiated) {
+            MatchBridge.bestMatch(product: probe, alerts: alerts, config: config)
+        }.value
+
+        if let hit {
+            matchResult = hit
+            showMatchAlert = true   // dismiss gebeurt na "Oké"
+        } else {
+            dismiss()
+        }
     }
 }

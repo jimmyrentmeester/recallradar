@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_at": "2026-06-15T20:13:25.464Z",
+ "generated_at": "2026-06-16T13:29:43.907Z",
  "window_months": 24,
  "count": 24,
  "categories": {
@@ -109,6 +109,29 @@
  "disclaimer": "Informatief, niet uitputtend. De officiële bron en fabrikant zijn leidend. Controleer altijd de officiële recall-pagina via de bronlink.",
  "alerts": [
   {
+   "id": "nvwa-w6i6ya",
+   "source": "nvwa",
+   "alert_number": "veiligheidswaarschuwing-aer2-autostoeladaptersets-van-joolz",
+   "brand": "joolz",
+   "brand_raw": "Joolz",
+   "model": "aer2autostoeladaptersets",
+   "model_raw": "Aer2 Autostoeladaptersets",
+   "category": "kinderen_speelgoed",
+   "source_category": null,
+   "barcode": null,
+   "batch_lot": null,
+   "risk_type": "overig_risico",
+   "risk_desc": "Joolz waarschuwt voor alle Aer2 autostoeladaptersets. Lees meer.",
+   "measure": "Joolz waarschuwt voor alle Aer2 autostoeladaptersets. Lees meer.",
+   "country": "NL",
+   "image_url": null,
+   "image_urls": [],
+   "source_url": "https://www.nvwa.nl/documenten/2026/06/16/veiligheidswaarschuwing-aer2-autostoeladaptersets-van-joolz",
+   "published_at": "2026-06-16",
+   "updated_at": "2026-06-16T11:46:00.000Z",
+   "ingested_at": "2026-06-16T13:29:43.907Z"
+  },
+  {
    "id": "nvwa-1ev5e1u",
    "source": "nvwa",
    "alert_number": "veiligheidswaarschuwing-enfinigy-contactgrill-van-zwilling",
@@ -129,7 +152,7 @@
    "source_url": "https://www.nvwa.nl/documenten/2026/06/15/veiligheidswaarschuwing-enfinigy-contactgrill-van-zwilling",
    "published_at": "2026-06-15",
    "updated_at": "2026-06-15T14:38:00.000Z",
-   "ingested_at": "2026-06-15T20:13:25.464Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "nvwa-1mjky1s",
@@ -152,7 +175,7 @@
    "source_url": "https://www.nvwa.nl/documenten/2026/06/15/veiligheidswaarschuwing-knuffelkonijn-roze-en-blauw-van-flying-tiger",
    "published_at": "2026-06-15",
    "updated_at": "2026-06-15T14:10:00.000Z",
-   "ingested_at": "2026-06-15T20:13:25.464Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "nvwa-1vvsost",
@@ -175,30 +198,7 @@
    "source_url": "https://www.nvwa.nl/documenten/2026/06/08/veiligheidswaarschuwing-fouganza-ruitersport-helm-100",
    "published_at": "2026-06-08",
    "updated_at": "2026-06-08T15:13:00.000Z",
-   "ingested_at": "2026-06-15T20:13:25.464Z"
-  },
-  {
-   "id": "nvwa-x4vmsm",
-   "source": "nvwa",
-   "alert_number": "veiligheidswaarschuwing-kindervestje-zeeman",
-   "brand": null,
-   "brand_raw": null,
-   "model": "kindervestjezeeman",
-   "model_raw": "kindervestje Zeeman",
-   "category": "kinderen_speelgoed",
-   "source_category": null,
-   "barcode": null,
-   "batch_lot": null,
-   "risk_type": "verstikking",
-   "risk_desc": "Zeeman waarschuwt voor een kindervestje in de maten 92 en 98/104. De knopen kunnen loskomen, wat bij inslikken verstikkingsgevaar kan veroorzaken. Gebruik het vestje niet.\n\nZie de website van Zeeman",
-   "measure": "Zeeman waarschuwt voor een kindervestje in de maten 92 en 98/104. De knopen kunnen loskomen, wat bij inslikken verstikkingsgevaar kan veroorzaken. Gebruik het vestje niet.\n\nZie de website van Zeeman",
-   "country": "NL",
-   "image_url": null,
-   "image_urls": [],
-   "source_url": "https://www.nvwa.nl/documenten/2026/05/29/veiligheidswaarschuwing-kindervestje-zeeman",
-   "published_at": "2026-05-29",
-   "updated_at": "2026-05-29T09:30:00.000Z",
-   "ingested_at": "2026-06-15T20:13:25.464Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01709-26",
@@ -214,7 +214,7 @@
    "batch_lot": "19062024",
    "risk_type": "verstikking",
    "risk_desc": "The product expands in size when in contact with water. If a child puts the product in the mouth or swallows it, contact with saliva or stomach liquids will cause the product to expand, which can result in occlusion of the respiratory tract or intestinal blockage.",
-   "measure": "Measures ordered by economic operators (to: Distributor) Withdrawal of the product from market Measures ordered by economic operators (to: Distributor) Recall of the product from end users Measures ordered by economic operators (to: Distributor) Warning consumers of the risks",
+   "measure": "Uit de handel genomen. (Maatregel door de marktdeelnemer, richting distributeur.) Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de marktdeelnemer, richting distributeur.) Waarschuwing aan consumenten voor de risico’s. (Maatregel door de marktdeelnemer, richting distributeur.)",
    "country": "SK",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011332",
    "image_urls": [
@@ -224,7 +224,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099202",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T07:36:10.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01722-26",
@@ -240,7 +240,7 @@
    "batch_lot": "092024",
    "risk_type": "verstikking",
    "risk_desc": "The toy has small parts (the protective part on the tip of the stylus and the tip itself) which can easily detach. Small children could put them in the mouth and choke.",
-   "measure": "Measures ordered by public authorities (to: Retailer) Withdrawal of the product from market",
+   "measure": "Uit de handel genomen. (Maatregel door de autoriteiten, richting winkelier.)",
    "country": "ES",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011357",
    "image_urls": [
@@ -251,7 +251,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099220",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-10T14:51:33.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01695-26",
@@ -267,14 +267,14 @@
    "batch_lot": null,
    "risk_type": "letsel",
    "risk_desc": "The product lacks instructions, which could lead to a child not being properly secured in the baby carrier, with the risk of falling as a result of incorrect positioning of the child or incorrect adjustment of the product.",
-   "measure": "Measures ordered by economic operators (to: Other) Removal of this product listing by the online marketplace Measures ordered by economic operators (to: Other) Warning consumers of the risks",
+   "measure": "Aanbieding verwijderd door het online platform. (Maatregel door de marktdeelnemer, richting betrokkene.) Waarschuwing aan consumenten voor de risico’s. (Maatregel door de marktdeelnemer, richting betrokkene.)",
    "country": "FR",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011383",
    "image_urls": [],
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099224",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T15:08:16.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01713-26",
@@ -290,7 +290,7 @@
    "batch_lot": null,
    "risk_type": "letsel",
    "risk_desc": "The baby carrier does not come with instructions for use. This could lead to a child not being properly secured in the baby carrier, with the risk of the falling and receiving injuries.",
-   "measure": "Measures ordered by economic operators (to: Other) Removal of this product listing by the online marketplace Measures ordered by economic operators (to: Other) Other:  Warning the seller of the risks Measures ordered by economic operators (to: Other) Recall of the product from end users",
+   "measure": "Aanbieding verwijderd door het online platform. (Maatregel door de marktdeelnemer, richting betrokkene.) Verkoper gewaarschuwd voor de risico’s. (Maatregel door de marktdeelnemer, richting betrokkene.) Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de marktdeelnemer, richting betrokkene.)",
    "country": "FR",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011413",
    "image_urls": [
@@ -301,7 +301,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099247",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T07:37:34.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-or-00072-26",
@@ -317,7 +317,7 @@
    "batch_lot": null,
    "risk_type": "brand_hitte",
    "risk_desc": "The battery management system lacks a cell temperature monitoring device. The product can overheat and cause burns.",
-   "measure": "Measures ordered by public authorities (to: Distributor) Ban on the marketing of the product and any accompanying measures",
+   "measure": "Verkoopverbod. (Maatregel door de autoriteiten, richting distributeur.)",
    "country": "HU",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011275",
    "image_urls": [
@@ -329,7 +329,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099165",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-04T13:35:54.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01696-26",
@@ -345,7 +345,7 @@
    "batch_lot": null,
    "risk_type": "elektrisch",
    "risk_desc": "Some parts of the base are not properly insulated from live parts. The base’s plastic casing might easily break upon impact. The user can access live parts and receive an electric shock.",
-   "measure": "Measures ordered by economic operators (to: Importer) Recall of the product from end users Measures ordered by economic operators (to: Importer) Withdrawal of the product from market",
+   "measure": "Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de marktdeelnemer, richting importeur.) Uit de handel genomen. (Maatregel door de marktdeelnemer, richting importeur.)",
    "country": "FR",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011350",
    "image_urls": [
@@ -354,7 +354,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099212",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T07:35:52.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01717-26",
@@ -370,14 +370,14 @@
    "batch_lot": null,
    "risk_type": "elektrisch",
    "risk_desc": "The metal part of the device is not resistant enough and could easily break, leaving live parts accessible to the user, who could receive an electric shock.",
-   "measure": "Measures ordered by public authorities (to: Retailer) Withdrawal of the product from market",
+   "measure": "Uit de handel genomen. (Maatregel door de autoriteiten, richting winkelier.)",
    "country": "LT",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011417",
    "image_urls": [],
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099258",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T07:41:05.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01679-26",
@@ -393,7 +393,7 @@
    "batch_lot": null,
    "risk_type": "elektrisch",
    "risk_desc": "The insulation and the dimensions of the extension socket are inadequate. The user could therefore touch accessible live parts and receive an electric shock.",
-   "measure": "Measures ordered by public authorities (to: Distributor) Recall of the product from end users Measures ordered by economic operators (to: Distributor) Withdrawal of the product from market Measures ordered by public authorities (to: Distributor) Withdrawal of the product from market Measures ordered by economic operators (to: Distributor) Recall of the product from end users Measures ordered by public authorities (to: Distributor) Ban on the marketing of the product and any accompanying measures",
+   "measure": "Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de autoriteiten, richting distributeur.) Uit de handel genomen. (Maatregel door de marktdeelnemer, richting distributeur.) Uit de handel genomen. (Maatregel door de autoriteiten, richting distributeur.) Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de marktdeelnemer, richting distributeur.) Verkoopverbod. (Maatregel door de autoriteiten, richting distributeur.)",
    "country": "HU",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011287",
    "image_urls": [
@@ -403,7 +403,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099171",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T07:40:45.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-or-00061-26",
@@ -419,7 +419,7 @@
    "batch_lot": "144180",
    "risk_type": "brand_hitte",
    "risk_desc": "In case an oversized utensil is used and the gas cartridge cover is left open or removed, the surface and gas cartridge overheat. The user could touch the hot surface and suffer burns.",
-   "measure": "Measures ordered by economic operators (to: Importer) Withdrawal of the product from market",
+   "measure": "Uit de handel genomen. (Maatregel door de marktdeelnemer, richting importeur.)",
    "country": "MT",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11010175",
    "image_urls": [
@@ -429,7 +429,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10098953",
    "published_at": "2026-06-05",
    "updated_at": "2026-06-05T13:40:47.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01324-26",
@@ -445,7 +445,7 @@
    "batch_lot": "250522-00001-06240",
    "risk_type": "letsel",
    "risk_desc": "The pressure vessel could rupture due to design flaws and cause injuries to the users.",
-   "measure": "Measures ordered by public authorities (to: Manufacturer) Recall of the product from end users Measures ordered by public authorities (to: Manufacturer) Ban on the marketing of the product and any accompanying measures Measures ordered by public authorities (to: Manufacturer) Withdrawal of the product from market",
+   "measure": "Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de autoriteiten, richting fabrikant.) Verkoopverbod. (Maatregel door de autoriteiten, richting fabrikant.) Uit de handel genomen. (Maatregel door de autoriteiten, richting fabrikant.)",
    "country": "LU",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11006891",
    "image_urls": [
@@ -455,7 +455,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10098801",
    "published_at": "2026-05-08",
    "updated_at": "2026-05-08T10:09:30.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01443-26",
@@ -471,7 +471,7 @@
    "batch_lot": "8922776",
    "risk_type": "brand_hitte",
    "risk_desc": "Due to a structural failure of the lid fastening, the lid can suddenly detach from the flask while pouring. This can cause hot liquid to suddenly and uncontrollably pour out over the user's body, causing burns.",
-   "measure": "Measures ordered by economic operators (to: Other) Withdrawal of the product from market Measures ordered by economic operators (to: Other) Recall of the product from end users",
+   "measure": "Uit de handel genomen. (Maatregel door de marktdeelnemer, richting betrokkene.) Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de marktdeelnemer, richting betrokkene.)",
    "country": "DE",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11008278",
    "image_urls": [
@@ -480,7 +480,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10098929",
    "published_at": "2026-05-22",
    "updated_at": "2026-05-18T17:07:30.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01279-26",
@@ -496,7 +496,7 @@
    "batch_lot": null,
    "risk_type": "brand_hitte",
    "risk_desc": "The plug fuse has insufficient granular filler, and the plug face does not meet the dimensional requirements. As a result, the plug may overheat and/or explode. There is a risk of fire. Improvements are also required to product documentation and marking.",
-   "measure": "Measures ordered by public authorities (to: Importer) Import rejected at border",
+   "measure": "Invoer geweigerd aan de grens. (Maatregel door de autoriteiten, richting importeur.)",
    "country": "GB",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11006310",
    "image_urls": [
@@ -505,7 +505,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10098782",
    "published_at": "2026-05-01",
    "updated_at": "2026-05-29T10:15:58.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-00032-26",
@@ -521,7 +521,7 @@
    "batch_lot": null,
    "risk_type": "chemisch",
    "risk_desc": "The  product has an excessive concentration of polycyclic aromatic hydrocarbons (PAHs), ) notably Benzo (a)pyrene (BaP), Benzo (e)pyrene (BeP), Benz (a)anthracene (BaA), Chrysene (CHR), Benzo (b)fluoranthene (BbFA), Benzo (j)fluoranthene (BjFA, Benzo (k)fluoranthene (BkFA), and Dibenz(a,h)anthracene (DBAhA) (measured values: 73.2 mg/kg, 57.3 mg/kg, 37.8 mg/kg, 37.8 mg/kg, 21.8 mg/kg, 9 mg/kg, 9.5 mg/kg and 0.5 mg/kg by weight respectively).\nThese PAHs may cause cancer and are also mutagenic and toxic for reproduction.",
-   "measure": "Measures ordered by public authorities (to: Retailer) Withdrawal of the product from market",
+   "measure": "Uit de handel genomen. (Maatregel door de autoriteiten, richting winkelier.)",
    "country": "CY",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/10990468",
    "image_urls": [
@@ -530,7 +530,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10097153",
    "published_at": "2026-01-09",
    "updated_at": "2026-05-07T13:07:13.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-00021-26",
@@ -546,7 +546,7 @@
    "batch_lot": "3APSWCB40",
    "risk_type": "chemisch",
    "risk_desc": "The plastic of the product has an excessive concentration of polycyclic aromatic hydrocarbons (PAHs), ) notably Benzo (a)pyrene (BaP), Benzo (e)pyrene (BeP), Benz (a)anthracene (BaA), Chrysene (CHR), Benzo (b)fluoranthene (BbFA), Benzo (j)fluoranthene (BjFA, Benzo (k)fluoranthene (BkFA), and Dibenz(a,h)anthracene (DBAhA) (measured values: 7.2 mg/kg, 7.1 mg/kg, 35.2 mg/kg, 27.6 mg/kg, 7.5 mg/kg, 2.6 mg/kg, 3.6 mg/kg and 0.6 mg/kg by weight respectively).\nThese PAHs may cause cancer and are also mutagenic and toxic for reproduction.",
-   "measure": "Measures ordered by public authorities (to: Importer) Withdrawal of the product from market",
+   "measure": "Uit de handel genomen. (Maatregel door de autoriteiten, richting importeur.)",
    "country": "CY",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/10990488",
    "image_urls": [
@@ -555,7 +555,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10097203",
    "published_at": "2026-01-09",
    "updated_at": "2026-05-07T13:06:09.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01725-26",
@@ -571,7 +571,7 @@
    "batch_lot": "0032730300",
    "risk_type": "letsel",
    "risk_desc": "The driver airbag inflator may malfunction due to long-term degradation. In this case, if the airbag is deployed in an accident, the internal pressure in the inflator may be too high and the inflator could burst, ejecting metal fragments that could cause injuries.",
-   "measure": "Measures ordered by economic operators (to: Manufacturer) Recall of the product from end users",
+   "measure": "Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de marktdeelnemer, richting fabrikant.)",
    "country": "DE",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011353",
    "image_urls": [
@@ -582,7 +582,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099219",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-15T08:05:02.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01626-26",
@@ -598,14 +598,14 @@
    "batch_lot": "4090105",
    "risk_type": "letsel",
    "risk_desc": "The wheel bolts were not tightened in accordance with the torque specifications. The bolts and the wheel assembly could detach while the vehicle is in motion, increasing the risk of accidents.",
-   "measure": "Measures ordered by economic operators (to: Manufacturer) Recall of the product from end users",
+   "measure": "Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de marktdeelnemer, richting fabrikant.)",
    "country": "DE",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011098",
    "image_urls": [],
    "source_url": "https://www.mercedes-benz.de/passengercars/services/recall.html",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-11T08:31:29.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01548-26",
@@ -621,14 +621,14 @@
    "batch_lot": "C5 035243245\nC5 0358243115\nC5 0358243122\nD6 0360154033\nD6 0360154735",
    "risk_type": "chemisch",
    "risk_desc": "According to the list of ingredients, the product contains 2-(4-tert-butylbenzyl) propionaldehyde (BMHCA), which is prohibited in cosmetic products. BMHCA may harm the reproductive system, may harm the health of the unborn child and may cause skin sensitisation. Moreover, the product contains hydroxyisohexyl 3-cyclohexene carboxaldehyde (HICC), which is prohibited in cosmetic products. HICC may cause an allergic skin reaction.",
-   "measure": "Measures ordered by economic operators (to: Retailer) Recall of the product from end users",
+   "measure": "Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de marktdeelnemer, richting winkelier.)",
    "country": "GB",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011159",
    "image_urls": [],
    "source_url": "https://www.savers.co.uk/prodrecall",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-10T14:41:35.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01567-26",
@@ -644,14 +644,14 @@
    "batch_lot": "BS11M100B",
    "risk_type": "chemisch",
    "risk_desc": "According to the list of ingredients, the product contains 2-(4-tert-butylbenzyl) propionaldehyde (BMHCA), which is prohibited in cosmetic products. BMHCA may harm the reproductive system, may harm the health of the unborn child and may cause skin sensitisation.",
-   "measure": "Measures ordered by economic operators (to: Retailer) Recall of the product from end users",
+   "measure": "Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de marktdeelnemer, richting winkelier.)",
    "country": "GB",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011141",
    "image_urls": [],
    "source_url": "https://www.savers.co.uk/prodrecall",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-10T14:28:33.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01724-26",
@@ -667,14 +667,14 @@
    "batch_lot": null,
    "risk_type": "milieu",
    "risk_desc": "The product contains perfluorononyl dimethicone, which is a perfluorooctanoic acid (PFOA) related compound. PFOAs pose a risk to human health and the environment.",
-   "measure": "Measures ordered by economic operators (to: Distributor) Stop of sales Measures ordered by public authorities (to: Distributor) Stop of sales",
+   "measure": "Verkoop gestopt. (Maatregel door de marktdeelnemer, richting distributeur.) Verkoop gestopt. (Maatregel door de autoriteiten, richting distributeur.)",
    "country": "DK",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011418",
    "image_urls": [],
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099259",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-09T15:32:13.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   },
   {
    "id": "sg-sr-01701-26",
@@ -690,14 +690,14 @@
    "batch_lot": "JH13\n5232U\n5233U\nJK23",
    "risk_type": "chemisch",
    "risk_desc": "According to the list of ingredients, the product contains 2-(4-tert-butylbenzyl) propionaldehyde (BMHCA), which is prohibited in cosmetic products. BMHCA may harm the reproductive system, may harm the health of the unborn child and may cause skin sensitisation. Moreover, the product contains hydroxyisohexyl 3-cyclohexene carboxaldehyde (HICC), which is prohibited in cosmetic products. HICC may cause an allergic skin reaction.",
-   "measure": "Measures ordered by economic operators (to: Retailer) Recall of the product from end users",
+   "measure": "Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de marktdeelnemer, richting winkelier.)",
    "country": "GB",
    "image_url": "https://ec.europa.eu/safety-gate-alerts/public/api/notification/image/11011301",
    "image_urls": [],
    "source_url": "https://www.savers.co.uk/prodrecall",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-09T12:35:53.000Z",
-   "ingested_at": "2026-06-15T20:10:56.869Z"
+   "ingested_at": "2026-06-16T13:29:43.907Z"
   }
  ]
 }

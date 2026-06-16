@@ -79,6 +79,23 @@ enum MatchBridge {
         }
     }
 
+    /// Beste match (≥ LAAG) voor één zojuist toegevoegd/bewerkt product — voor de
+    /// directe "dit product heeft mogelijk een recall"-check bij toevoegen.
+    nonisolated static func bestMatch(
+        product: MatchableProduct, alerts: [RecallAlert], config: MatchingConfig
+    ) -> ScoredAlert? {
+        var best: ScoredAlert?
+        for alert in alerts {
+            let m = MatchingService.evaluate(product: product, alert: alert, config: config)
+            guard m.tier > .none else { continue }
+            if best == nil || m.tier > best!.tier ||
+                (m.tier == best!.tier && alert.publishedAt > best!.alert.publishedAt) {
+                best = ScoredAlert(alert: alert, tier: m.tier, productID: product.id, kind: .product)
+            }
+        }
+        return best
+    }
+
     /// Gemaks-wrapper (snapshot + compute) voor niet-UI-paden zoals de achtergrond-refresh.
     @MainActor static func personalMatches(
         products: [TrackedProduct], subscriptions: [Subscription],

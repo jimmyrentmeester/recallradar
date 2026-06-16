@@ -8,6 +8,7 @@ import {
 import { mapSafetyGateCategory, classifyNvwaCategory, isFood } from './lookups/categories.js';
 import { mapRisk } from './lookups/risks.js';
 import { mapCountry } from './lookups/countries.js';
+import { translateMeasure } from './lookups/measures.js';
 
 const slug = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
@@ -26,7 +27,8 @@ export function normalizeSafetyGate(rec, ingestedAt) {
   const alertNumber = rec.alert_number ?? '';
   const brandRaw = firstNonEmpty(rec.product_brand);
   const modelRaw = firstNonEmpty(rec.product_model_type);
-  const measure = toArray(rec.measures_country).join(' ') || 'Zie de officiële bron voor het handelingsadvies.';
+  const measure = toArray(rec.measures_country).map(translateMeasure).filter(Boolean).join(' ')
+    || 'Zie de officiële bron voor het handelingsadvies.';
   const sourceUrl = firstNonEmpty(rec.product_recall_url, rec.rapex_url, 'https://ec.europa.eu/safety-gate-alerts/');
 
   return {

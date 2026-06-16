@@ -6,6 +6,7 @@ import { mapSafetyGateCategory, classifyNvwaCategory, isFood } from '../src/look
 import { mapRisk } from '../src/lookups/risks.js';
 import { mapCountry } from '../src/lookups/countries.js';
 import { normalizeSafetyGate, normalizeNvwa } from '../src/normalize.js';
+import { translateMeasure } from '../src/lookups/measures.js';
 import { dedup } from '../src/dedup.js';
 
 const NOW = '2026-06-15T10:00:00Z';
@@ -119,6 +120,24 @@ test('normalizeNvwa: titel-parsing + food-filter', () => {
   assert.equal(a.category, 'witgoed_keuken');
   assert.equal(a.risk_type, 'brand_hitte');
   assert.equal(a.country, 'NL');
+});
+
+test('translateMeasure: getemplate measure → NL', () => {
+  assert.equal(
+    translateMeasure('Measures ordered by economic operators (to: Manufacturer) Recall of the product from end users'),
+    'Teruggeroepen — breng het product terug of stop met gebruik. (Maatregel door de marktdeelnemer, richting fabrikant.)'
+  );
+  assert.match(
+    translateMeasure('Measures ordered by public authorities (to: Distributor) Withdrawal of the product from market'),
+    /^Uit de handel genomen\. \(Maatregel door de autoriteiten, richting distributeur\.\)$/
+  );
+  // "Other:"-vrije tekst → verkoper-variant herkend
+  assert.match(
+    translateMeasure('Measures ordered by economic operators (to: Other) Other:  Warn the seller of the risks'),
+    /Verkoper gewaarschuwd/
+  );
+  // Geen patroon → ongewijzigd
+  assert.equal(translateMeasure('iets heel anders'), 'iets heel anders');
 });
 
 test('dedup: id-niveau houdt het meest complete record', () => {

@@ -36,6 +36,14 @@ struct UserDataStore {
         return product
     }
 
+    func update(_ product: TrackedProduct, brand: String?, model: String?, category: String, barcode: String?) {
+        product.brand = brand?.trimmedOrNil
+        product.model = model?.trimmedOrNil
+        product.category = category
+        product.barcode = barcode?.trimmedOrNil
+        try? context.save()
+    }
+
     func delete(_ product: TrackedProduct) {
         context.delete(product)
         try? context.save()

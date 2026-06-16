@@ -23,6 +23,9 @@ final class RecallStore {
     private(set) var status: Status = .idle
     private(set) var origin: IndexService.Origin?
 
+    /// Unieke merknamen uit de index (1× berekend) — voedt merk-autocomplete.
+    private(set) var brandNames: [String] = []
+
     /// Tonen we niet-verse data (cache/ingebouwd)? Voor een eerlijke "offline"-melding.
     var isOffline: Bool { origin == .cache || origin == .bundle }
 
@@ -52,5 +55,17 @@ final class RecallStore {
         index = result.index
         origin = result.origin
         status = result.index.count == 0 ? .failed : .loaded
+        rebuildBrandNames()
+    }
+
+    private func rebuildBrandNames() {
+        var seen = Set<String>()
+        var names: [String] = []
+        for a in index.alerts {
+            guard let b = a.displayBrand?.trimmingCharacters(in: .whitespaces), !b.isEmpty else { continue }
+            let key = b.lowercased()
+            if seen.insert(key).inserted { names.append(b) }
+        }
+        brandNames = names.sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }
     }
 }

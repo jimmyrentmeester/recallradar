@@ -18,6 +18,7 @@ struct MyStuffView: View {
 
     @State private var showAdd = false
     @State private var showInfo = false
+    @State private var editingProduct: TrackedProduct?
     @State private var newBrand = ""
     @State private var notifAuthorized = true
 
@@ -92,6 +93,7 @@ struct MyStuffView: View {
             }
             .sheet(isPresented: $showAdd) { AddProductView(store: store) }
             .sheet(isPresented: $showInfo) { AboutView(store: store) }
+            .sheet(item: $editingProduct) { p in AddProductView(store: store, editing: p) }
         }
     }
 
@@ -260,10 +262,16 @@ struct MyStuffView: View {
                     .foregroundStyle(.secondary)
             }
             ForEach(products) { p in
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(p.displayName).font(.body)
-                    Text(store.index.categoryLabel(p.category))
-                        .font(.caption).foregroundStyle(.secondary)
+                Button { editingProduct = p } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(p.displayName).font(.body).foregroundStyle(.primary)
+                            Text(store.index.categoryLabel(p.category))
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
+                    }
                 }
             }
             .onDelete { idx in idx.map { products[$0] }.forEach(data.delete) }
