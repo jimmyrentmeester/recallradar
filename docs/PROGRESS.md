@@ -4,8 +4,8 @@
 
 ## Status (samenvatting)
 - **Fase:** Bouw deel 2 — **Blokken B–E + F1/F2 af**. App is functioneel + App Store-waardig; alleen F3 (release) resteert.
-- **Laatst gewerkt aan:** F1 (disclaimer/bronnen/privacy + privacy-manifest) + F2 (offline-banner, fout-staat met retry, "laatst bijgewerkt").
-- **Volgende stap:** **F3** — TestFlight + App Store-listing (eigenaar-traject, met de `app-store-release`-skill): archiveren/uploaden, listing, screenshots, privacy-vragenlijst, review. Optioneel daarna P1 (widget, gezin-delen, OCR, Pro-unlock).
+- **Laatst gewerkt aan:** TestFlight-prep (icoon, export-compliance, schone Release-archive, walkthrough).
+- **Volgende stap:** **Eigenaar voert TestFlight-upload uit** via `docs/TestFlight-walkthrough.md` (interne test: geen review/privacy-URL nodig). Daarna evt. volledige App Store-release (screenshots/listing) of P1-features.
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
@@ -13,9 +13,16 @@
 - [x] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [x] C3 feed · [x] C4 detail
 - [x] Blok D — toevoegen & matching: [x] D1 onboarding · [x] D2 toevoegen+scan · [x] D3 MatchingService · [x] D4 "is dit van jou?"
 - [x] Blok E — notificaties & retentie: [x] E1 BGAppRefreshTask · [x] E2 lokale notificaties (trede/bundel/rustige uren) · [x] E3 maandelijkse digest
-- [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [ ] F3 TestFlight + App Store (eigenaar)
+- [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [~] F3 TestFlight (bouwzijde klaar; upload = eigenaar) · [ ] F3 volledige App Store-release
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — TestFlight-prep, F3)
+- **App-icoon** 1024×1024 (opaque) gegenereerd via `RecallRadar/Tools/GenerateAppIcon.swift` (radar + blip) → `AppIcon.appiconset` (lege icon was anders een upload-blocker). Contents.json naar single-size.
+- **Export-compliance** vooraf gezet: `INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO` (beide configs) — alleen HTTPS, dus de submit-vraag wordt niet meer gesteld.
+- **Pre-flight:** `xcodebuild … -configuration Release … archive` (unsigned) → **ARCHIVE SUCCEEDED**.
+- **`docs/TestFlight-walkthrough.md`** geschreven: paste-ready stappen voor interne TestFlight (agreements → app-record → signing → archive → upload → interne test → installeren). Vaste waarden incl. SKU `recallradar`.
+- Eigenaar bevestigde: betaald lidmaatschap actief, interne testers → geen beta-review/privacy-URL nodig.
+
 ### 2026-06-16 (sessie 2 — Blok F1 + F2)
 - **F1:** `AboutView` — altijd bereikbaar via info-knop (Feed + Mijn spullen). Disclaimer (P0-7), bronvermelding (Safety Gate + NVWA, CC0, klikbaar), privacy-uitleg (on-device/geen account/geen tracking), gegevens (laatst bijgewerkt, count, versie), GitHub-link. `PrivacyInfo.xcprivacy` toegevoegd (NSPrivacyTracking false, geen verzamelde data, UserDefaults-reason CA92.1). Camera-uitleg stond al.
 - **F2:** `RecallStore` onderscheidt nu `loaded` vs `failed` (geen netwerk én geen cache/bundle → nooit als "geen recalls" tonen; fout-staat met **Opnieuw proberen**). Offline-banner als cache/bundle wordt getoond. "Laatst bijgewerkt" + lege zoekstaat al aanwezig.
