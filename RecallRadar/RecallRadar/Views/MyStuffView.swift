@@ -68,10 +68,10 @@ struct MyStuffView: View {
     var body: some View {
         NavigationStack {
             List {
-                summarySection
+                heroSection
                 if !notifAuthorized && data.isMonitoringAnything { notifSection }
                 if !pending.isEmpty { confirmSection }
-                if data.isMonitoringAnything { matchesSection }
+                if !forYou.isEmpty { matchesSection }
                 categoriesSection
                 brandsSection
                 productsSection
@@ -97,32 +97,21 @@ struct MyStuffView: View {
         }
     }
 
-    // MARK: - Samenvatting (home-header)
+    // MARK: - Statuskaart (home-header, gemoedsrust)
 
-    @ViewBuilder private var summarySection: some View {
+    private var heroSection: some View {
         Section {
-            if data.isMonitoringAnything {
-                HStack(spacing: 0) {
-                    summaryStat(value: products.count, label: products.count == 1 ? "product" : "producten")
-                    Divider().frame(height: 36)
-                    summaryStat(value: subscriptions.count, label: "gevolgd")
-                    Divider().frame(height: 36)
-                    summaryStat(value: pending.count + forYou.count, label: "relevant", highlight: (pending.count + forYou.count) > 0)
-                }
-            } else {
-                Label("Voeg een product toe of volg een categorie om bewaakt te worden.", systemImage: "shield.lefthalf.filled")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
+            StatusHeroCard(kind: heroKind)
+                .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                .listRowBackground(Color.clear)
         }
     }
 
-    private func summaryStat(value: Int, label: String, highlight: Bool = false) -> some View {
-        VStack(spacing: 2) {
-            Text("\(value)").font(.title2.bold()).foregroundStyle(highlight ? .red : .primary)
-            Text(label).font(.caption).foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity)
+    private var heroKind: StatusHeroCard.Kind {
+        let relevant = pending.count + forYou.count
+        if relevant > 0 { return .attention(count: relevant) }
+        if data.isMonitoringAnything { return .protected(products: products.count, follows: subscriptions.count) }
+        return .setup
     }
 
     // MARK: - Meldingen aanzetten (voor wie de onboarding oversloeg)
@@ -179,26 +168,15 @@ struct MyStuffView: View {
 
     // MARK: - Voor jou (zekere + gevolgde-merk-matches)
 
-    @ViewBuilder private var matchesSection: some View {
-        Section {
-            if forYou.isEmpty {
-                Label("Geen enkele recall raakt jouw spullen", systemImage: "checkmark.shield.fill")
-                    .foregroundStyle(.green)
-            } else {
-                ForEach(forYou.prefix(30)) { scored in
-                    NavigationLink(value: scored.alert) {
-                        HStack {
-                            RecallRow(alert: scored.alert, index: store.index)
-                            TierBadge(tier: scored.tier)
-                        }
+    private var matchesSection: some View {
+        Section("Voor jou") {
+            ForEach(forYou.prefix(30)) { scored in
+                NavigationLink(value: scored.alert) {
+                    HStack {
+                        RecallRow(alert: scored.alert, index: store.index)
+                        TierBadge(tier: scored.tier)
                     }
                 }
-            }
-        } header: {
-            Text(forYou.isEmpty ? "Voor jou" : "Voor jou · \(forYou.count)")
-        } footer: {
-            if forYou.isEmpty {
-                Text("Recalls in je gevolgde categorieën vind je in de Feed.")
             }
         }
     }

@@ -71,13 +71,14 @@ struct RecallDetailView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .always))
             .frame(height: 280)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .background(.fill.quaternary)
+            .clipShape(RoundedRectangle(cornerRadius: DS.cardRadius))
             .accessibilityLabel("Productfoto's, \(images.count) stuks")
         } else if let url = images.first {
             photo(url)
                 .frame(maxHeight: 260)
-                .background(.quaternary)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .background(.fill.quaternary)
+                .clipShape(RoundedRectangle(cornerRadius: DS.cardRadius))
         }
     }
 
@@ -150,7 +151,7 @@ struct RecallDetailView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
+        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: DS.cardRadius))
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Wat moet je doen? \(alert.action ?? alert.measure)")
     }

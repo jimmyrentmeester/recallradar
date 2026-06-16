@@ -48,25 +48,28 @@ struct RecallRow: View {
 
     @ViewBuilder private var thumbnail: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(.quaternary)
+            Rectangle().fill(.fill.quaternary)
             if let url = alert.imageURL {
                 AsyncImage(url: url) { phase in
                     switch phase {
-                    case .success(let img):
-                        img.resizable().scaledToFill()
-                    default:
-                        Image(systemName: CategoryStyle.icon(alert.category))
-                            .foregroundStyle(.secondary)
+                    case .success(let img): img.resizable().scaledToFill()
+                    case .empty: ProgressView().controlSize(.small)
+                    default: categoryGlyph
                     }
                 }
             } else {
-                Image(systemName: CategoryStyle.icon(alert.category))
-                    .foregroundStyle(.secondary)
+                categoryGlyph
             }
         }
         .frame(width: 56, height: 56)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: DS.thumbRadius))
+    }
+
+    private var categoryGlyph: some View {
+        Image(systemName: CategoryStyle.icon(alert.category))
+            .font(.title3)
+            .symbolRenderingMode(.hierarchical)
+            .foregroundStyle(.secondary)
     }
 }
 
