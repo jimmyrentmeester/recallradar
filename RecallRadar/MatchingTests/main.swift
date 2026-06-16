@@ -133,5 +133,8 @@ let fCat = MatchingService.followTier(for: alert(brand: "lego", model: nil, cate
                                       brandFollows: [], categoryFollows: ["kinderen_speelgoed"])
 eq(fCat, .low, "gevolgde categorie → LAAG (feed)")
 
+// E2 — NotificationPlanner-tests (in planner.swift).
+runPlannerTests()
+
 print("\n\(failures == 0 ? "ALLES GROEN ✓" : "\(failures) FOUT(EN)")")
 exit(failures == 0 ? 0 : 1)

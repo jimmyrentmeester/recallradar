@@ -18,6 +18,7 @@ struct MyStuffView: View {
 
     @State private var showAdd = false
     @State private var newBrand = ""
+    @State private var notifAuthorized = true
 
     private var data: UserDataStore { UserDataStore(context) }
 
@@ -53,6 +54,7 @@ struct MyStuffView: View {
     var body: some View {
         NavigationStack {
             List {
+                if !notifAuthorized && data.isMonitoringAnything { notifSection }
                 if !pending.isEmpty { confirmSection }
                 if data.isMonitoringAnything { matchesSection }
                 categoriesSection
@@ -60,6 +62,7 @@ struct MyStuffView: View {
                 productsSection
             }
             .navigationTitle("Mijn spullen")
+            .task { notifAuthorized = await NotificationService.isAuthorized() }
             .navigationDestination(for: RecallAlert.self) { alert in
                 RecallDetailView(alert: alert, index: store.index)
             }
@@ -69,6 +72,23 @@ struct MyStuffView: View {
                 }
             }
             .sheet(isPresented: $showAdd) { AddProductView(store: store) }
+        }
+    }
+
+    // MARK: - Meldingen aanzetten (voor wie de onboarding oversloeg)
+
+    private var notifSection: some View {
+        Section {
+            Button {
+                Task {
+                    _ = await NotificationService.requestAuthorization()
+                    notifAuthorized = await NotificationService.isAuthorized()
+                }
+            } label: {
+                Label("Zet meldingen aan", systemImage: "bell.badge")
+            }
+        } footer: {
+            Text("Zo waarschuwen we je zodra een recall jouw spullen raakt.")
         }
     }
 

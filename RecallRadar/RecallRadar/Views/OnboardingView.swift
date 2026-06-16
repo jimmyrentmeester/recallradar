@@ -97,6 +97,9 @@ struct OnboardingView: View {
         let data = UserDataStore(context)
         for code in selected { data.addSubscription(kind: .category, value: code) }
         UserDefaults.standard.set(true, forKey: "didOnboard")
+        // E2 — net nu de gebruiker iets gaat bewaken is hét moment om toestemming
+        // voor meldingen te vragen.
+        Task { _ = await NotificationService.requestAuthorization() }
         dismiss()
     }
 }
