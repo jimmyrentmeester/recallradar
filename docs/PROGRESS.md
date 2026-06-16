@@ -4,8 +4,8 @@
 
 ## Status (samenvatting)
 - **Fase:** Bouw deel 2 — **Blokken B–E + F1/F2 af**. App is functioneel + App Store-waardig; alleen F3 (release) resteert.
-- **Laatst gewerkt aan:** TestFlight-prep (icoon, export-compliance, schone Release-archive, walkthrough).
-- **Volgende stap:** **Eigenaar voert TestFlight-upload uit** via `docs/TestFlight-walkthrough.md` (interne test: geen review/privacy-URL nodig). Daarna evt. volledige App Store-release (screenshots/listing) of P1-features.
+- **Laatst gewerkt aan:** TestFlight — build geüpload, verwerkt en **geïnstalleerd op een echt toestel** (interne test) ✅.
+- **Volgende stap:** On-device smoke-test (vooral barcode-scanner D2, notificatie-permissie, feel). Daarna keuze: volledige App Store-release (screenshots/listing/privacy-URL via `app-store-release`-skill) óf P1 (widget, gezin-delen, OCR, Pro-unlock).
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
@@ -13,9 +13,13 @@
 - [x] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [x] C3 feed · [x] C4 detail
 - [x] Blok D — toevoegen & matching: [x] D1 onboarding · [x] D2 toevoegen+scan · [x] D3 MatchingService · [x] D4 "is dit van jou?"
 - [x] Blok E — notificaties & retentie: [x] E1 BGAppRefreshTask · [x] E2 lokale notificaties (trede/bundel/rustige uren) · [x] E3 maandelijkse digest
-- [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [~] F3 TestFlight (bouwzijde klaar; upload = eigenaar) · [ ] F3 volledige App Store-release
+- [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [x] F3 TestFlight — **build live op toestel** · [ ] F3 volledige App Store-release
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — TestFlight LIVE)
+- Build geüpload, verwerkt en **geïnstalleerd op een echt toestel** via TestFlight (interne test, geen review). Mijlpaal: v1 is live testbaar.
+- Te doen door eigenaar: on-device smoke-test — barcode-scanner (alleen op device), notificatie-permissie, CloudKit-sync, algemeen gevoel.
+
 ### 2026-06-16 (sessie 2 — TestFlight-prep, F3)
 - **App-icoon** 1024×1024 (opaque) gegenereerd via `RecallRadar/Tools/GenerateAppIcon.swift` (radar + blip) → `AppIcon.appiconset` (lege icon was anders een upload-blocker). Contents.json naar single-size.
 - **Export-compliance** vooraf gezet: `INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO` (beide configs) — alleen HTTPS, dus de submit-vraag wordt niet meer gesteld.
