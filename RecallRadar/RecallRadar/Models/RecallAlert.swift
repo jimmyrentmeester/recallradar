@@ -38,7 +38,8 @@ nonisolated struct RecallAlert: Codable, Identifiable, Hashable, Sendable {
 
     let riskType: String     // interne risico-code
     let riskDesc: String?
-    let measure: String      // handelingsadvies
+    let measure: String      // officiële markt-maatregel (vertaald)
+    let action: String?      // consumentenactie ("wat moet je doen?")
 
     let country: String      // ISO-2
 
@@ -68,6 +69,7 @@ nonisolated struct RecallAlert: Codable, Identifiable, Hashable, Sendable {
         case riskType = "risk_type"
         case riskDesc = "risk_desc"
         case measure
+        case action
         case country
         case imageURLString = "image_url"
         case imageURLStrings = "image_urls"

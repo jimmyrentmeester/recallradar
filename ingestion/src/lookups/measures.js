@@ -64,6 +64,50 @@ function translateAction(action) {
   return core.charAt(0).toUpperCase() + core.slice(1);
 }
 
+// --- Consumentenactie ("Wat moet je doen?") ---------------------------------
+// Niet de markt-maatregel beschrijven, maar wat de BEZITTER moet doen. We
+// classificeren de maatregel-actie (EN of NL) en kiezen de meest beschermende.
+
+// Sterkste/meest-beschermende eerst.
+const ACTION_PRIORITY = ['recall', 'repair', 'destruction', 'stop', 'removal', 'warning', 'import', 'admin'];
+
+function classifyAction(text) {
+  const t = norm(text);
+  if (/recall|terugroep|terugg?eroep|retour|terug te brengen|terugbrengen/.test(t)) return 'recall';
+  if (/repair|repareren|reparatie|reparatieset|aanpassing|prior conditions|technical measures|modification|safety upgrade|spare part|installation of safety|safety device/.test(t)) return 'repair';
+  if (/destruction|destroy|dispose|asbestos|vernietig|afvoeren|weggooien/.test(t)) return 'destruction';
+  if (/withdrawal|withdraw|ban on the marketing|stop of sales|temporary ban|uit de handel|niet meer gebruiken|stop het gebruik|verkoopverbod|leveringsverbod/.test(t)) return 'stop';
+  if (/removal of this product listing|aanbieding verwijderd/.test(t)) return 'removal';
+  if (/warning|warn|marking the product|waarschuw|wees voorzichtig/.test(t)) return 'warning';
+  if (/import rejected|grens geweigerd/.test(t)) return 'import';
+  return 'admin';
+}
+
+const ACTION_TEXT = {
+  recall: 'Stop met gebruik en breng het product terug voor terugbetaling, reparatie of vervanging — neem contact op met de winkel of fabrikant.',
+  repair: 'Gebruik het product pas weer na reparatie of aanpassing. Neem contact op met de fabrikant voor de oplossing (bijvoorbeeld een reparatieset).',
+  destruction: 'Gebruik het product niet meer en voer het veilig af volgens de instructies.',
+  stop: 'Stop met het gebruik van dit product en neem contact op met de winkel of fabrikant over terugbetaling of vervanging.',
+  removal: 'Stop met gebruik. Online gekocht? Neem contact op met de verkoper of het platform waar je het kocht.',
+  warning: 'Wees voorzichtig bij gebruik en volg de veiligheidsinstructies; stop bij twijfel.',
+  import: 'Dit product is aan de grens tegengehouden en hoort niet op de markt. Bezit je het al, stop dan met gebruik.',
+  admin: 'Stop bij twijfel met gebruik en raadpleeg de officiële bron voor het juiste advies.',
+};
+
+// measures = array ruwe measure-strings (Safety Gate) of [vrije tekst] (NVWA).
+export function consumerAction(measures, riskLabelText) {
+  const cats = (measures || []).filter(Boolean).map((m) => {
+    const am = String(m).match(/\(to:[^)]*\)\s*(.+)$/); // alleen het actie-deel (Safety Gate)
+    return classifyAction(am ? am[1] : m);
+  });
+  let best = 'admin';
+  for (const c of ACTION_PRIORITY) { if (cats.includes(c)) { best = c; break; } }
+  if (best === 'warning' && riskLabelText) {
+    return `Wees voorzichtig bij gebruik (risico: ${riskLabelText.toLowerCase()}). Volg de veiligheidsinstructies en stop bij twijfel.`;
+  }
+  return ACTION_TEXT[best];
+}
+
 // Hoofdfunctie: ruwe measure-string → NL. Valt terug op het origineel bij geen patroon.
 export function translateMeasure(raw) {
   if (!raw) return null;

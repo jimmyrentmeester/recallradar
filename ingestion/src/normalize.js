@@ -6,9 +6,9 @@ import {
   toISODate, toISODateTime, toArray, firstNonEmpty,
 } from './util.js';
 import { mapSafetyGateCategory, classifyNvwaCategory, isFood } from './lookups/categories.js';
-import { mapRisk } from './lookups/risks.js';
+import { mapRisk, riskLabel } from './lookups/risks.js';
 import { mapCountry } from './lookups/countries.js';
-import { translateMeasure } from './lookups/measures.js';
+import { translateMeasure, consumerAction } from './lookups/measures.js';
 
 const slug = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
@@ -29,6 +29,8 @@ export function normalizeSafetyGate(rec, ingestedAt) {
   const modelRaw = firstNonEmpty(rec.product_model_type);
   const measure = toArray(rec.measures_country).map(translateMeasure).filter(Boolean).join(' ')
     || 'Zie de officiële bron voor het handelingsadvies.';
+  const riskCode = mapRisk(rec.alert_type);
+  const action = consumerAction(toArray(rec.measures_country), riskLabel(riskCode));
   const sourceUrl = firstNonEmpty(rec.product_recall_url, rec.rapex_url, 'https://ec.europa.eu/safety-gate-alerts/');
 
   return {
@@ -43,9 +45,10 @@ export function normalizeSafetyGate(rec, ingestedAt) {
     source_category: firstNonEmpty(rec.product_category),
     barcode: normalizeBarcode(rec.product_barcode),
     batch_lot: firstNonEmpty(rec.product_batch_number, rec.product_recall_code),
-    risk_type: mapRisk(rec.alert_type),
+    risk_type: riskCode,
     risk_desc: firstNonEmpty(rec.alert_description),
     measure,
+    action,
     country: mapCountry(rec.alert_country) ?? 'EU',
     image_url: firstNonEmpty(rec.product_image),
     image_urls: toArray(rec.product_other_images),
@@ -94,6 +97,7 @@ export function normalizeNvwa(item, ingestedAt) {
   const { product, brand } = parseNvwaBrandModel(item.title);
   const brandRaw = brand;
   const id = `nvwa-${hash(item.url)}`;
+  const riskCode = parseNvwaRisk(haystack);
 
   return {
     id,
@@ -107,9 +111,10 @@ export function normalizeNvwa(item, ingestedAt) {
     source_category: null,
     barcode: extractBarcode(item.summary),
     batch_lot: extractBatch(item.summary),
-    risk_type: parseNvwaRisk(haystack),
+    risk_type: riskCode,
     risk_desc: item.summary || null,
     measure: item.summary || 'Zie de officiële NVWA-waarschuwing voor het handelingsadvies.',
+    action: consumerAction([haystack], riskLabel(riskCode)),
     country: 'NL',
     image_url: item.imageUrl ?? null,
     image_urls: [],

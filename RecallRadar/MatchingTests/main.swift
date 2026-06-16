@@ -35,7 +35,7 @@ func alert(brand: String?, model: String?, category: String, barcode: String? = 
         id: id, source: .safetyGate, alertNumber: id,
         brand: brand, brandRaw: brand, model: model, modelRaw: model,
         category: category, sourceCategory: nil, barcode: barcode, batchLot: nil,
-        riskType: "letsel", riskDesc: nil, measure: "Stop gebruik.", country: "NL",
+        riskType: "letsel", riskDesc: nil, measure: "Stop gebruik.", action: nil, country: "NL",
         imageURLString: nil, imageURLStrings: nil, sourceURLString: "https://x",
         publishedAt: Date(timeIntervalSince1970: 1_700_000_000),
         updatedAt: Date(timeIntervalSince1970: 1_700_000_000), ingestedAt: nil,

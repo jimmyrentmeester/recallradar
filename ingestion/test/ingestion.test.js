@@ -6,7 +6,7 @@ import { mapSafetyGateCategory, classifyNvwaCategory, isFood } from '../src/look
 import { mapRisk } from '../src/lookups/risks.js';
 import { mapCountry } from '../src/lookups/countries.js';
 import { normalizeSafetyGate, normalizeNvwa } from '../src/normalize.js';
-import { translateMeasure } from '../src/lookups/measures.js';
+import { translateMeasure, consumerAction } from '../src/lookups/measures.js';
 import { dedup } from '../src/dedup.js';
 
 const NOW = '2026-06-15T10:00:00Z';
@@ -138,6 +138,28 @@ test('translateMeasure: getemplate measure → NL', () => {
   );
   // Geen patroon → ongewijzigd
   assert.equal(translateMeasure('iets heel anders'), 'iets heel anders');
+});
+
+test('consumerAction: maatregel → bezitter-actie (sterkste wint)', () => {
+  assert.match(
+    consumerAction(['Measures ordered by economic operators (to: Manufacturer) Recall of the product from end users'], 'Letsel'),
+    /breng het product terug/i
+  );
+  // Recall wint van warning bij meerdere maatregelen.
+  assert.match(
+    consumerAction([
+      'Measures ordered by public authorities (to: Other) Warning consumers of the risks',
+      'Measures ordered by economic operators (to: Distributor) Recall of the product from end users',
+    ], 'Brand / hitte'),
+    /terug/i
+  );
+  // Alleen waarschuwing → voorzichtig, met risico.
+  assert.match(
+    consumerAction(['Measures ordered by public authorities (to: Retailer) Warning consumers of the risks'], 'Brand / hitte'),
+    /voorzichtig.*brand/i
+  );
+  // NVWA vrije tekst met "teruggeroepen" → recall-actie.
+  assert.match(consumerAction(['Het product wordt teruggeroepen.'], 'Letsel'), /terug/i);
 });
 
 test('dedup: id-niveau houdt het meest complete record', () => {

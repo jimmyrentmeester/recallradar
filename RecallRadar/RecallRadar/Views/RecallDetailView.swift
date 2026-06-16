@@ -136,14 +136,23 @@ struct RecallDetailView: View {
         VStack(alignment: .leading, spacing: 6) {
             Label("Wat moet je doen?", systemImage: "checklist")
                 .font(.headline)
-            Text(alert.measure)
+            Text(alert.action ?? alert.measure)
                 .font(.body)
+            DisclosureGroup("Officiële maatregel") {
+                Text(alert.measure)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .font(.footnote)
+            .tint(.secondary)
+            .padding(.top, 2)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Wat moet je doen? \(alert.measure)")
+        .accessibilityLabel("Wat moet je doen? \(alert.action ?? alert.measure)")
     }
 
     private var details: some View {
