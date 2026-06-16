@@ -3,9 +3,9 @@
 > Houd dit bij aan het einde van elke Claude Code-sessie, zodat de volgende sessie (of een verse context) direct verder kan. Zelfde workflow als je toddler-games.
 
 ## Status (samenvatting)
-- **Fase:** Bouw deel 2 — **Blokken B–E af**. Volledige P0-app: index live, on-device matching, feed/detail, onboarding/volgen/toevoegen/scan, bevestiging, notificaties + digest.
-- **Laatst gewerkt aan:** Blok E — BGAppRefreshTask + lokale notificaties + maandelijkse digest.
-- **Volgende stap:** **Blok F** — privacy-labels, camera-uitleg, disclaimer-scherm (F1); lege/foutstaten + "laatst bijgewerkt" (F2); TestFlight + App Store-listing (F3).
+- **Fase:** Bouw deel 2 — **Blokken B–E + F1/F2 af**. App is functioneel + App Store-waardig; alleen F3 (release) resteert.
+- **Laatst gewerkt aan:** F1 (disclaimer/bronnen/privacy + privacy-manifest) + F2 (offline-banner, fout-staat met retry, "laatst bijgewerkt").
+- **Volgende stap:** **F3** — TestFlight + App Store-listing (eigenaar-traject, met de `app-store-release`-skill): archiveren/uploaden, listing, screenshots, privacy-vragenlijst, review. Optioneel daarna P1 (widget, gezin-delen, OCR, Pro-unlock).
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
@@ -13,8 +13,14 @@
 - [x] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [x] C3 feed · [x] C4 detail
 - [x] Blok D — toevoegen & matching: [x] D1 onboarding · [x] D2 toevoegen+scan · [x] D3 MatchingService · [x] D4 "is dit van jou?"
 - [x] Blok E — notificaties & retentie: [x] E1 BGAppRefreshTask · [x] E2 lokale notificaties (trede/bundel/rustige uren) · [x] E3 maandelijkse digest
+- [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [ ] F3 TestFlight + App Store (eigenaar)
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Blok F1 + F2)
+- **F1:** `AboutView` — altijd bereikbaar via info-knop (Feed + Mijn spullen). Disclaimer (P0-7), bronvermelding (Safety Gate + NVWA, CC0, klikbaar), privacy-uitleg (on-device/geen account/geen tracking), gegevens (laatst bijgewerkt, count, versie), GitHub-link. `PrivacyInfo.xcprivacy` toegevoegd (NSPrivacyTracking false, geen verzamelde data, UserDefaults-reason CA92.1). Camera-uitleg stond al.
+- **F2:** `RecallStore` onderscheidt nu `loaded` vs `failed` (geen netwerk én geen cache/bundle → nooit als "geen recalls" tonen; fout-staat met **Opnieuw proberen**). Offline-banner als cache/bundle wordt getoond. "Laatst bijgewerkt" + lege zoekstaat al aanwezig.
+- Build SUCCEEDED; About-scherm visueel geverifieerd in Simulator.
+
 ### 2026-06-16 (sessie 2 — Blok E: notificaties & retentie)
 - **E1 `BackgroundRefresh`:** BGAppRefreshTask (`jire.RecallRadar.refresh`, in Info.plist) — registreert bij launch, plant ~1×/dag, ververst de index en matcht **alleen nieuwe/gewijzigde** alerts (watermark op `updatedAt`; eerste run = baseline, geen backlog-spam). Dedup van gepushte alert-ids in `NotifState` (UserDefaults).
 - **E2 notificaties:** `NotificationPlanner` (puur, getest) — bundeling per trede (HOOG alarm / MIDDEL zacht) + rustige uren (22–08 → uitstellen tot 08:00). `NotificationService` wrapt UNUserNotificationCenter. Permissie wordt gevraagd na onboarding + via een "Zet meldingen aan"-rij voor wie de onboarding oversloeg. **Permissie-prompt live geverifieerd in Simulator.**
