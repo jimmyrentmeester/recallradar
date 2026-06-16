@@ -3,17 +3,24 @@
 > Houd dit bij aan het einde van elke Claude Code-sessie, zodat de volgende sessie (of een verse context) direct verder kan. Zelfde workflow als je toddler-games.
 
 ## Status (samenvatting)
-- **Fase:** Bouw deel 2 — **Blok C volledig af (incl. C4-polish) + D3 af**. Feed+detail live; matching-engine puur & getest.
-- **Laatst gewerkt aan:** C4-polish (galerij/delen/a11y), visueel geverifieerd in Simulator.
-- **Volgende stap:** **D1** (onboarding merk/categorie volgen) + **D2** (product toevoegen + barcode-scan) + **D4** ("is dit van jou?"-bevestiging) — die hangen aan de nu-werkende MatchingService.
+- **Fase:** Bouw deel 2 — **Blok C af + D1/D2/D3 af**. Onboarding, volgen, toevoegen/scan en matching werken end-to-end (visueel geverifieerd).
+- **Laatst gewerkt aan:** D1 (onboarding + volgen) + D2 (toevoegen + VisionKit-scanner) + MatchBridge.
+- **Volgende stap:** **D4** — "is dit van jou?"-bevestiging (confirm/suppress UI) + "Voor jou" verfijnen (categorie-follows horen in de feed, niet als persoonlijke matches). Daarna Blok E (notificaties/digest).
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
 - [x] Blok A — Xcode-project scaffold (door eigenaar in Xcode) ✅
 - [x] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [x] C3 feed · [x] C4 detail
-- [ ] Blok D — toevoegen & matching: [ ] D1 onboarding · [ ] D2 toevoegen+scan · [x] D3 MatchingService · [ ] D4 "is dit van jou?"
+- [ ] Blok D — toevoegen & matching: [x] D1 onboarding · [x] D2 toevoegen+scan · [x] D3 MatchingService · [ ] D4 "is dit van jou?"
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Blok D1 + D2)
+- **D1 onboarding/volgen:** `OnboardingView` (first-run categorie-keuze, jonge-gezin-spits met "populair"-badge), `MyStuffView`-tab (categorieën/merken volgen + producten). `ContentView` is nu een TabView (Feed / Mijn spullen).
+- **D2 toevoegen:** `AddProductView` (handmatig merk/model/categorie/barcode) + `BarcodeScannerView` (VisionKit DataScanner, EAN/UPC; device-gated, op Simulator verborgen met uitleg). Barcode-prefill van merk/categorie uit de index.
+- **MatchBridge:** koppelt SwiftData (TrackedProduct/Subscription) aan de pure MatchingService; "Voor jou" toont relevante recalls met tier-badges.
+- **Geverifieerd in Simulator:** onboarding → 2 categorieën gevolgd → "Voor jou · 1.763 relevant" = exact 1.668 (kinderen) + 95 (witgoed). Toevoeg-sheet rendert; scanknop correct verborgen zonder camera. Build SUCCEEDED.
+- **D4-verfijning genoteerd:** categorie-follows vullen nu "Voor jou" (1.763, trede LAAG) — die horen eigenlijk in de feed; "Voor jou" moet bezit- + merk-matches benadrukken. Plus de "is dit van jou?"-bevestiging (confirm/suppress schrijft al naar TrackedProduct via UserDataStore).
+
 ### 2026-06-16 (sessie 2 — C4-polish afgerond)
 - `RecallDetailView` afgewerkt: foto-**galerij** (paged TabView bij meerdere foto's), **deel-knop** (ShareLink in de toolbar), **toegankelijkheidslabels** (risico/categorie + advies gecombineerd). Build SUCCEEDED; visueel geverifieerd in Simulator (detail van een Safety Gate-recall).
 - Bekend: vrije tekst (`risk_desc`/`measure`) is Engels (brondata Safety Gate); labels/categorieën/risico's zijn NL. Vertaling = latere optie, geen v1-blocker.
