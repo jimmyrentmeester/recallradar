@@ -63,11 +63,11 @@ Maak voor **elke** token hieronder een Color Set met een **Any (light)**- en **D
 |---|---|---|
 | `riskHigh` | `#C2341D` | `#F1715C` |
 | `riskHighBg` | `#FBE7E2` | `#3A1E18` |
-| `riskMedium` | `#B8690A` | `#E0A04A` |
+| `riskMedium` | `#9E5A08` | `#E0A04A` |
 | `riskMediumBg` | `#FBEFD9` | `#332617` |
 | `riskLow` | `#5B6B6A` | `#9FB0AE` |
 | `riskLowBg` | `#EDF0F1` | `#222A28` |
-| `reassureGreen` | `#2E7D52` | `#5FBF8A` |
+| `reassureGreen` | `#2C784E` | `#5FBF8A` |
 | `reassureGreenBg` | `#E2F1E8` | `#16301F` |
 
 > Zet in elke Color Set "Appearances" op **Any, Dark** en vink **sRGB** aan. De `*Bg`-darkwaarden zijn bewust diep en gedempt zodat ze niet gloeien op `bgPrimary` (`#0F1413`).

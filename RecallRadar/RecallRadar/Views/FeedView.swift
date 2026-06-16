@@ -14,7 +14,6 @@ struct FeedView: View {
 
     @State private var selectedCategory: String? = nil // nil = alle
     @State private var searchText: String = ""
-    @State private var showInfo = false
 
     var body: some View {
         NavigationStack {
@@ -30,13 +29,6 @@ struct FeedView: View {
             }
             .navigationTitle("Verken")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button { showInfo = true } label: { Image(systemName: "info.circle") }
-                        .accessibilityLabel("Over en disclaimer")
-                }
-            }
-            .sheet(isPresented: $showInfo) { AboutView(store: store) }
         }
     }
 

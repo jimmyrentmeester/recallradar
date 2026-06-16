@@ -4,8 +4,8 @@
 
 ## Status (samenvatting)
 - **Fase:** Bouw deel 2 — **Blokken B–E + F1/F2 af**. App is functioneel + App Store-waardig; alleen F3 (release) resteert.
-- **Laatst gewerkt aan:** Feedback-ronde 2 (Batch A+B) + on-device vertaling risico-omschrijving. CI doet nu volledige rebuild; build bumped naar 2.
-- **Volgende stap:** Eigenaar maakt **nieuwe TestFlight-build (build 2)** voor de app-wijzigingen (home/snelheid/bewerken/autocomplete/vertaling). NL-measures zijn al live (data). Daarna volledige App Store-release óf P1.
+- **Laatst gewerkt aan:** Design-systeem alignment (DESIGN/ASSETS) + restpunten (contrast, onboarding-privacy, AboutView weg).
+- **Volgende stap:** Eigenaar uploadt **TestFlight build 2** (Archive → Distribute → Upload) en test op toestel. Daarna volledige App Store-release óf P1.
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
@@ -27,6 +27,12 @@
 - **Bewuste afwijking (genoteerd per §0.5):** doc schrijft feed=startscherm (3 tabs); eigenaar koos **Thuis (persoonlijk) als opening** → 3 tabs Thuis · Verken · Instellingen. Sterker voor de kernwaarde.
 - 38 app- + 16 ingestion-tests groen; build SUCCEEDED; home/Instellingen visueel geverifieerd. Zit in **build 2** (app-code).
 - *Rest/later:* AboutView overlapt nu deels met Instellingen; contrast-tabel (ASSETS Deel C) formeel narekenen; onboarding-privacyscherm aanscherpen.
+
+### 2026-06-16 (sessie 2 — Design-restpunten afgehandeld)
+- **Contrast geverifieerd** (WCAG, alle paren uit ASSETS Deel C, light+dark). Twee zakten onder 4.5 voor kleine tekst → voorgrond verdonkerd: `riskMedium` `#B8690A`→`#9E5A08` (4.71), `reassureGreen` `#2E7D52`→`#2C784E` (4.61). Definitieve hex teruggeschreven naar DESIGN §2.2 / ASSETS B.2. (`white/brandPrimary` dark is geen issue: primaire knoppen gebruiken systeem-`.borderedProminent` met auto-contrast label.)
+- **Onboarding-privacyscherm** (§4.2/principe 3): privacybelofte + slot-symbool ("Je productlijst blijft op je toestel. Geen account nodig.") + de waarde-zin bovenaan.
+- **AboutView verwijderd** (overlapte met de Instellingen-tab): info-knoppen uit Thuis + Verken weg; disclaimer blijft bereikbaar via Instellingen én elk recall-detail.
+- Build SUCCEEDED. Klaar voor TestFlight build 2.
 
 ### 2026-06-16 (sessie 2 — NVWA-classificatie verbeterd)
 - **Probleem:** elke NVWA-titel bevat "waarschuwt" → acties classificeerden als zwakke "wees voorzichtig"; risico viel vaak op "overig"; snippet was te kort.

@@ -30,11 +30,29 @@ struct OnboardingView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: DS.Space.lg) {
                     Text("Welkom bij Recall Radar")
                         .font(.largeTitle.bold())
-                    Text("Kies de categorieën die je belangrijk vindt. Je krijgt alleen recalls die er voor jóu toe doen — geen ruis. Later kun je losse producten of merken toevoegen.")
-                        .foregroundStyle(.secondary)
+                    Text("Wij waarschuwen je alleen als jóuw spullen worden teruggeroepen — geen ruis.")
+                        .foregroundStyle(DS.Color.textSecondary)
+
+                    // Privacybelofte voelbaar maken (§4.2 / principe 3).
+                    HStack(spacing: DS.Space.md) {
+                        Image(systemName: "lock.shield.fill")
+                            .font(.title2)
+                            .foregroundStyle(DS.Color.brandPrimary)
+                            .accessibilityHidden(true)
+                        Text("Je productlijst blijft op je toestel. Geen account nodig.")
+                            .font(.subheadline)
+                            .foregroundStyle(DS.Color.textPrimary)
+                    }
+                    .padding(DS.Space.md)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(DS.Color.brandPrimaryMuted, in: RoundedRectangle(cornerRadius: DS.Radius.md))
+
+                    Text("Kies de categorieën die je belangrijk vindt. Later kun je losse producten of merken toevoegen.")
+                        .font(.subheadline)
+                        .foregroundStyle(DS.Color.textSecondary)
 
                     LazyVGrid(columns: columns, spacing: 10) {
                         ForEach(categoryCodes, id: \.self) { code in

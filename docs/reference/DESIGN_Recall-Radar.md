@@ -80,11 +80,11 @@ Alle kleuren als semantische tokens; concrete hex zijn de light-mode-basis. Defi
 |---|---|---|---|
 | `riskHigh` | `#C2341D` | Ernstig risico / HOOG-match | HOOG (≥75) |
 | `riskHighBg` | `#FBE7E2` | Achtergrond achter `riskHigh` |  |
-| `riskMedium` | `#B8690A` | Verhoogd risico / "is dit van jou?" | MIDDEL (45–74) |
+| `riskMedium` | `#9E5A08` | Verhoogd risico / "is dit van jou?" | MIDDEL (45–74) |
 | `riskMediumBg` | `#FBEFD9` | Achtergrond achter `riskMedium` |  |
 | `riskLow` | `#5B6B6A` | Laag / informatief / alleen-feed | LAAG (20–44) |
 | `riskLowBg` | `#EDF0F1` | Achtergrond achter `riskLow` |  |
-| `reassureGreen` | `#2E7D52` | Geruststelling: "niets geraakt" | digest, lege staat |
+| `reassureGreen` | `#2C784E` | Geruststelling: "niets geraakt" | digest, lege staat |
 | `reassureGreenBg` | `#E2F1E8` | Achtergrond geruststelling |  |
 
 > **Belangrijk:** `riskHigh` (rood) is een *terracotta*-rood, geen schreeuwend signaalrood — het past bij de rustige grondhouding en blijft toegankelijk op wit. `riskMedium` is een amber/oker, géén feloranje. Gebruik risicokleuren alleen voor de risk-pill, de detailheader-accentband en de bijbehorende HOOG-notificatie. **Nooit** voor randen van de hele card of voor de tabbar.
