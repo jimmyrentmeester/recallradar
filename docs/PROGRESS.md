@@ -3,16 +3,26 @@
 > Houd dit bij aan het einde van elke Claude Code-sessie, zodat de volgende sessie (of een verse context) direct verder kan. Zelfde workflow als je toddler-games.
 
 ## Status (samenvatting)
-- **Fase:** Bouw deel 2 — **C1 + B6 live**. Index draait in de cloud op GitHub Pages; app-laag haalt 'm op.
-- **Laatst gewerkt aan:** GitHub-repo + Action + Pages live gezet en geverifieerd (B6 echt live).
-- **Volgende stap:** **Blok C2** (SwiftData-modellen `TrackedProduct`/`Subscription` + CloudKit-mirroring), daarna C3 feed + C4 detail.
+- **Fase:** Bouw deel 2 — **C1 + C2 af, B6 live**. Index in de cloud; app-laag (download/cache + SwiftData/CloudKit) staat.
+- **Laatst gewerkt aan:** C2 — SwiftData-modellen + CloudKit-container + CRUD-store.
+- **Volgende stap:** **C3** (browsebare feed met categoriefilter, P0-3), daarna C4 (recall-detail). Eigenaar: iCloud-capability in Xcode bevestigen.
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
 - [x] Blok A — Xcode-project scaffold (door eigenaar in Xcode) ✅
-- [ ] Blok C — app-kern: [x] C1 modellen+download/cache · [ ] C2 SwiftData · [ ] C3 feed · [ ] C4 detail
+- [ ] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [ ] C3 feed · [ ] C4 detail
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Blok C2)
+- **C2 SwiftData-laag gebouwd:**
+  - `Models/TrackedProduct.swift` (bezit) + `Models/Subscription.swift` (merk/categorie-follow) — CloudKit-compatibel (defaults overal, geen unique, geen verplichte relaties). `confirmedMatches`/`suppressedMatches` voor de feedback-loop.
+  - `Services/Persistence.swift` — `ModelContainer` met CloudKit-mirroring (`.automatic`) + **fallback naar lokaal/in-memory** zodat de app nooit crasht vóór de capability actief is.
+  - `Services/UserDataStore.swift` — CRUD + dedup van follows + confirm/suppress + `isMonitoringAnything` (voor de maand-digest).
+  - `RecallRadarApp` koppelt de container via `.modelContainer`.
+- **Entitlements/Info.plist:** iCloud-container `iCloud.jire.RecallRadar` toegevoegd; `remote-notification` background-mode erbij (CloudKit-sync).
+- **Geverifieerd:** hele app type-checkt schoon tegen iOS 26.5 SDK (exit 0).
+- **Nog door eigenaar in Xcode:** iCloud-capability bevestigen (CloudKit + container `iCloud.jire.RecallRadar` registreren) voor device-builds; Simulator werkt nu al via de fallback.
+
 ### 2026-06-16 (sessie 2 — B6 live op GitHub Pages)
 - Repo gepusht → **github.com/jimmyrentmeester/recallradar** (publiek). Git-remote `origin` over HTTPS (token niet opgeslagen).
 - GitHub Action handmatig getriggerd → **run 1 geslaagd**: bouwde de index in de cloud en pushte naar `gh-pages` (`.nojekyll`, `index.json`, `meta.json`).
