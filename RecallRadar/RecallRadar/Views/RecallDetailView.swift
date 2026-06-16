@@ -16,7 +16,7 @@ struct RecallDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                hero
+                gallery
                 header
                 actionAdvice
                 details
@@ -27,25 +27,57 @@ struct RecallDetailView: View {
         }
         .navigationTitle(index.categoryLabel(alert.category))
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if let share = shareURL {
+                ShareLink(item: share, subject: Text(alert.displayTitle),
+                          message: Text("Recall via Recall Radar")) {
+                    Image(systemName: "square.and.arrow.up")
+                }
+                .accessibilityLabel("Deel deze recall")
+            }
+        }
     }
 
-    @ViewBuilder private var hero: some View {
-        if let url = alert.imageURL {
-            AsyncImage(url: url) { phase in
-                switch phase {
-                case .success(let img):
-                    img.resizable().scaledToFit()
-                case .failure:
-                    placeholder
-                default:
-                    ProgressView().frame(maxWidth: .infinity, minHeight: 160)
+    /// Hoofdfoto + extra foto's, ontdubbeld. Galerij bij meerdere; enkel beeld anders.
+    private var images: [URL] {
+        var urls: [URL] = []
+        if let main = alert.imageURL { urls.append(main) }
+        for u in alert.imageURLs where !urls.contains(u) { urls.append(u) }
+        return urls
+    }
+
+    @ViewBuilder private var gallery: some View {
+        if images.count > 1 {
+            TabView {
+                ForEach(images, id: \.self) { url in
+                    photo(url)
                 }
             }
-            .frame(maxWidth: .infinity)
-            .frame(maxHeight: 260)
-            .background(.quaternary)
+            .tabViewStyle(.page(indexDisplayMode: .always))
+            .frame(height: 280)
             .clipShape(RoundedRectangle(cornerRadius: 14))
+            .accessibilityLabel("Productfoto's, \(images.count) stuks")
+        } else if let url = images.first {
+            photo(url)
+                .frame(maxHeight: 260)
+                .background(.quaternary)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
         }
+    }
+
+    private func photo(_ url: URL) -> some View {
+        AsyncImage(url: url) { phase in
+            switch phase {
+            case .success(let img):
+                img.resizable().scaledToFit()
+            case .failure:
+                placeholder
+            default:
+                ProgressView().frame(maxWidth: .infinity, minHeight: 160)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityLabel("Foto van \(alert.displayTitle)")
     }
 
     private var placeholder: some View {
@@ -53,7 +85,10 @@ struct RecallDetailView: View {
             .font(.largeTitle)
             .foregroundStyle(.secondary)
             .frame(maxWidth: .infinity, minHeight: 160)
+            .accessibilityHidden(true)
     }
+
+    private var shareURL: URL? { alert.sourceURL }
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -69,6 +104,8 @@ struct RecallDetailView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Risico: \(index.riskLabel(alert.riskType)). Categorie: \(index.categoryLabel(alert.category))")
             if let desc = alert.riskDesc, !desc.isEmpty {
                 Text(desc).font(.body).foregroundStyle(.secondary)
             }
@@ -85,6 +122,8 @@ struct RecallDetailView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Wat moet je doen? \(alert.measure)")
     }
 
     private var details: some View {
