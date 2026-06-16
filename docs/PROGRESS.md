@@ -16,6 +16,11 @@
 - [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [x] F3 TestFlight — **build live op toestel** · [ ] F3 volledige App Store-release
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Feedback-ronde 1: perf + hoofdpagina)
+- **Performance-fix:** matching draaide synchroon op de main thread over alle ~9.000 alerts bij elke her-render → trage Bewaar/"Ja, van mij". Nu: `MatchBridge.snapshot` (main, goedkoop) + `MatchBridge.compute` (`nonisolated`, off-main via `Task.detached`), resultaat gecachet in `@State` en herberekend via `.task(id: matchKey)` alleen bij input-wijziging. Modellen `Sendable` gemaakt.
+- **Hoofdpagina herinricht:** `ContentView` opent nu op de **persoonlijke home** (tab "Thuis"); de feed is tab "Verken" (zoeken/filter). Home heeft een samenvatting-header (producten · gevolgd · relevant) + "Voor jou". Build SUCCEEDED, 38 tests groen, visueel geverifieerd.
+- **Openstaand uit feedback (volgende rondes):** (a) "Wat moet je doen?"/risico-tekst naar NL; (b) merk-autocomplete uit index (typo's); (c) producten bewerken; (d) naam-prompt na barcode zonder index-match; (e) directe "dit is teruggeroepen"-check bij toevoegen; (f) model-matching nakijken (cryptische Safety Gate-codes); (g) pushes vs in-app match-semantiek verduidelijken.
+
 ### 2026-06-16 (sessie 2 — TestFlight LIVE)
 - Build geüpload, verwerkt en **geïnstalleerd op een echt toestel** via TestFlight (interne test, geen review). Mijlpaal: v1 is live testbaar.
 - Te doen door eigenaar: on-device smoke-test — barcode-scanner (alleen op device), notificatie-permissie, CloudKit-sync, algemeen gevoel.
