@@ -3,17 +3,21 @@
 > Houd dit bij aan het einde van elke Claude Code-sessie, zodat de volgende sessie (of een verse context) direct verder kan. Zelfde workflow als je toddler-games.
 
 ## Status (samenvatting)
-- **Fase:** Bouw deel 2 — **Blok C af + D3 (MatchingService) af**. Feed live; matching-engine puur & getest.
-- **Laatst gewerkt aan:** D3 — `MatchingService` + `Normalizer` (Swift-port van util.js), 24 headless unit-tests groen.
+- **Fase:** Bouw deel 2 — **Blok C volledig af (incl. C4-polish) + D3 af**. Feed+detail live; matching-engine puur & getest.
+- **Laatst gewerkt aan:** C4-polish (galerij/delen/a11y), visueel geverifieerd in Simulator.
 - **Volgende stap:** **D1** (onboarding merk/categorie volgen) + **D2** (product toevoegen + barcode-scan) + **D4** ("is dit van jou?"-bevestiging) — die hangen aan de nu-werkende MatchingService.
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
 - [x] Blok A — Xcode-project scaffold (door eigenaar in Xcode) ✅
-- [ ] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [x] C3 feed · [~] C4 detail (kern af)
+- [x] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [x] C3 feed · [x] C4 detail
 - [ ] Blok D — toevoegen & matching: [ ] D1 onboarding · [ ] D2 toevoegen+scan · [x] D3 MatchingService · [ ] D4 "is dit van jou?"
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — C4-polish afgerond)
+- `RecallDetailView` afgewerkt: foto-**galerij** (paged TabView bij meerdere foto's), **deel-knop** (ShareLink in de toolbar), **toegankelijkheidslabels** (risico/categorie + advies gecombineerd). Build SUCCEEDED; visueel geverifieerd in Simulator (detail van een Safety Gate-recall).
+- Bekend: vrije tekst (`risk_desc`/`measure`) is Engels (brondata Safety Gate); labels/categorieën/risico's zijn NL. Vertaling = latere optie, geen v1-blocker.
+
 ### 2026-06-16 (sessie 2 — Blok D3: MatchingService)
 - **`Services/Normalizer.swift`** — Swift-port van `ingestion/src/util.js` (tekst/model/barcode-normalisatie + Jaro-Winkler). MOET identiek aan util.js zijn, want alert-velden zijn al door util.js genormaliseerd.
 - **`Services/MatchingService.swift`** — puur & `nonisolated`, werkt op value-types (`MatchableProduct`, geen SwiftData). Scoring + tredes uit de `MatchingConfig` die in de index meereist. Feedback-loop: confirmed → HOOG, suppressed → GEEN. Aparte follow-tak (merk → MIDDEL, categorie → feed/LAAG).
