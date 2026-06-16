@@ -3,9 +3,9 @@
 > Houd dit bij aan het einde van elke Claude Code-sessie, zodat de volgende sessie (of een verse context) direct verder kan. Zelfde workflow als je toddler-games.
 
 ## Status (samenvatting)
-- **Fase:** Bouw deel 2 — **Blok C1 afgerond** (Codable-modellen + index-download/cache). Blok B (ingestion) klaar.
-- **Laatst gewerkt aan:** C1 — `RecallAlert`/`RecallIndex`-modellen, `IndexService` (ETag/cache/fallback), `RecallStore`, minimale feed-UI, gebundelde fixture.
-- **Volgende stap:** GitHub-repo `recallradar` (publiek) pushen + Pages aanzetten op `gh-pages` (B6 live → echte index-URL), dan **Blok C2** (SwiftData-modellen + CloudKit).
+- **Fase:** Bouw deel 2 — **C1 + B6 live**. Index draait in de cloud op GitHub Pages; app-laag haalt 'm op.
+- **Laatst gewerkt aan:** GitHub-repo + Action + Pages live gezet en geverifieerd (B6 echt live).
+- **Volgende stap:** **Blok C2** (SwiftData-modellen `TrackedProduct`/`Subscription` + CloudKit-mirroring), daarna C3 feed + C4 detail.
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
@@ -13,6 +13,12 @@
 - [ ] Blok C — app-kern: [x] C1 modellen+download/cache · [ ] C2 SwiftData · [ ] C3 feed · [ ] C4 detail
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — B6 live op GitHub Pages)
+- Repo gepusht → **github.com/jimmyrentmeester/recallradar** (publiek). Git-remote `origin` over HTTPS (token niet opgeslagen).
+- GitHub Action handmatig getriggerd → **run 1 geslaagd**: bouwde de index in de cloud en pushte naar `gh-pages` (`.nojekyll`, `index.json`, `meta.json`).
+- **GitHub Pages aangezet** op `gh-pages`/root. Live geverifieerd: `https://jimmyrentmeester.github.io/recallradar/index.json` → HTTP 200, `application/json`, ETag aanwezig, 8.975 alerts (beide bronnen). B6 dus **echt live**.
+- `IndexService.indexURL` wees al naar deze exacte URL → geen app-wijziging nodig.
+
 ### 2026-06-15 (sessie 2 — Blok C1)
 - **C1 app-kern gebouwd** in `RecallRadar/RecallRadar/`:
   - `Models/RecallAlert.swift` + `Models/RecallIndex.swift` — Codable, spiegelt exact het gepubliceerde schema; tolerante datum-decoder (date-only én ISO-datetime); URL-velden als String + computed `URL?` (één fout veld breekt nooit de hele decode).
