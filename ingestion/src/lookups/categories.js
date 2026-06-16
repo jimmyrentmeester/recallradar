@@ -106,6 +106,11 @@ const FOOD_KEYWORDS = [
   'eieren', 'kruiden', 'thee', 'koffie', 'drank', 'sap', 'salmonella',
   'listeria', 'e. coli', 'bacterie', 'schimmel', 'bedorven', 'houdbaarheid',
   'supplement', 'voedingssupplement', 'babyvoeding', 'flesvoeding',
+  // product-typen die als food kunnen lekken (v1 = non-food):
+  'burger', 'groente', 'fruit', 'plantaardig', 'vegan', 'vega ', 'maaltijd',
+  'yoghurt', 'boter', 'gehakt', 'kipfilet', 'garnaal', 'garnalen', 'mossel',
+  'brood', 'broodje', 'pizza', 'pasta', 'rijst', 'snoep', 'reep', 'vleesvervanger',
+  'consumptie', 'consumeren', 'eetwaren', 'voeding', 'ingrediënt', 'smaak',
 ];
 
 const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -123,10 +128,18 @@ export function classifyNvwaCategory(text) {
   return keywordCategory(norm(text)) ?? 'overig';
 }
 
+// Woord-grens-matching: korte trefwoorden (≤4) exact (zo matcht 'vis' niet in
+// 'televisie'/'viscose'), langere als prefix (zo matcht 'groente' in 'groenteburger').
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const FOOD_RES = FOOD_KEYWORDS.map((kw) => {
+  const w = norm(kw).trim();
+  return new RegExp(w.length <= 4 ? `\\b${escapeRe(w)}\\b` : `\\b${escapeRe(w)}`);
+});
+
 // Is deze NVWA-tekst (titel + omschrijving) food? -> uit de non-food-index houden.
 export function isFood(text) {
   const t = norm(text);
-  return FOOD_KEYWORDS.some((kw) => t.includes(kw));
+  return FOOD_RES.some((re) => re.test(t));
 }
 
 function keywordCategory(text) {

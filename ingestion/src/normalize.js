@@ -91,7 +91,10 @@ function parseNvwaBrandModel(title) {
 
 // Retourneert null als het item food is (hoort niet in de non-food-index, v1).
 export function normalizeNvwa(item, ingestedAt) {
-  const haystack = `${item.title} ${item.summary}`;
+  // Volledige detailtekst (indien verrijkt) is veel rijker dan de snippet → beter
+  // voor food-detectie, risico- en actie-classificatie.
+  const body = item.fullText || item.summary || '';
+  const haystack = `${item.title} ${body}`;
   if (isFood(haystack)) return null;
 
   const { product, brand } = parseNvwaBrandModel(item.title);
@@ -112,9 +115,9 @@ export function normalizeNvwa(item, ingestedAt) {
     barcode: extractBarcode(item.summary),
     batch_lot: extractBatch(item.summary),
     risk_type: riskCode,
-    risk_desc: item.summary || null,
-    measure: item.summary || 'Zie de officiële NVWA-waarschuwing voor het handelingsadvies.',
-    action: consumerAction([haystack], riskLabel(riskCode)),
+    risk_desc: body || null,
+    measure: body || 'Zie de officiële NVWA-waarschuwing voor het handelingsadvies.',
+    action: consumerAction([body], riskLabel(riskCode)),
     country: 'NL',
     image_url: item.imageUrl ?? null,
     image_urls: [],

@@ -73,10 +73,10 @@ const ACTION_PRIORITY = ['recall', 'repair', 'destruction', 'stop', 'removal', '
 
 function classifyAction(text) {
   const t = norm(text);
-  if (/recall|terugroep|terugg?eroep|retour|terug te brengen|terugbrengen/.test(t)) return 'recall';
+  if (/recall|terugroep|terugg?eroep|retour|terug te brengen|terugbrengen|breng[^.]{0,30}terug|lever[^.]{0,30}in/.test(t)) return 'recall';
   if (/repair|repareren|reparatie|reparatieset|aanpassing|prior conditions|technical measures|modification|safety upgrade|spare part|installation of safety|safety device/.test(t)) return 'repair';
   if (/destruction|destroy|dispose|asbestos|vernietig|afvoeren|weggooien/.test(t)) return 'destruction';
-  if (/withdrawal|withdraw|ban on the marketing|stop of sales|temporary ban|uit de handel|niet meer gebruiken|stop het gebruik|verkoopverbod|leveringsverbod/.test(t)) return 'stop';
+  if (/withdrawal|withdraw|ban on the marketing|stop of sales|temporary ban|uit de handel|niet meer gebruiken|stop het gebruik|stop[^.]{0,12}gebruik|gebruik[^.]{0,40}niet|niet[^.]{0,15}gebruik|verkoopverbod|leveringsverbod/.test(t)) return 'stop';
   if (/removal of this product listing|aanbieding verwijderd/.test(t)) return 'removal';
   if (/warning|warn|marking the product|waarschuw|wees voorzichtig/.test(t)) return 'warning';
   if (/import rejected|grens geweigerd/.test(t)) return 'import';

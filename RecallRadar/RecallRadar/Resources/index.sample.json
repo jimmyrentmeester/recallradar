@@ -1,6 +1,6 @@
 {
  "schema_version": 1,
- "generated_at": "2026-06-16T14:06:30.262Z",
+ "generated_at": "2026-06-16T15:53:55.772Z",
  "window_months": 24,
  "count": 24,
  "categories": {
@@ -109,30 +109,6 @@
  "disclaimer": "Informatief, niet uitputtend. De officiële bron en fabrikant zijn leidend. Controleer altijd de officiële recall-pagina via de bronlink.",
  "alerts": [
   {
-   "id": "nvwa-w6i6ya",
-   "source": "nvwa",
-   "alert_number": "veiligheidswaarschuwing-aer2-autostoeladaptersets-van-joolz",
-   "brand": "joolz",
-   "brand_raw": "Joolz",
-   "model": "aer2autostoeladaptersets",
-   "model_raw": "Aer2 Autostoeladaptersets",
-   "category": "kinderen_speelgoed",
-   "source_category": null,
-   "barcode": null,
-   "batch_lot": null,
-   "risk_type": "overig_risico",
-   "risk_desc": "Joolz waarschuwt voor alle Aer2 autostoeladaptersets. Lees meer.",
-   "measure": "Joolz waarschuwt voor alle Aer2 autostoeladaptersets. Lees meer.",
-   "action": "Wees voorzichtig bij gebruik (risico: overig risico). Volg de veiligheidsinstructies en stop bij twijfel.",
-   "country": "NL",
-   "image_url": null,
-   "image_urls": [],
-   "source_url": "https://www.nvwa.nl/documenten/2026/06/16/veiligheidswaarschuwing-aer2-autostoeladaptersets-van-joolz",
-   "published_at": "2026-06-16",
-   "updated_at": "2026-06-16T11:46:00.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
-  },
-  {
    "id": "nvwa-1ev5e1u",
    "source": "nvwa",
    "alert_number": "veiligheidswaarschuwing-enfinigy-contactgrill-van-zwilling",
@@ -144,17 +120,17 @@
    "source_category": null,
    "barcode": null,
    "batch_lot": null,
-   "risk_type": "overig_risico",
-   "risk_desc": "ZWILLING waarschuwt voor hun ENFINIGY contactgrill. Lees meer.",
-   "measure": "ZWILLING waarschuwt voor hun ENFINIGY contactgrill. Lees meer.",
-   "action": "Wees voorzichtig bij gebruik (risico: overig risico). Volg de veiligheidsinstructies en stop bij twijfel.",
+   "risk_type": "elektrisch",
+   "risk_desc": "ZWILLING waarschuwt voor hun ENFINIGY contactgrill. Het kan in afzonderlijke gevallen gebeuren dat het zijdelingse deel van de greep in aanraking komt met intern liggende, stroom geleidende kabels. Daardoor bestaat er voor gebruikers een risico op een voor de gezondheid gevaarlijke stroomschok en dientengevolge een potentieel gevaar voor lijf en leven. Gebruik de contactgrill niet. Zie de website van ZWILLING Beeld: © ZWILLING Wilt u op de hoogte blijven van veiligheidswaarschuwingen over consumentenartikelen? Meld u dan aan en u ontvangt de waarschuwingen per e-mail.",
+   "measure": "ZWILLING waarschuwt voor hun ENFINIGY contactgrill. Het kan in afzonderlijke gevallen gebeuren dat het zijdelingse deel van de greep in aanraking komt met intern liggende, stroom geleidende kabels. Daardoor bestaat er voor gebruikers een risico op een voor de gezondheid gevaarlijke stroomschok en dientengevolge een potentieel gevaar voor lijf en leven. Gebruik de contactgrill niet. Zie de website van ZWILLING Beeld: © ZWILLING Wilt u op de hoogte blijven van veiligheidswaarschuwingen over consumentenartikelen? Meld u dan aan en u ontvangt de waarschuwingen per e-mail.",
+   "action": "Stop met het gebruik van dit product en neem contact op met de winkel of fabrikant over terugbetaling of vervanging.",
    "country": "NL",
    "image_url": null,
    "image_urls": [],
    "source_url": "https://www.nvwa.nl/documenten/2026/06/15/veiligheidswaarschuwing-enfinigy-contactgrill-van-zwilling",
    "published_at": "2026-06-15",
    "updated_at": "2026-06-15T14:38:00.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "nvwa-1mjky1s",
@@ -168,17 +144,17 @@
    "source_category": null,
    "barcode": null,
    "batch_lot": null,
-   "risk_type": "overig_risico",
-   "risk_desc": "Flying Tiger waarschuwt voor hun knuffelkonijn (roze en blauw). De oren en de benen kunnen gemakkelijk loslaten, waardoor er vulling vrij kan komen. Lees meer.",
-   "measure": "Flying Tiger waarschuwt voor hun knuffelkonijn (roze en blauw). De oren en de benen kunnen gemakkelijk loslaten, waardoor er vulling vrij kan komen. Lees meer.",
-   "action": "Wees voorzichtig bij gebruik (risico: overig risico). Volg de veiligheidsinstructies en stop bij twijfel.",
+   "risk_type": "verstikking",
+   "risk_desc": "Flying Tiger waarschuwt voor hun knuffelkonijn (roze en blauw). De oren en de benen kunnen gemakkelijk loslaten, waardoor er vulling vrij kan komen. De vulling kan verstikkingsgevaar opleveren voor kleine kinderen. Gebruik de knuffel niet. Zie de website van Flying Tiger Wilt u op de hoogte blijven van veiligheidswaarschuwingen over consumentenartikelen? Meld u dan aan en u ontvangt de waarschuwingen per e-mail.",
+   "measure": "Flying Tiger waarschuwt voor hun knuffelkonijn (roze en blauw). De oren en de benen kunnen gemakkelijk loslaten, waardoor er vulling vrij kan komen. De vulling kan verstikkingsgevaar opleveren voor kleine kinderen. Gebruik de knuffel niet. Zie de website van Flying Tiger Wilt u op de hoogte blijven van veiligheidswaarschuwingen over consumentenartikelen? Meld u dan aan en u ontvangt de waarschuwingen per e-mail.",
+   "action": "Stop met gebruik en breng het product terug voor terugbetaling, reparatie of vervanging — neem contact op met de winkel of fabrikant.",
    "country": "NL",
    "image_url": null,
    "image_urls": [],
    "source_url": "https://www.nvwa.nl/documenten/2026/06/15/veiligheidswaarschuwing-knuffelkonijn-roze-en-blauw-van-flying-tiger",
    "published_at": "2026-06-15",
    "updated_at": "2026-06-15T14:10:00.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "nvwa-1vvsost",
@@ -192,17 +168,41 @@
    "source_category": null,
    "barcode": null,
    "batch_lot": null,
-   "risk_type": "overig_risico",
-   "risk_desc": "Decathlon waarschuwt voor FOUGANZA ruitersport helm 100. De riem die voor het oor langs loopt, kan naar achteren schuiven. Daardoor kan de helm minder goed op het hoofd blijven zitten en verschuiven tijdens het gebruik. Dit vergroot de kans op...",
-   "measure": "Decathlon waarschuwt voor FOUGANZA ruitersport helm 100. De riem die voor het oor langs loopt, kan naar achteren schuiven. Daardoor kan de helm minder goed op het hoofd blijven zitten en verschuiven tijdens het gebruik. Dit vergroot de kans op...",
-   "action": "Wees voorzichtig bij gebruik (risico: overig risico). Volg de veiligheidsinstructies en stop bij twijfel.",
+   "risk_type": "letsel",
+   "risk_desc": "Decathlon waarschuwt voor FOUGANZA ruitersport helm 100. De riem die voor het oor langs loopt, kan naar achteren schuiven. Daardoor kan de helm minder goed op het hoofd blijven zitten en verschuiven tijdens het gebruik. Dit vergroot de kans op letsel bij een val of botsing. Gebruik de helm niet. Zie de website van Decathlon Verkocht bij Decathlon. Beeld: © Decathlon Wilt u op de hoogte blijven van veiligheidswaarschuwingen over consumentenartikelen? Meld u dan aan en u ontvangt de waarschuwingen per e-mail.",
+   "measure": "Decathlon waarschuwt voor FOUGANZA ruitersport helm 100. De riem die voor het oor langs loopt, kan naar achteren schuiven. Daardoor kan de helm minder goed op het hoofd blijven zitten en verschuiven tijdens het gebruik. Dit vergroot de kans op letsel bij een val of botsing. Gebruik de helm niet. Zie de website van Decathlon Verkocht bij Decathlon. Beeld: © Decathlon Wilt u op de hoogte blijven van veiligheidswaarschuwingen over consumentenartikelen? Meld u dan aan en u ontvangt de waarschuwingen per e-mail.",
+   "action": "Stop met het gebruik van dit product en neem contact op met de winkel of fabrikant over terugbetaling of vervanging.",
    "country": "NL",
    "image_url": null,
    "image_urls": [],
    "source_url": "https://www.nvwa.nl/documenten/2026/06/08/veiligheidswaarschuwing-fouganza-ruitersport-helm-100",
    "published_at": "2026-06-08",
    "updated_at": "2026-06-08T15:13:00.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
+  },
+  {
+   "id": "nvwa-x4vmsm",
+   "source": "nvwa",
+   "alert_number": "veiligheidswaarschuwing-kindervestje-zeeman",
+   "brand": null,
+   "brand_raw": null,
+   "model": "kindervestjezeeman",
+   "model_raw": "kindervestje Zeeman",
+   "category": "kinderen_speelgoed",
+   "source_category": null,
+   "barcode": null,
+   "batch_lot": null,
+   "risk_type": "verstikking",
+   "risk_desc": "Zeeman waarschuwt voor een kindervestje in de maten 92 en 98/104. De knopen kunnen loskomen, wat bij inslikken verstikkingsgevaar kan veroorzaken. Gebruik het vestje niet. Zie de website van Zeeman Beeld: © Zeeman Wilt u op de hoogte blijven van veiligheidswaarschuwingen over consumentenartikelen? Meld u dan aan en u ontvangt de waarschuwingen per e-mail.",
+   "measure": "Zeeman waarschuwt voor een kindervestje in de maten 92 en 98/104. De knopen kunnen loskomen, wat bij inslikken verstikkingsgevaar kan veroorzaken. Gebruik het vestje niet. Zie de website van Zeeman Beeld: © Zeeman Wilt u op de hoogte blijven van veiligheidswaarschuwingen over consumentenartikelen? Meld u dan aan en u ontvangt de waarschuwingen per e-mail.",
+   "action": "Stop met het gebruik van dit product en neem contact op met de winkel of fabrikant over terugbetaling of vervanging.",
+   "country": "NL",
+   "image_url": null,
+   "image_urls": [],
+   "source_url": "https://www.nvwa.nl/documenten/2026/05/29/veiligheidswaarschuwing-kindervestje-zeeman",
+   "published_at": "2026-05-29",
+   "updated_at": "2026-05-29T09:30:00.000Z",
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01709-26",
@@ -229,7 +229,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099202",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T07:36:10.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01722-26",
@@ -257,7 +257,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099220",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-10T14:51:33.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01695-26",
@@ -281,7 +281,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099224",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T15:08:16.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01713-26",
@@ -309,7 +309,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099247",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T07:37:34.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-or-00072-26",
@@ -338,7 +338,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099165",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-04T13:35:54.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01696-26",
@@ -364,7 +364,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099212",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T07:35:52.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01717-26",
@@ -388,7 +388,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099258",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T07:41:05.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01679-26",
@@ -415,7 +415,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099171",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-12T07:40:45.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-or-00061-26",
@@ -442,7 +442,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10098953",
    "published_at": "2026-06-05",
    "updated_at": "2026-06-05T13:40:47.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01324-26",
@@ -469,7 +469,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10098801",
    "published_at": "2026-05-08",
    "updated_at": "2026-05-08T10:09:30.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01443-26",
@@ -495,7 +495,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10098929",
    "published_at": "2026-05-22",
    "updated_at": "2026-05-18T17:07:30.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01279-26",
@@ -521,7 +521,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10098782",
    "published_at": "2026-05-01",
    "updated_at": "2026-05-29T10:15:58.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-00032-26",
@@ -547,7 +547,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10097153",
    "published_at": "2026-01-09",
    "updated_at": "2026-05-07T13:07:13.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-00021-26",
@@ -573,7 +573,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10097203",
    "published_at": "2026-01-09",
    "updated_at": "2026-05-07T13:06:09.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01725-26",
@@ -601,7 +601,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099219",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-15T08:05:02.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01626-26",
@@ -625,7 +625,7 @@
    "source_url": "https://www.mercedes-benz.de/passengercars/services/recall.html",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-11T08:31:29.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01548-26",
@@ -649,7 +649,7 @@
    "source_url": "https://www.savers.co.uk/prodrecall",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-10T14:41:35.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01567-26",
@@ -673,7 +673,7 @@
    "source_url": "https://www.savers.co.uk/prodrecall",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-10T14:28:33.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01724-26",
@@ -697,7 +697,7 @@
    "source_url": "https://ec.europa.eu/safety-gate-alerts/screen/webReport/alertDetail/10099259",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-09T15:32:13.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   },
   {
    "id": "sg-sr-01701-26",
@@ -721,7 +721,7 @@
    "source_url": "https://www.savers.co.uk/prodrecall",
    "published_at": "2026-06-12",
    "updated_at": "2026-06-09T12:35:53.000Z",
-   "ingested_at": "2026-06-16T14:06:30.262Z"
+   "ingested_at": "2026-06-16T15:53:55.772Z"
   }
  ]
 }

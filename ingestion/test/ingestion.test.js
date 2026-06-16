@@ -52,7 +52,12 @@ test('classifyNvwaCategory op vrije tekst', () => {
 test('isFood houdt food uit de non-food-index', () => {
   assert.equal(isFood('BBQ worsten pittig (allergenen)'), true);
   assert.equal(isFood('Bevroren oesters van Surasang'), true);
+  assert.equal(isFood('Vivera Plantaardige Groenteburger 2 stuks'), true);
   assert.equal(isFood('knuffelkonijn van Flying Tiger'), false);
+  // Geen valse positieven door substring-matching:
+  assert.equal(isFood('Televisie van merk X'), false); // 'vis' niet in 'televisie'
+  assert.equal(isFood('Viscose trui'), false);          // 'vis' niet in 'viscose'
+  assert.equal(isFood('Kleine onderdelen, kind kan erin stikken'), false); // 'ei' niet in 'kleine'
 });
 
 test('mapRisk: array-input en aliasing', () => {

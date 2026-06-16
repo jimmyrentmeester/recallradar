@@ -83,7 +83,58 @@ export async function fetchNvwa({ windowFloor, log = null } = {}) {
     stop = collectPage(data, floor, out);
     log?.(`  NVWA: ${out.length} binnen venster (pagina ${page}/${totalPages})`);
   }
+
+  // Verrijk elk item met de detailpagina: de volledige waarschuwingstekst bevat
+  // het echte advies ("Gebruik … niet", "teruggeroepen", "breng terug") + soms een
+  // fabrikant-link. Veel rijker dan de zoek-snippet → betere actie/risico-classificatie.
+  await enrichWithDetails(out, log);
   return out;
+}
+
+// Detailpagina ophalen en de rich-text body + externe link extraheren.
+async function fetchDetail(url) {
+  try {
+    const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT } });
+    if (!res.ok) return null;
+    const htmlText = await res.text();
+    const i = htmlText.search(/class="rich-text[^"]*">/);
+    if (i === -1) return null;
+    const block = htmlText.slice(i, i + 6000);
+    const paras = [...block.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/g)]
+      .map((m) => stripTags(m[1]))
+      .filter((t) => t.length > 0);
+    const fullText = paras.join(' ').replace(/\s+/g, ' ').trim();
+    const linkMatch = block.match(/href="(https?:\/\/[^"]+)"[^>]*rel="external"/)
+      || block.match(/rel="external"[^>]*href="(https?:\/\/[^"]+)"/);
+    return { fullText: fullText || null, officialLink: linkMatch ? linkMatch[1] : null };
+  } catch {
+    return null;
+  }
+}
+
+function stripTags(s) {
+  return s
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .trim();
+}
+
+// Concurrency-begrensde verrijking (resilient: faalt er één, dan blijft de snippet).
+async function enrichWithDetails(items, log, concurrency = 8) {
+  let idx = 0;
+  let enriched = 0;
+  async function worker() {
+    while (idx < items.length) {
+      const item = items[idx++];
+      const detail = await fetchDetail(item.url);
+      if (detail?.fullText) { item.fullText = detail.fullText; enriched += 1; }
+      if (detail?.officialLink) item.officialLink = detail.officialLink;
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, worker));
+  log?.(`  NVWA: ${enriched}/${items.length} detailpagina's verrijkt`);
 }
 
 // Voegt items van één pagina toe; retourneert true zodra we onder het venster zakken

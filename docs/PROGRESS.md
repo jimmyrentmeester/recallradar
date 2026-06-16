@@ -16,6 +16,13 @@
 - [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [x] F3 TestFlight — **build live op toestel** · [ ] F3 volledige App Store-release
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — NVWA-classificatie verbeterd)
+- **Probleem:** elke NVWA-titel bevat "waarschuwt" → acties classificeerden als zwakke "wees voorzichtig"; risico viel vaak op "overig"; snippet was te kort.
+- **Fix — detailpagina-verrijking:** `nvwa.js` haalt nu per item de detailpagina op (concurrency 8, resilient) en extraheert de volledige `rich-text` waarschuwingstekst (+ eventuele fabrikant-link). Die volledige tekst voedt food-detectie, risico- én actie-classificatie.
+- **Resultaat:** contactgrill → elektrisch + "stop met gebruik"; knuffelkonijn → verstikking + "breng terug". Zwakke "wees voorzichtig"-actie: ~alle → **35/163**.
+- **Food-filter verscherpt:** woord-grens-matching (kort=exact, lang=prefix) → geen valse positieven meer (televisie/viscose/kleine), en food-lek gedicht ('groenteburger' etc.). NVWA non-food 195 → 163 (32 food eruit). +1 test (16 ingestion-tests groen).
+- Index live geregenereerd nodig (zie volgende stap).
+
 ### 2026-06-16 (sessie 2 — Design-polish (HIG / Liquid Glass))
 - Ingelezen op actuele Apple-richtlijnen: klassiek **Clarity/Deference/Depth** + iOS 26 **Hierarchy/Harmony/Consistency** (Liquid Glass). Aanpak: content-first, semantische kleuren, Dynamic Type, consistente concentrische radii/spacing, materials voor diepte, en standaard-componenten laten de glass dragen.
 - **`DesignSystem.swift`:** gedeelde radii (`cardRadius`/`thumbRadius`) + `StatusHeroCard`.
