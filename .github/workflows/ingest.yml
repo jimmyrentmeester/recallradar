@@ -39,9 +39,12 @@ jobs:
         working-directory: ingestion
         run: node --test
 
-      - name: Ingest (incrementeel; valt terug op vorige index bij bronfout)
+      # Volledige rebuild: altijd-correcte normalisatie (incl. vertalingen) en een
+      # zuiver 24-maands venster. Goedkoop (~88 gepagineerde calls). Bij bronfout
+      # behoudt run.js de vorige index.
+      - name: Ingest (volledige rebuild)
         working-directory: ingestion
-        run: node src/run.js
+        run: node src/run.js --full
 
       - name: Sanity-check
         working-directory: ingestion
