@@ -16,6 +16,16 @@
 - [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [x] F3 TestFlight — **build live op toestel** · [ ] F3 volledige App Store-release
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Design-polish (HIG / Liquid Glass))
+- Ingelezen op actuele Apple-richtlijnen: klassiek **Clarity/Deference/Depth** + iOS 26 **Hierarchy/Harmony/Consistency** (Liquid Glass). Aanpak: content-first, semantische kleuren, Dynamic Type, consistente concentrische radii/spacing, materials voor diepte, en standaard-componenten laten de glass dragen.
+- **`DesignSystem.swift`:** gedeelde radii (`cardRadius`/`thumbRadius`) + `StatusHeroCard`.
+- **Home:** grote titel "Recall Radar" + prominente **geruststellings-statuskaart** (groen "Je bent beschermd" / rood "N recalls voor jou" / setup) als emotionele kern; lege groene rij weg; "Voor jou" alleen bij echte matches; schone inset-grouped secties.
+- **Feed-rij:** consistente thumbnail-radius + hiërarchische SF Symbols + nette laad-/placeholder-staat.
+- **Detail:** consistente card-materials/radii (secondarySystemBackground, `DS.cardRadius`), galerij-achtergrond semantisch.
+- Standaard-componenten (insetGrouped List, TabView, NavigationStack, .searchable, ShareLink, ContentUnavailableView) adopteren automatisch Liquid Glass — bewust niet overschreven.
+- Build SUCCEEDED; home/detail/feed visueel geverifieerd in Simulator.
+- *Follow-up genoteerd:* NVWA-actie classificeert nu vaak als "waarschuwing" omdat elke NVWA-titel "waarschuwt" bevat → onderschat recalls; risico/actie-parsing voor NVWA verbeteren (evt. detailpagina fetchen).
+
 ### 2026-06-16 (sessie 2 — "Wat moet je doen?" = consumentenactie)
 - Feedback: de sectie beschreef de markt-maatregel i.p.v. wat de bezitter moet doen. Opgelost met **`consumerAction()`** (`measures.js`): classificeert de maatregel-actie (EN+NL: recall/reparatie/vernietiging/uit-de-handel/verwijderd/waarschuwing/import), kiest de **meest beschermende** en mapt naar een korte imperatieve actie (bv. recall → "Stop met gebruik en breng het product terug…").
 - Nieuw schema-veld **`action`** (SG + NVWA). Detail toont de actie prominent onder "Wat moet je doen?"; de letterlijke maatregel staat als uitklapbare **"Officiële maatregel"** (transparantie/bron-getrouw).
