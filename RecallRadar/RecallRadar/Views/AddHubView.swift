@@ -12,24 +12,30 @@ struct AddHubView: View {
     let store: RecallStore
     @Environment(\.dismiss) private var dismiss
 
-    enum Path: Hashable { case scan, manual, categories, brand }
-
     var body: some View {
         NavigationStack {
             List {
                 Section("Een product dat je bezit") {
-                    NavigationLink(value: Path.scan) {
+                    NavigationLink {
+                        AddProductView(store: store, autoScan: true) { dismiss() }
+                    } label: {
                         row("barcode.viewfinder", "Scan de barcode", "De snelste manier")
                     }
-                    NavigationLink(value: Path.manual) {
+                    NavigationLink {
+                        AddProductView(store: store) { dismiss() }
+                    } label: {
                         row("pencil.and.list.clipboard", "Handmatig invoeren", "Merk, model en categorie")
                     }
                 }
                 Section {
-                    NavigationLink(value: Path.categories) {
+                    NavigationLink {
+                        FollowCategoriesView(store: store) { dismiss() }
+                    } label: {
                         row("square.grid.2x2", "Categorieën volgen", "Bijv. speelgoed of elektronica")
                     }
-                    NavigationLink(value: Path.brand) {
+                    NavigationLink {
+                        FollowBrandView(store: store) { dismiss() }
+                    } label: {
                         row("tag", "Een merk volgen", "Krijg recalls van dat merk")
                     }
                 } header: {
@@ -38,14 +44,6 @@ struct AddHubView: View {
             }
             .navigationTitle("Toevoegen")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: Path.self) { path in
-                switch path {
-                case .scan: AddProductView(store: store, autoScan: true) { dismiss() }
-                case .manual: AddProductView(store: store) { dismiss() }
-                case .categories: FollowCategoriesView(store: store) { dismiss() }
-                case .brand: FollowBrandView(store: store) { dismiss() }
-                }
-            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Sluit") { dismiss() } }
             }
