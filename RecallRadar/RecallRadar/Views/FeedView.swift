@@ -16,22 +16,24 @@ struct FeedView: View {
     @State private var searchText: String = ""
 
     var body: some View {
-        Group {
-            switch store.status {
-            case .idle, .loading:
-                ProgressView("Recalls laden…")
-            case .empty:
-                ContentUnavailableView(
-                    "Geen recalls beschikbaar",
-                    systemImage: "checkmark.shield",
-                    description: Text("Controleer je verbinding. Zodra de index beschikbaar is, verschijnen recalls hier.")
-                )
-            case .loaded:
-                content
+        NavigationStack {
+            Group {
+                switch store.status {
+                case .idle, .loading:
+                    ProgressView("Recalls laden…")
+                case .empty:
+                    ContentUnavailableView(
+                        "Geen recalls beschikbaar",
+                        systemImage: "checkmark.shield",
+                        description: Text("Controleer je verbinding. Zodra de index beschikbaar is, verschijnen recalls hier.")
+                    )
+                case .loaded:
+                    content
+                }
             }
+            .navigationTitle("Recalls")
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationTitle("Recalls")
-        .navigationBarTitleDisplayMode(.inline)
     }
 
     private var content: some View {
