@@ -20,6 +20,9 @@ struct ContentView: View {
             // De volledige recall-lijst als verkenscherm (zoeken/filteren).
             FeedView(store: store)
                 .tabItem { Label("Verken", systemImage: "magnifyingglass") }
+
+            SettingsView(store: store)
+                .tabItem { Label("Instellingen", systemImage: "gearshape") }
         }
         .task { await store.load() }
         .sheet(isPresented: $showOnboarding) {

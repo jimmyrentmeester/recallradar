@@ -66,15 +66,15 @@ struct FeedView: View {
     }
 
     private var offlineBanner: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: DS.Space.xs) {
             Image(systemName: "wifi.slash")
             Text("Offline — laatst bekende lijst wordt getoond.")
             Spacer()
         }
         .font(.caption)
-        .foregroundStyle(.secondary)
-        .padding(.horizontal).padding(.vertical, 6)
-        .background(.yellow.opacity(0.15))
+        .foregroundStyle(DS.Color.textSecondary)
+        .padding(.horizontal, DS.Space.lg).padding(.vertical, DS.Space.sm)
+        .background(DS.Color.riskLowBg) // nooit als alarm vormgeven (§3.4)
     }
 
     private var list: some View {
@@ -124,14 +124,15 @@ struct FeedView: View {
             HStack(spacing: 5) {
                 if let code { Image(systemName: CategoryStyle.icon(code)) }
                 Text(label)
-                Text("\(count)").foregroundStyle(selected ? .white.opacity(0.8) : .secondary)
+                Text("\(count)").foregroundStyle(DS.Color.textTertiary)
             }
             .font(.subheadline.weight(selected ? .semibold : .regular))
-            .padding(.horizontal, 12)
+            .padding(.horizontal, DS.Space.md)
             .padding(.vertical, 7)
-            .background(selected ? AnyShapeStyle(Color.accentColor) : AnyShapeStyle(.quaternary),
-                        in: Capsule())
-            .foregroundStyle(selected ? .white : .primary)
+            // §3.7: geselecteerd = brandPrimaryMuted-vulling + brandPrimary-tekst; anders neutraal.
+            .background(selected ? DS.Color.brandPrimaryMuted : DS.Color.bgSecondary, in: Capsule())
+            .foregroundStyle(selected ? DS.Color.brandPrimary : DS.Color.textPrimary)
+            .overlay(Capsule().stroke(DS.Color.separator, lineWidth: selected ? 0 : 1))
         }
         .buttonStyle(.plain)
     }

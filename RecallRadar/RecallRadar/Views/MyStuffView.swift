@@ -79,8 +79,8 @@ struct MyStuffView: View {
             .navigationTitle("Recall Radar")
             .task { notifAuthorized = await NotificationService.isAuthorized() }
             .task(id: matchKey) { await recomputeMatches() }
-            .navigationDestination(for: RecallAlert.self) { alert in
-                RecallDetailView(alert: alert, index: store.index)
+            .navigationDestination(for: ScoredAlert.self) { scored in
+                RecallDetailView(alert: scored.alert, index: store.index, tier: scored.tier, signals: scored.signals)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -141,7 +141,7 @@ struct MyStuffView: View {
                         Text("Lijkt op: \(p.displayName)")
                             .font(.caption).foregroundStyle(.secondary)
                     }
-                    NavigationLink(value: scored.alert) {
+                    NavigationLink(value: scored) {
                         RecallRow(alert: scored.alert, index: store.index)
                     }
                     HStack {
@@ -171,10 +171,10 @@ struct MyStuffView: View {
     private var matchesSection: some View {
         Section("Voor jou") {
             ForEach(forYou.prefix(30)) { scored in
-                NavigationLink(value: scored.alert) {
-                    HStack {
+                NavigationLink(value: scored) {
+                    VStack(alignment: .leading, spacing: DS.Space.sm) {
+                        if let p = RiskPresentation.tier(scored.tier) { RiskPill(presentation: p) }
                         RecallRow(alert: scored.alert, index: store.index)
-                        TierBadge(tier: scored.tier)
                     }
                 }
             }
@@ -257,19 +257,3 @@ struct MyStuffView: View {
     }
 }
 
-struct TierBadge: View {
-    let tier: MatchTier
-    var body: some View {
-        Text(label)
-            .font(.caption2.weight(.semibold))
-            .padding(.horizontal, 6).padding(.vertical, 2)
-            .background(color.opacity(0.18), in: Capsule())
-            .foregroundStyle(color)
-    }
-    private var label: String {
-        switch tier { case .high: "Hoog"; case .medium: "Mogelijk"; case .low: "Misschien"; case .none: "" }
-    }
-    private var color: Color {
-        switch tier { case .high: .red; case .medium: .orange; case .low: .secondary; case .none: .secondary }
-    }
-}

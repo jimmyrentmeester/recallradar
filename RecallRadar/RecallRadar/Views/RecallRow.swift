@@ -20,16 +20,12 @@ struct RecallRow: View {
                     .lineLimit(2)
                 HStack(spacing: 6) {
                     Image(systemName: CategoryStyle.icon(alert.category))
-                        .foregroundStyle(.secondary)
-                    Text(index.categoryLabel(alert.category))
-                        .lineLimit(1)
-                    Text("·").foregroundStyle(.tertiary)
-                    Text(index.riskLabel(alert.riskType))
-                        .foregroundStyle(RiskStyle.color(alert.riskType))
-                        .lineLimit(1)
+                    Text(index.categoryLabel(alert.category)).lineLimit(1)
+                    Text("·").foregroundStyle(DS.Color.textTertiary)
+                    Text(index.riskLabel(alert.riskType)).lineLimit(1)
                 }
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(DS.Color.textSecondary) // rustig: geen risicokleur in de feed
                 HStack(spacing: 6) {
                     Text(alert.publishedAt, style: .date)
                     if alert.source == .nvwa {
@@ -62,7 +58,7 @@ struct RecallRow: View {
             }
         }
         .frame(width: 56, height: 56)
-        .clipShape(RoundedRectangle(cornerRadius: DS.thumbRadius))
+        .clipShape(RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     private var categoryGlyph: some View {

@@ -13,6 +13,10 @@ import Translation
 struct RecallDetailView: View {
     let alert: RecallAlert
     let index: RecallIndex
+    /// Gezet wanneer geopend vanuit een persoonlijke match → toont de trede-pill + "waarom".
+    var tier: MatchTier? = nil
+    /// Gematchte signalen voor "Waarom zie ik dit?" (§3.6).
+    var signals: [String] = []
 
     // On-device vertaling van de Engelse risico-omschrijving (Safety Gate) → NL.
     @State private var translatedDesc: String?
@@ -24,6 +28,7 @@ struct RecallDetailView: View {
                 gallery
                 header
                 actionAdvice
+                if !signals.isEmpty { confidence }
                 details
                 sources
                 disclaimer
@@ -72,13 +77,13 @@ struct RecallDetailView: View {
             .tabViewStyle(.page(indexDisplayMode: .always))
             .frame(height: 280)
             .background(.fill.quaternary)
-            .clipShape(RoundedRectangle(cornerRadius: DS.cardRadius))
+            .clipShape(RoundedRectangle(cornerRadius: DS.Radius.lg))
             .accessibilityLabel("Productfoto's, \(images.count) stuks")
         } else if let url = images.first {
             photo(url)
                 .frame(maxHeight: 260)
                 .background(.fill.quaternary)
-                .clipShape(RoundedRectangle(cornerRadius: DS.cardRadius))
+                .clipShape(RoundedRectangle(cornerRadius: DS.Radius.lg))
         }
     }
 
@@ -107,30 +112,36 @@ struct RecallDetailView: View {
 
     private var shareURL: URL? { alert.sourceURL }
 
+    // Accent-header (§4.4): het enige scherm waar risicokleur prominent mag zijn.
     private var header: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: DS.Space.sm) {
             Text(alert.displayTitle)
                 .font(.title2.bold())
-            HStack(spacing: 8) {
-                Label(index.riskLabel(alert.riskType), systemImage: "exclamationmark.triangle.fill")
-                    .font(.subheadline.weight(.medium))
-                    .padding(.horizontal, 10).padding(.vertical, 5)
-                    .background(RiskStyle.color(alert.riskType).opacity(0.15), in: Capsule())
-                    .foregroundStyle(RiskStyle.color(alert.riskType))
+                .foregroundStyle(DS.Color.textPrimary)
+            HStack(spacing: DS.Space.sm) {
+                if let tier, let p = RiskPresentation.tier(tier) {
+                    RiskPill(presentation: p)
+                }
+                Label(index.riskLabel(alert.riskType), systemImage: HazardStyle.symbol(alert.riskType))
+                    .font(.caption.weight(.semibold))
+                    .padding(.horizontal, DS.Space.sm).padding(.vertical, DS.Space.xs)
+                    .foregroundStyle(HazardStyle.color(alert.riskType))
+                    .background(HazardStyle.background(alert.riskType), in: Capsule())
                 Label(index.categoryLabel(alert.category), systemImage: CategoryStyle.icon(alert.category))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(.caption)
+                    .foregroundStyle(DS.Color.textSecondary)
             }
-            .accessibilityElement(children: .combine)
-            .accessibilityLabel("Risico: \(index.riskLabel(alert.riskType)). Categorie: \(index.categoryLabel(alert.category))")
             if let desc = alert.riskDesc, !desc.isEmpty {
-                Text(translatedDesc ?? desc).font(.body).foregroundStyle(.secondary)
+                Text(translatedDesc ?? desc).font(.body).foregroundStyle(DS.Color.textSecondary)
                 if translatedDesc != nil {
                     Text("Automatisch vertaald")
-                        .font(.caption2).foregroundStyle(.tertiary)
+                        .font(.caption2).foregroundStyle(DS.Color.textTertiary)
                 }
             }
         }
+        .padding(DS.Space.lg)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(HazardStyle.background(alert.riskType).opacity(0.5), in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     private var actionAdvice: some View {
@@ -151,9 +162,25 @@ struct RecallDetailView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: DS.cardRadius))
+        .background(DS.Color.bgSecondary, in: RoundedRectangle(cornerRadius: DS.Radius.md))
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Wat moet je doen? \(alert.action ?? alert.measure)")
+    }
+
+    // §3.6 — transparante uitleg waarom dit een match is (zonder het scoregetal).
+    private var confidence: some View {
+        VStack(alignment: .leading, spacing: DS.Space.sm) {
+            Label("Waarom zie ik dit?", systemImage: "questionmark.circle")
+                .font(.headline)
+            ForEach(signals, id: \.self) { s in
+                Label(s, systemImage: "checkmark.circle.fill")
+                    .font(.subheadline)
+                    .foregroundStyle(DS.Color.textSecondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(DS.Color.brandPrimaryMuted, in: RoundedRectangle(cornerRadius: DS.Radius.md))
     }
 
     private var details: some View {

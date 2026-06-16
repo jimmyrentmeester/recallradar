@@ -23,13 +23,14 @@ extension TrackedProduct {
     }
 }
 
-nonisolated enum MatchKind: Sendable { case product, brandFollow }
+nonisolated enum MatchKind: Sendable, Hashable { case product, brandFollow }
 
-nonisolated struct ScoredAlert: Identifiable, Sendable {
+nonisolated struct ScoredAlert: Identifiable, Sendable, Hashable {
     let alert: RecallAlert
     let tier: MatchTier
     let productID: String?   // uuidString van het matchende product (voor confirm/suppress)
     let kind: MatchKind
+    var signals: [String] = [] // "Waarom zie ik dit?" — gematchte signalen
     var id: String { alert.id }
 }
 
@@ -66,12 +67,18 @@ enum MatchBridge {
         for p in products {
             for alert in alerts {
                 let m = MatchingService.evaluate(product: p, alert: alert, config: config)
-                if m.tier >= .medium { consider(ScoredAlert(alert: alert, tier: m.tier, productID: p.id, kind: .product)) }
+                if m.tier >= .medium {
+                    let signals = MatchingService.matchedSignals(product: p, alert: alert, config: config)
+                    consider(ScoredAlert(alert: alert, tier: m.tier, productID: p.id, kind: .product, signals: signals))
+                }
             }
         }
         for alert in alerts {
             let t = MatchingService.followTier(for: alert, brandFollows: brandFollows, categoryFollows: [])
-            if t == .medium { consider(ScoredAlert(alert: alert, tier: .medium, productID: nil, kind: .brandFollow)) }
+            if t == .medium {
+                consider(ScoredAlert(alert: alert, tier: .medium, productID: nil, kind: .brandFollow,
+                                     signals: ["Je volgt dit merk"]))
+            }
         }
         return best.values.sorted {
             if $0.tier != $1.tier { return $0.tier > $1.tier }

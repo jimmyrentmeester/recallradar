@@ -16,6 +16,18 @@
 - [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [x] F3 TestFlight — **build live op toestel** · [ ] F3 volledige App Store-release
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Design-systeem alignment op DESIGN/ASSETS-docs)
+- **DESIGN_Recall-Radar.md + ASSETS_Recall-Radar.md gevonden** (zaten niet in de repo, ontbraken in de eerste kopieerlijst) → naar `docs/reference/` gekopieerd en geïnterpreteerd; app erop gealignd (volledige scope).
+- **Color Assets:** alle tokens uit ASSETS B (brand-teal, bg/text, risk- + reassure-tokens) als Color Sets met **light+dark**; `AccentColor` = brand-teal → app-breed teal accent. `DesignSystem.swift` mapt tokens + `DS.Space`/`DS.Radius` (4-grid, 8/12/20).
+- **RiskPill + RiskPresentation:** drievoudige codering (kleur+symbool+label) per match-trede (Ernstig risico / Mogelijk van jou / Ter info) + reassure. `HazardStyle` voor de detail-accentband.
+- **Kleurdiscipline:** risicokleur weg uit de feed (rustig, neutraal); alleen in home-matches (RiskPill) en het recall-detail (accent-header). reassureGreen-hero.
+- **3e tab "Instellingen"** (§4.6): notificaties per trede (HOOG altijd aan; MIDDEL/digest/rustige uren instelbaar via `NotifPrefs`, gewired in BackgroundRefresh), privacy, bronnen & disclaimer, over.
+- **"Waarom zie ik dit?"** (§3.6): `MatchingService.matchedSignals` → transparante signaal-uitleg in het detail bij een match.
+- **App-icoon** hermaakt per ASSETS A: teal-achtergrond, lichte radarveeg, **amber** stip (geen rood), met light/**dark**/**tinted** appearances.
+- **Bewuste afwijking (genoteerd per §0.5):** doc schrijft feed=startscherm (3 tabs); eigenaar koos **Thuis (persoonlijk) als opening** → 3 tabs Thuis · Verken · Instellingen. Sterker voor de kernwaarde.
+- 38 app- + 16 ingestion-tests groen; build SUCCEEDED; home/Instellingen visueel geverifieerd. Zit in **build 2** (app-code).
+- *Rest/later:* AboutView overlapt nu deels met Instellingen; contrast-tabel (ASSETS Deel C) formeel narekenen; onboarding-privacyscherm aanscherpen.
+
 ### 2026-06-16 (sessie 2 — NVWA-classificatie verbeterd)
 - **Probleem:** elke NVWA-titel bevat "waarschuwt" → acties classificeerden als zwakke "wees voorzichtig"; risico viel vaak op "overig"; snippet was te kort.
 - **Fix — detailpagina-verrijking:** `nvwa.js` haalt nu per item de detailpagina op (concurrency 8, resilient) en extraheert de volledige `rich-text` waarschuwingstekst (+ eventuele fabrikant-link). Die volledige tekst voedt food-detectie, risico- én actie-classificatie.

@@ -2,8 +2,8 @@
 //  CategoryStyle.swift
 //  RecallRadar
 //
-//  C3 — Presentatie-helpers voor de interne categorie- en risicocodes (SF Symbols
-//  + kleur). Puur cosmetisch; de codes/labels zelf komen uit de index-taxonomie.
+//  Presentatie-helpers voor categorie-iconen en hazard-accent. Hazard-kleur wordt
+//  ALLEEN in het recall-detail (accentband) gebruikt — nooit in de feed (rustig).
 //
 
 import SwiftUI
@@ -26,15 +26,23 @@ enum CategoryStyle {
     }
 }
 
-enum RiskStyle {
-    static func color(_ code: String) -> Color {
-        switch code {
-        case "brand_hitte", "elektrisch", "vuurwerk_brand": .orange
-        case "verstikking", "beknelling", "verdrinking": .red
-        case "chemisch", "microbiologisch": .purple
-        case "letsel": .pink
-        case "milieu": .green
-        default: .secondary
-        }
+/// Hazard (risico-type) → accent voor het detailscherm. Ernstige gevaren krijgen de
+/// terracotta `riskHigh`, informatief de neutrale `riskLow`, rest amber `riskMedium`.
+enum HazardStyle {
+    private static let severe: Set<String> = [
+        "verstikking", "brand_hitte", "elektrisch", "beknelling", "verdrinking",
+    ]
+    static func color(_ riskType: String) -> Color {
+        if severe.contains(riskType) { return DS.Color.riskHigh }
+        if riskType == "overig_risico" { return DS.Color.riskLow }
+        return DS.Color.riskMedium
+    }
+    static func background(_ riskType: String) -> Color {
+        if severe.contains(riskType) { return DS.Color.riskHighBg }
+        if riskType == "overig_risico" { return DS.Color.riskLowBg }
+        return DS.Color.riskMediumBg
+    }
+    static func symbol(_ riskType: String) -> String {
+        riskType == "overig_risico" ? "info.circle.fill" : "exclamationmark.triangle.fill"
     }
 }

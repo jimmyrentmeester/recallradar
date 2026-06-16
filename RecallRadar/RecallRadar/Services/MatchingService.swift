@@ -94,6 +94,29 @@ nonisolated enum MatchingService {
         return min(max(s, 0), 100)
     }
 
+    /// Mensentaal-uitleg welke signalen matchten ("Waarom zie ik dit?", §3.6) — transparant
+    /// zonder het scoregetal te tonen.
+    static func matchedSignals(product: MatchableProduct, alert: RecallAlert, config: MatchingConfig) -> [String] {
+        var out: [String] = []
+        if let pb = Normalizer.barcode(product.barcode), let ab = alert.barcode, pb == ab {
+            out.append("Barcode komt overeen")
+        }
+        let pBrand = canonicalBrand(Normalizer.text(product.brand), config: config)
+        let aBrand = canonicalBrand(alert.brand ?? "", config: config)
+        if !pBrand.isEmpty, !aBrand.isEmpty {
+            if pBrand == aBrand { out.append("Merk komt overeen") }
+            else if Normalizer.jaroWinkler(pBrand, aBrand) >= 0.9 { out.append("Merk lijkt erop") }
+        }
+        let pModel = Normalizer.model(product.model)
+        let aModel = alert.model ?? ""
+        if !pModel.isEmpty, !aModel.isEmpty {
+            if pModel == aModel { out.append("Model komt overeen") }
+            else if Normalizer.jaroWinkler(pModel, aModel) >= 0.85 { out.append("Model lijkt erop") }
+        }
+        if product.category == alert.category { out.append("Categorie komt overeen") }
+        return out
+    }
+
     // MARK: - Trede (Fase 1 §6)
 
     static func tier(for score: Int, thresholds: MatchingConfig.Thresholds) -> MatchTier {

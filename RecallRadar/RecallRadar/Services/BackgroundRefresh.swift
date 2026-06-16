@@ -32,6 +32,24 @@ enum NotifState {
     }
 }
 
+/// Instelbare notificatie-voorkeuren (§4.6). HOOG is altijd aan (niet instelbaar).
+enum NotifPrefs {
+    private static let d = UserDefaults.standard
+    // Defaults = aan; `object(forKey:) == nil` → standaard true.
+    static var mediumEnabled: Bool {
+        get { d.object(forKey: "pref.medium") as? Bool ?? true }
+        set { d.set(newValue, forKey: "pref.medium") }
+    }
+    static var digestEnabled: Bool {
+        get { d.object(forKey: "pref.digest") as? Bool ?? true }
+        set { d.set(newValue, forKey: "pref.digest") }
+    }
+    static var quietHoursEnabled: Bool {
+        get { d.object(forKey: "pref.quiet") as? Bool ?? true }
+        set { d.set(newValue, forKey: "pref.quiet") }
+    }
+}
+
 @MainActor
 enum BackgroundRefresh {
     static let taskID = "jire.RecallRadar.refresh"
@@ -78,10 +96,17 @@ enum BackgroundRefresh {
                 products: products, subscriptions: subs, alerts: newAlerts, config: index.matchingConfig
             )
             let alreadyNotified = NotifState.notifiedIDs
-            let fresh = matches.filter { !alreadyNotified.contains($0.alert.id) }
+            let fresh = matches
+                .filter { !alreadyNotified.contains($0.alert.id) }
+                // HOOG altijd; MIDDEL alleen als de gebruiker dat aan laat staan (§4.6).
+                .filter { $0.tier == .high || NotifPrefs.mediumEnabled }
             if !fresh.isEmpty {
                 let items = fresh.map { NotifItem(alertID: $0.alert.id, title: $0.alert.displayTitle, tier: $0.tier) }
-                await NotificationService.schedule(NotificationPlanner.plan(items: items, now: .now))
+                // Rustige uren uitschakelbaar: dan venster (0,0) → altijd direct.
+                let q = NotifPrefs.quietHoursEnabled ? (22, 8) : (0, 0)
+                await NotificationService.schedule(
+                    NotificationPlanner.plan(items: items, now: .now, quietStartHour: q.0, quietEndHour: q.1)
+                )
                 NotifState.notifiedIDs = alreadyNotified.union(fresh.map(\.alert.id))
             }
         }
@@ -97,7 +122,8 @@ enum BackgroundRefresh {
     /// Maandelijkse geruststelling-digest (P0-6), ook bij nul matches.
     private static func maybeSendDigest(index: RecallIndex, products: [TrackedProduct], subs: [Subscription]) async {
         let data = UserDataStoreMonitoring(products: products, subs: subs)
-        guard data.isMonitoringAnything, await NotificationService.isAuthorized() else { return }
+        guard NotifPrefs.digestEnabled, data.isMonitoringAnything,
+              await NotificationService.isAuthorized() else { return }
 
         let now = Date()
         if let last = NotifState.lastDigestAt,
