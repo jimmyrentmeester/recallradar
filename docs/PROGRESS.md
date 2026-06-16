@@ -3,16 +3,22 @@
 > Houd dit bij aan het einde van elke Claude Code-sessie, zodat de volgende sessie (of een verse context) direct verder kan. Zelfde workflow als je toddler-games.
 
 ## Status (samenvatting)
-- **Fase:** Bouw deel 2 — **C1 + C2 af, B6 live**. Index in de cloud; app-laag (download/cache + SwiftData/CloudKit) staat.
-- **Laatst gewerkt aan:** C2 — SwiftData-modellen + CloudKit-container + CRUD-store.
-- **Volgende stap:** **C3** (browsebare feed met categoriefilter, P0-3), daarna C4 (recall-detail). Eigenaar: iCloud-capability in Xcode bevestigen.
+- **Fase:** Bouw deel 2 — **C1+C2+C3 af, B6 live**. Feed draait in de Simulator op de live cloud-index.
+- **Laatst gewerkt aan:** C3 — browsebare feed met categoriefilter + zoeken + detailscherm.
+- **Volgende stap:** **C4** (recall-detail afronden: foto-galerij, delen, toegankelijkheid) — kern staat al. Daarna Blok D (toevoegen + matching). Eigenaar: iCloud-capability in Xcode bevestigen + C2/C3-commits pushen.
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
 - [x] Blok A — Xcode-project scaffold (door eigenaar in Xcode) ✅
-- [ ] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [ ] C3 feed · [ ] C4 detail
+- [ ] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [x] C3 feed · [~] C4 detail (kern af)
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Blok C3)
+- **C3 feed gebouwd:** `Views/FeedView.swift` (categoriefilter-chips, jonge-gezin-spits vooraan, `.searchable` op merk/model, states), `Views/RecallRow.swift` (thumbnail + categorie/risico/datum/bronbadge), `Views/RecallDetailView.swift` (handelingsadvies, foto, batch/lot, bronknop(pen), disclaimer — C4-kern), `Views/CategoryStyle.swift` (SF Symbols + risicokleur). `ContentView` host de feed in een NavigationStack.
+- **Concurrency-fix (belangrijk projectdetail):** project staat op **Swift 6.2 default main-actor isolation** → pure modellen/decoders gemarkeerd `nonisolated` (`RecallAlert`, `RecallIndex`, `MatchingConfig`, `RecallMeta`, `JSONDecoder.recallIndex`, `RecallDateParser`, `RecallIndex.empty`) zodat de `IndexService`-actor ze off-main kan decoderen. `swiftc -typecheck` mist dit; alleen een echte `xcodebuild build` vangt het. Vastgelegd in memory.
+- Lege `INFOPLIST_KEY_NSCameraUsageDescription` voorzien van een nette NL-uitleg (privacy-guardrail + prep D2-scanner).
+- **Geverifieerd:** `xcodebuild build` SUCCEEDED; app draait in Simulator (iPhone 17 Pro) en toont 8.975 recalls van de live index met werkende filters/zoeken. Screenshot gedeeld.
+
 ### 2026-06-16 (sessie 2 — Blok C2)
 - **C2 SwiftData-laag gebouwd:**
   - `Models/TrackedProduct.swift` (bezit) + `Models/Subscription.swift` (merk/categorie-follow) — CloudKit-compatibel (defaults overal, geen unique, geen verplichte relaties). `confirmedMatches`/`suppressedMatches` voor de feedback-loop.
@@ -64,6 +70,7 @@
 - ~~NVWA via RSS~~ → **NVWA via eigen JSON-zoek-API** (RSS bestaat niet meer; eigen primaire bron, geen scrape). Food eruit gefilterd op trefwoorden (v1 = non-food).
 - Publicatie = GitHub Action → **`gh-pages`** branch (publish-stap geabstraheerd voor latere R2-switch).
 - PROGRESS bijhouden is verplicht en gebeurt via `/progress` (na elk blok / einde sessie).
+- App-project staat op **Swift 6.2 default main-actor isolation**: pure modellen/decoders `nonisolated` markeren; valideren met echte `xcodebuild build` (niet alleen `swiftc -typecheck`).
 - On-device matching, gebalanceerde grondhouding.
 - v1 = non-food; datamodel food-ready. Monetisatie = eenmalige Pro-unlock (P1).
 
