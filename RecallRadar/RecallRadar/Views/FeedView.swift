@@ -28,7 +28,7 @@ struct FeedView: View {
                     content
                 }
             }
-            .navigationTitle("Recalls")
+            .navigationTitle("Verken")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

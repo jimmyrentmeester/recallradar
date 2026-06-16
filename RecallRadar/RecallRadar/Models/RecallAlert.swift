@@ -14,13 +14,13 @@
 
 import Foundation
 
-nonisolated enum AlertSource: String, Codable, Hashable {
+nonisolated enum AlertSource: String, Codable, Hashable, Sendable {
     case safetyGate = "safety_gate"
     case nvwa
     case rasff // food-ready (later)
 }
 
-nonisolated struct RecallAlert: Codable, Identifiable, Hashable {
+nonisolated struct RecallAlert: Codable, Identifiable, Hashable, Sendable {
     let id: String
     let source: AlertSource
     let alertNumber: String

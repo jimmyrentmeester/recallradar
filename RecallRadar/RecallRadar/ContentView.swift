@@ -13,11 +13,13 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            FeedView(store: store)
-                .tabItem { Label("Feed", systemImage: "list.bullet.rectangle") }
-
+            // Persoonlijke home = openingsview (de waarde: raakt het míjn spullen?).
             MyStuffView(store: store)
-                .tabItem { Label("Mijn spullen", systemImage: "checkmark.shield") }
+                .tabItem { Label("Thuis", systemImage: "house.fill") }
+
+            // De volledige recall-lijst als verkenscherm (zoeken/filteren).
+            FeedView(store: store)
+                .tabItem { Label("Verken", systemImage: "magnifyingglass") }
         }
         .task { await store.load() }
         .sheet(isPresented: $showOnboarding) {

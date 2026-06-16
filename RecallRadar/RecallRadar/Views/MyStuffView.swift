@@ -23,12 +23,24 @@ struct MyStuffView: View {
 
     private var data: UserDataStore { UserDataStore(context) }
 
-    private var matches: [ScoredAlert] {
-        guard !store.alerts.isEmpty else { return [] }
-        return MatchBridge.personalMatches(
-            products: products, subscriptions: subscriptions,
-            alerts: store.alerts, config: store.index.matchingConfig
-        )
+    @State private var matches: [ScoredAlert] = []
+
+    /// Verandert zodra de matching-input verandert → trigger voor herberekening.
+    private var matchKey: String {
+        let p = products.map { "\($0.id.uuidString):\($0.brand ?? ""):\($0.model ?? ""):\($0.barcode ?? ""):\($0.category):\($0.confirmedMatches.count):\($0.suppressedMatches.count)" }.joined(separator: "|")
+        let s = subscriptions.map { "\($0.kindRaw)=\($0.value)" }.joined(separator: "|")
+        return "\(store.index.generatedAt.timeIntervalSince1970)#\(store.alerts.count)#\(p)#\(s)"
+    }
+
+    /// Matching draait OFF-MAIN en wordt gecachet in `matches` (geen UI-hang).
+    private func recomputeMatches() async {
+        guard !store.alerts.isEmpty else { matches = []; return }
+        let snap = MatchBridge.snapshot(products: products, subscriptions: subscriptions)
+        let alerts = store.alerts
+        let config = store.index.matchingConfig
+        matches = await Task.detached(priority: .userInitiated) {
+            MatchBridge.compute(products: snap.products, brandFollows: snap.brandFollows, alerts: alerts, config: config)
+        }.value
     }
 
     /// MIDDEL bezit-matches die nog bevestigd/weggeklikt moeten worden (Fase 1 §7).
@@ -55,6 +67,7 @@ struct MyStuffView: View {
     var body: some View {
         NavigationStack {
             List {
+                summarySection
                 if !notifAuthorized && data.isMonitoringAnything { notifSection }
                 if !pending.isEmpty { confirmSection }
                 if data.isMonitoringAnything { matchesSection }
@@ -62,8 +75,9 @@ struct MyStuffView: View {
                 brandsSection
                 productsSection
             }
-            .navigationTitle("Mijn spullen")
+            .navigationTitle("Recall Radar")
             .task { notifAuthorized = await NotificationService.isAuthorized() }
+            .task(id: matchKey) { await recomputeMatches() }
             .navigationDestination(for: RecallAlert.self) { alert in
                 RecallDetailView(alert: alert, index: store.index)
             }
@@ -79,6 +93,34 @@ struct MyStuffView: View {
             .sheet(isPresented: $showAdd) { AddProductView(store: store) }
             .sheet(isPresented: $showInfo) { AboutView(store: store) }
         }
+    }
+
+    // MARK: - Samenvatting (home-header)
+
+    @ViewBuilder private var summarySection: some View {
+        Section {
+            if data.isMonitoringAnything {
+                HStack(spacing: 0) {
+                    summaryStat(value: products.count, label: products.count == 1 ? "product" : "producten")
+                    Divider().frame(height: 36)
+                    summaryStat(value: subscriptions.count, label: "gevolgd")
+                    Divider().frame(height: 36)
+                    summaryStat(value: pending.count + forYou.count, label: "relevant", highlight: (pending.count + forYou.count) > 0)
+                }
+            } else {
+                Label("Voeg een product toe of volg een categorie om bewaakt te worden.", systemImage: "shield.lefthalf.filled")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func summaryStat(value: Int, label: String, highlight: Bool = false) -> some View {
+        VStack(spacing: 2) {
+            Text("\(value)").font(.title2.bold()).foregroundStyle(highlight ? .red : .primary)
+            Text(label).font(.caption).foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Meldingen aanzetten (voor wie de onboarding oversloeg)

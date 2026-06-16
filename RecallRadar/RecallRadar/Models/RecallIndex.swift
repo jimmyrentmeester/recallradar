@@ -63,7 +63,7 @@ nonisolated struct RecallMeta: Codable {
 }
 
 /// Spiegelt `matching_config` uit de index. Gebruikt door de MatchingService (Blok D).
-nonisolated struct MatchingConfig: Codable, Hashable {
+nonisolated struct MatchingConfig: Codable, Hashable, Sendable {
     let weights: Weights
     let thresholds: Thresholds
     let brandAliases: [String: String]
