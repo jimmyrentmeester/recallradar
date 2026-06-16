@@ -15,12 +15,16 @@ final class RecallStore {
     enum Status: Equatable {
         case idle
         case loading
-        case loaded(origin: String)
-        case empty
+        case loaded
+        case failed   // geen netwerk én geen cache/bundle — nooit als "geen recalls" tonen
     }
 
     private(set) var index: RecallIndex = .empty
     private(set) var status: Status = .idle
+    private(set) var origin: IndexService.Origin?
+
+    /// Tonen we niet-verse data (cache/ingebouwd)? Voor een eerlijke "offline"-melding.
+    var isOffline: Bool { origin == .cache || origin == .bundle }
 
     private let service: IndexService
 
@@ -39,22 +43,14 @@ final class RecallStore {
     }
 
     func load() async {
-        status = .loading
+        if index.count == 0 { status = .loading }
         // Snelle eerste render uit cache/bundle, daarna verversen over het netwerk.
         if let quick = await service.cachedOrBundled() {
             index = quick
         }
         let result = await service.refresh()
         index = result.index
-        status = result.index.count == 0 ? .empty : .loaded(origin: originLabel(result.origin))
-    }
-
-    private func originLabel(_ origin: IndexService.Origin) -> String {
-        switch origin {
-        case .network: "netwerk"
-        case .notModified: "cache (ongewijzigd)"
-        case .cache: "cache (offline)"
-        case .bundle: "ingebouwd"
-        }
+        origin = result.origin
+        status = result.index.count == 0 ? .failed : .loaded
     }
 }

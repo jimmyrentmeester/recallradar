@@ -17,6 +17,7 @@ struct MyStuffView: View {
     @Query(sort: \Subscription.addedAt, order: .reverse) private var subscriptions: [Subscription]
 
     @State private var showAdd = false
+    @State private var showInfo = false
     @State private var newBrand = ""
     @State private var notifAuthorized = true
 
@@ -67,11 +68,16 @@ struct MyStuffView: View {
                 RecallDetailView(alert: alert, index: store.index)
             }
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button { showInfo = true } label: { Image(systemName: "info.circle") }
+                        .accessibilityLabel("Over en disclaimer")
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button { showAdd = true } label: { Label("Product toevoegen", systemImage: "plus") }
                 }
             }
             .sheet(isPresented: $showAdd) { AddProductView(store: store) }
+            .sheet(isPresented: $showInfo) { AboutView(store: store) }
         }
     }
 

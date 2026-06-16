@@ -14,6 +14,7 @@ struct FeedView: View {
 
     @State private var selectedCategory: String? = nil // nil = alle
     @State private var searchText: String = ""
+    @State private var showInfo = false
 
     var body: some View {
         NavigationStack {
@@ -21,23 +22,39 @@ struct FeedView: View {
                 switch store.status {
                 case .idle, .loading:
                     ProgressView("Recalls laden…")
-                case .empty:
-                    ContentUnavailableView(
-                        "Geen recalls beschikbaar",
-                        systemImage: "checkmark.shield",
-                        description: Text("Controleer je verbinding. Zodra de index beschikbaar is, verschijnen recalls hier.")
-                    )
+                case .failed:
+                    failedState
                 case .loaded:
                     content
                 }
             }
             .navigationTitle("Recalls")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { showInfo = true } label: { Image(systemName: "info.circle") }
+                        .accessibilityLabel("Over en disclaimer")
+                }
+            }
+            .sheet(isPresented: $showInfo) { AboutView(store: store) }
+        }
+    }
+
+    /// Geen netwerk én geen cache/bundle. Nooit als "geen recalls" framen (guardrail).
+    private var failedState: some View {
+        ContentUnavailableView {
+            Label("Recalls niet geladen", systemImage: "wifi.exclamationmark")
+        } description: {
+            Text("We konden de recall-lijst nu niet ophalen. Dit betekent niet dat er geen recalls zijn.")
+        } actions: {
+            Button("Opnieuw proberen") { Task { await store.load() } }
+                .buttonStyle(.borderedProminent)
         }
     }
 
     private var content: some View {
         VStack(spacing: 0) {
+            if store.isOffline { offlineBanner }
             categoryBar
             if filtered.isEmpty {
                 ContentUnavailableView.search(text: searchText)
@@ -46,6 +63,18 @@ struct FeedView: View {
             }
         }
         .searchable(text: $searchText, prompt: "Zoek op merk of model")
+    }
+
+    private var offlineBanner: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "wifi.slash")
+            Text("Offline — laatst bekende lijst wordt getoond.")
+            Spacer()
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .padding(.horizontal).padding(.vertical, 6)
+        .background(.yellow.opacity(0.15))
     }
 
     private var list: some View {
