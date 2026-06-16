@@ -4,8 +4,8 @@
 
 ## Status (samenvatting)
 - **Fase:** Bouw deel 2 — **Blokken B–E + F1/F2 af**. App is functioneel + App Store-waardig; alleen F3 (release) resteert.
-- **Laatst gewerkt aan:** TestFlight — build geüpload, verwerkt en **geïnstalleerd op een echt toestel** (interne test) ✅.
-- **Volgende stap:** On-device smoke-test (vooral barcode-scanner D2, notificatie-permissie, feel). Daarna keuze: volledige App Store-release (screenshots/listing/privacy-URL via `app-store-release`-skill) óf P1 (widget, gezin-delen, OCR, Pro-unlock).
+- **Laatst gewerkt aan:** Feedback-ronde 2 (Batch A+B) + on-device vertaling risico-omschrijving. CI doet nu volledige rebuild; build bumped naar 2.
+- **Volgende stap:** Eigenaar maakt **nieuwe TestFlight-build (build 2)** voor de app-wijzigingen (home/snelheid/bewerken/autocomplete/vertaling). NL-measures zijn al live (data). Daarna volledige App Store-release óf P1.
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
@@ -23,7 +23,8 @@
   - **Naam-prompt** na barcode zonder index-match (focus + oranje hint).
   - **Model-matching bevinding:** model-exact = 40 = LAAG, terwijl home alleen ≥ MIDDEL toont → daarom zag je geen melding bij handmatig model (barcode = 70 = MIDDEL wél). De directe check-bij-toevoegen lost dit op (toont vanaf LAAG). Tip aan gebruiker: kies de juiste categorie (model+categorie = 55 = MIDDEL).
 - **Batch B (data/tekst):**
-  - **"Wat moet je doen?" in NL** — `ingestion/src/lookups/measures.js` vertaalt de getemplate `measures_country` compositioneel (authority+rol+~dozijn acties, "Other:"-fallback). Index geregenereerd; +1 test (15 ingestion-tests). *Risico-omschrijving (vrije tekst) blijft voorlopig Engels — losse beslissing (DeepL incrementeel vs on-device Translation framework).*
+  - **"Wat moet je doen?" in NL** — `ingestion/src/lookups/measures.js` vertaalt de getemplate `measures_country` compositioneel (authority+rol+~dozijn acties, "Other:"-fallback). Index geregenereerd; +1 test (15 ingestion-tests). **Live geverifieerd: 8.780/8.780 measures NL.**
+  - **Risico-omschrijving (vrije tekst) → on-device vertaling** met Apple's Translation-framework (`.translationTask`, en→nl), alleen voor Safety Gate (NVWA is al NL), met fallback naar origineel + "Automatisch vertaald"-label. Gratis, privacy-first. Best te verifiëren op een echt toestel (taalpakket-download).
   - **Merk-autocomplete** — `RecallStore.brandNames` (1× uit index) voedt suggesties in `AddProductView` → minder typo's, betere matching.
 - Build SUCCEEDED; 38 app-tests + 15 ingestion-tests groen.
 
