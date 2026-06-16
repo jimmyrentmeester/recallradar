@@ -3,17 +3,23 @@
 > Houd dit bij aan het einde van elke Claude Code-sessie, zodat de volgende sessie (of een verse context) direct verder kan. Zelfde workflow als je toddler-games.
 
 ## Status (samenvatting)
-- **Fase:** Bouw deel 2 — **Blok C af + D1/D2/D3 af**. Onboarding, volgen, toevoegen/scan en matching werken end-to-end (visueel geverifieerd).
-- **Laatst gewerkt aan:** D1 (onboarding + volgen) + D2 (toevoegen + VisionKit-scanner) + MatchBridge.
-- **Volgende stap:** **D4** — "is dit van jou?"-bevestiging (confirm/suppress UI) + "Voor jou" verfijnen (categorie-follows horen in de feed, niet als persoonlijke matches). Daarna Blok E (notificaties/digest).
+- **Fase:** Bouw deel 2 — **Blok C + Blok D volledig af**. Index live; download/cache, SwiftData/CloudKit, feed+detail, onboarding/volgen/toevoegen/scan en matching+bevestiging werken.
+- **Laatst gewerkt aan:** D4 — "is dit van jou?"-bevestiging + "Voor jou" verfijnd (persoonlijke matches i.p.v. categorie-flood).
+- **Volgende stap:** **Blok E** — BGAppRefreshTask (dagelijkse refresh + match-only-nieuwe), lokale notificaties per trede + bundeling + rustige uren, maandelijkse geruststelling-digest (P0-6).
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
 - [x] Blok A — Xcode-project scaffold (door eigenaar in Xcode) ✅
 - [x] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [x] C3 feed · [x] C4 detail
-- [ ] Blok D — toevoegen & matching: [x] D1 onboarding · [x] D2 toevoegen+scan · [x] D3 MatchingService · [ ] D4 "is dit van jou?"
+- [x] Blok D — toevoegen & matching: [x] D1 onboarding · [x] D2 toevoegen+scan · [x] D3 MatchingService · [x] D4 "is dit van jou?"
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Blok D4)
+- **"Is dit van jou?"-bevestiging:** nieuwe sectie in `MyStuffView` voor MIDDEL bezit-matches met Ja / Nee / Weet-ik-niet → schrijft naar `confirmedMatches`/`suppressedMatches` (Ja → toekomstig HOOG, Nee → onderdrukt). Logica gedekt door de bestaande matching-unit-tests.
+- **"Voor jou" verfijnd:** `MatchBridge.personalMatches` toont nu alleen bezit-matches (≥ MIDDEL) + gevolgde-merk-meldingen; **categorie-follows zijn eruit** (die horen in de feed). Een gebruiker die alleen categorieën volgt ziet de groene geruststelling + verwijzing naar de Feed.
+- Build SUCCEEDED. Visuele opname van de bevestig-sectie overgeslagen wegens een simulator-toetsenbordartefact (accent-popup bij synthetische toetsaanslagen) — geen app-probleem; logica is getest.
+- **Blok D compleet.**
+
 ### 2026-06-16 (sessie 2 — Blok D1 + D2)
 - **D1 onboarding/volgen:** `OnboardingView` (first-run categorie-keuze, jonge-gezin-spits met "populair"-badge), `MyStuffView`-tab (categorieën/merken volgen + producten). `ContentView` is nu een TabView (Feed / Mijn spullen).
 - **D2 toevoegen:** `AddProductView` (handmatig merk/model/categorie/barcode) + `BarcodeScannerView` (VisionKit DataScanner, EAN/UPC; device-gated, op Simulator verborgen met uitleg). Barcode-prefill van merk/categorie uit de index.
