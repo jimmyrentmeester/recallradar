@@ -48,20 +48,17 @@ struct HomeView: View {
             List {
                 brandHeaderSection
                 heroSection
-                if !notifAuthorized && monitoring { notifSection }
                 if !pending.isEmpty { confirmSection }
                 if !forYou.isEmpty { matchesSection }
-                if monitoring { trackedSummarySection } else { getStartedSection }
+                addCTASection
+                if monitoring { trackedSummarySection }
+                exploreSection
+                if !notifAuthorized && monitoring { notifSection }
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: ScoredAlert.self) { s in
                 RecallDetailView(alert: s.alert, index: store.index, tier: s.tier, signals: s.signals)
-            }
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button { showAdd = true } label: { Label("Toevoegen", systemImage: "plus") }
-                }
             }
             .sheet(isPresented: $showAdd) { AddHubView(store: store) }
             .task { notifAuthorized = await NotificationService.isAuthorized() }
@@ -115,7 +112,7 @@ struct HomeView: View {
     private var heroKind: StatusHeroCard.Kind {
         let n = pending.count + forYou.count
         if n > 0 { return .attention(count: n) }
-        if monitoring { return .protected(products: products.count, follows: subscriptions.count) }
+        if monitoring { return .protected }
         return .setup
     }
 
@@ -169,33 +166,58 @@ struct HomeView: View {
         }
     }
 
-    /// Compacte "je bewaakt …" met doorstap naar het beheerscherm.
-    private var trackedSummarySection: some View {
-        Section {
-            Button { selection = .manage } label: {
-                HStack {
-                    Label("Je bewaakt", systemImage: "shippingbox.fill")
-                    Spacer()
-                    Text("\(products.count) prod. · \(followCount) gevolgd")
-                        .foregroundStyle(DS.Color.textSecondary)
-                    Image(systemName: "chevron.right").font(.caption).foregroundStyle(DS.Color.textTertiary)
-                }
-            }
-            .tint(DS.Color.textPrimary)
-        }
-    }
-    private var followCount: Int { subscriptions.count }
-
-    private var getStartedSection: some View {
+    /// Prominente primaire actie (vervangt de kleine nav-"+").
+    private var addCTASection: some View {
         Section {
             Button { showAdd = true } label: {
-                Label("Voeg je eerste product of categorie toe", systemImage: "plus.circle.fill")
+                Label(monitoring ? "Product of categorie toevoegen" : "Voeg je eerste product of categorie toe",
+                      systemImage: "plus.circle.fill")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
             .listRowInsets(EdgeInsets(top: DS.Space.sm, leading: DS.Space.lg, bottom: DS.Space.sm, trailing: DS.Space.lg))
             .listRowBackground(Color.clear)
+        }
+    }
+
+    /// Compacte "je bewaakt …" met doorstap naar het beheerscherm.
+    private var trackedSummarySection: some View {
+        Section {
+            Button { selection = .manage } label: {
+                HStack {
+                    Label("Mijn spullen", systemImage: "shippingbox.fill")
+                    Spacer()
+                    Text(monitoredSummary).foregroundStyle(DS.Color.textSecondary)
+                    Image(systemName: "chevron.right").font(.caption).foregroundStyle(DS.Color.textTertiary)
+                }
+            }
+            .tint(DS.Color.textPrimary)
+        }
+    }
+
+    /// Voluit, zonder afkortingen; nul-onderdelen weggelaten.
+    private var monitoredSummary: String {
+        let cats = subscriptions.filter { $0.kind == .category }.count
+        let brands = subscriptions.filter { $0.kind == .brand }.count
+        var parts: [String] = []
+        if products.count > 0 { parts.append("\(products.count) product\(products.count == 1 ? "" : "en")") }
+        if cats > 0 { parts.append("\(cats) categorie\(cats == 1 ? "" : "ën")") }
+        if brands > 0 { parts.append("\(brands) merk\(brands == 1 ? "" : "en")") }
+        return parts.isEmpty ? "niets" : parts.joined(separator: " · ")
+    }
+
+    /// Verwijst naar de volledige feed — vult de ruimte met een nuttige actie.
+    private var exploreSection: some View {
+        Section {
+            Button { selection = .explore } label: {
+                HStack {
+                    Label("Verken alle recalls", systemImage: "magnifyingglass")
+                    Spacer()
+                    Image(systemName: "chevron.right").font(.caption).foregroundStyle(DS.Color.textTertiary)
+                }
+            }
+            .tint(DS.Color.textPrimary)
         }
     }
 }

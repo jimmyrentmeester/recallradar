@@ -50,6 +50,22 @@ struct ManageView: View {
         }
     }
 
+    /// Gevolgde categorie/merk-rij met een per-bron notificatie-bereik-keuze.
+    private func followRow(_ sub: Subscription, label: String, icon: String) -> some View {
+        HStack {
+            Label(label, systemImage: icon)
+            Spacer()
+            Menu {
+                ForEach(PushScope.allCases, id: \.self) { scope in
+                    Button { data.setPushScope(sub, scope) } label: { Label(scope.label, systemImage: scope.icon) }
+                }
+            } label: {
+                Label(sub.pushScope.label, systemImage: sub.pushScope.icon)
+                    .font(.caption).foregroundStyle(DS.Color.brandPrimary)
+            }
+        }
+    }
+
     private var list: some View {
         List {
             Section {
@@ -73,17 +89,21 @@ struct ManageView: View {
             }
 
             if !followedCategories.isEmpty {
-                Section("Gevolgde categorieën") {
+                Section {
                     ForEach(followedCategories) { sub in
-                        Label(store.index.categoryLabel(sub.value), systemImage: CategoryStyle.icon(sub.value))
+                        followRow(sub, label: store.index.categoryLabel(sub.value), icon: CategoryStyle.icon(sub.value))
                     }
                     .onDelete { idx in idx.map { followedCategories[$0] }.forEach(data.delete) }
+                } header: {
+                    Text("Gevolgde categorieën")
+                } footer: {
+                    Text("Kies per categorie hoeveel je wilt horen: alleen in de feed, alleen ernstige recalls, of alles.")
                 }
             }
 
             if !followedBrands.isEmpty {
                 Section("Gevolgde merken") {
-                    ForEach(followedBrands) { sub in Text(sub.value) }
+                    ForEach(followedBrands) { sub in followRow(sub, label: sub.value, icon: "tag") }
                         .onDelete { idx in idx.map { followedBrands[$0] }.forEach(data.delete) }
                 }
             }

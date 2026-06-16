@@ -78,13 +78,13 @@ struct UserDataStore {
 
     /// Voegt een follow toe; voorkomt duplicaten op (kind, value, genormaliseerd).
     @discardableResult
-    func addSubscription(kind: SubscriptionKind, value: String, pushEnabled: Bool = false) -> Subscription? {
+    func addSubscription(kind: SubscriptionKind, value: String, pushScope: PushScope = .feed) -> Subscription? {
         guard let clean = value.trimmedOrNil else { return nil }
         let key = clean.lowercased()
         if allSubscriptions().contains(where: { $0.kind == kind && $0.value.lowercased() == key }) {
             return nil // bestaat al
         }
-        let sub = Subscription(kind: kind, value: clean, pushEnabled: pushEnabled)
+        let sub = Subscription(kind: kind, value: clean, pushScope: pushScope)
         context.insert(sub)
         try? context.save()
         return sub
@@ -95,8 +95,8 @@ struct UserDataStore {
         try? context.save()
     }
 
-    func setPush(_ subscription: Subscription, enabled: Bool) {
-        subscription.pushEnabled = enabled
+    func setPushScope(_ subscription: Subscription, _ scope: PushScope) {
+        subscription.pushScope = scope
         try? context.save()
     }
 

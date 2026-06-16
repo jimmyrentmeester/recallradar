@@ -14,6 +14,7 @@ struct SettingsView: View {
     @State private var mediumEnabled = NotifPrefs.mediumEnabled
     @State private var digestEnabled = NotifPrefs.digestEnabled
     @State private var quietHours = NotifPrefs.quietHoursEnabled
+    @State private var allCritical = NotifPrefs.allCriticalEnabled
     @State private var notifAuthorized = true
 
     private var appVersion: String {
@@ -62,14 +63,19 @@ struct SettingsView: View {
                 Label("Rustige uren (22–08)", systemImage: "moon.fill")
             }
             .onChange(of: quietHours) { _, v in NotifPrefs.quietHoursEnabled = v }
+            Toggle(isOn: $allCritical) {
+                Label("Alle ernstige recalls", systemImage: "globe.europe.africa.fill")
+            }
+            .onChange(of: allCritical) { _, v in NotifPrefs.allCriticalEnabled = v }
         } header: {
             Text("Meldingen")
         } footer: {
             Text("""
-            • Ernstige recalls (HOOG) krijg je altijd — die kun je niet uitzetten.
-            • Mogelijke matches: zachte "is dit van jou?"-vraag bij twijfelgevallen.
+            • Eigen producten: ernstige match (HOOG) waarschuwt altijd; mogelijke matches vragen "is dit van jou?".
+            • Per gevolgde categorie/merk kies je bij "Mijn spullen" het bereik (feed / alleen ernstige / alles).
             • Maandelijkse geruststelling: één bericht per maand, ook als er níéts geraakt is.
-            • Rustige uren: 's nachts geen meldingen — we bundelen ze tot 08:00.
+            • Rustige uren: 's nachts bundelen we meldingen tot 08:00.
+            • Alle ernstige recalls: ook buiten je eigen spullen — meer dekking, meer meldingen.
             """)
         }
     }

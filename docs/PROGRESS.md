@@ -16,6 +16,12 @@
 - [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [x] F3 TestFlight — **build live op toestel** · [ ] F3 volledige App Store-release
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Feedback: icoon, notificatie-bereik, dashboard-opschoning)
+- **App-icoon → "retour-doos"** (`shippingbox.and.arrow.backward`, gecentreerd, teal, light/dark/tinted, opaque) — sterker recall-thema dan de radar. Generator op AppKit+CoreGraphics.
+- **Notificatie-bereik per bron** (gekozen model): `Subscription.pushScope` = feed / alleen-ernstige / alles; per gevolgde categorie/merk instelbaar via menu in "Mijn spullen". Producten: HOOG pusht altijd, MIDDEL via toggle. Globale opt-in **"Alle ernstige recalls"** in Instellingen (`NotifPrefs.allCriticalEnabled`). Push-beslissing in `MatchBridge.pushItems` (+ `MatchingService.isSerious`); BackgroundRefresh gebruikt het. `pushEnabled` vervangen door scope.
+- **Dashboard opgeschoond:** hero-copy zonder rauwe tellingen ("We controleren je spullen elke dag"); tellingen alleen op de "Mijn spullen"-regel, **voluit** ("2 categorieën"); geen dubbele info. Kleine nav-"+" vervangen door een **prominente "Toevoegen"-knop**; witruimte benut met "Verken alle recalls"-regel.
+- Build → 4. 38 app- + 16 ingestion-tests groen; build SUCCEEDED; dashboard + scope-picker visueel geverifieerd.
+
 ### 2026-06-16 (sessie 2 — UX-herstructurering: dashboard + 4 tabs + Toevoegen-hub)
 - **4 tabs:** Thuis (dashboard) · Mijn spullen (beheer) · Verken (feed) · Instellingen. (`ContentView` met tab-selectie-binding.)
 - **Thuis = puur dashboard** (`HomeView`): status-hero, "is dit van jou?", "Voor jou", een "Je bewaakt X · Y"-regel die naar Mijn spullen springt, en één primaire **+ Toevoegen**. Beheer-UI (toggles/lijsten/merkveld) van de home gehaald.

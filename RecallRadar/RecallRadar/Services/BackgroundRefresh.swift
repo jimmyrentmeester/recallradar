@@ -48,6 +48,11 @@ enum NotifPrefs {
         get { d.object(forKey: "pref.quiet") as? Bool ?? true }
         set { d.set(newValue, forKey: "pref.quiet") }
     }
+    /// Globale opt-in: push álle ernstige recalls, ook buiten je spullen. Standaard uit.
+    static var allCriticalEnabled: Bool {
+        get { d.object(forKey: "pref.allCritical") as? Bool ?? false }
+        set { d.set(newValue, forKey: "pref.allCritical") }
+    }
 }
 
 @MainActor
@@ -92,22 +97,20 @@ enum BackgroundRefresh {
 
         let newAlerts = index.alerts.filter { $0.updatedAt > watermark }
         if !newAlerts.isEmpty, await NotificationService.isAuthorized() {
-            let matches = MatchBridge.personalMatches(
-                products: products, subscriptions: subs, alerts: newAlerts, config: index.matchingConfig
+            let snap = MatchBridge.snapshot(products: products, subscriptions: subs)
+            let follows = MatchBridge.followSnapshot(subs)
+            let items = MatchBridge.pushItems(
+                alerts: newAlerts, products: snap.products, follows: follows, config: index.matchingConfig,
+                mediumEnabled: NotifPrefs.mediumEnabled, allCritical: NotifPrefs.allCriticalEnabled
             )
             let alreadyNotified = NotifState.notifiedIDs
-            let fresh = matches
-                .filter { !alreadyNotified.contains($0.alert.id) }
-                // HOOG altijd; MIDDEL alleen als de gebruiker dat aan laat staan (§4.6).
-                .filter { $0.tier == .high || NotifPrefs.mediumEnabled }
+            let fresh = items.filter { !alreadyNotified.contains($0.alertID) }
             if !fresh.isEmpty {
-                let items = fresh.map { NotifItem(alertID: $0.alert.id, title: $0.alert.displayTitle, tier: $0.tier) }
-                // Rustige uren uitschakelbaar: dan venster (0,0) → altijd direct.
                 let q = NotifPrefs.quietHoursEnabled ? (22, 8) : (0, 0)
                 await NotificationService.schedule(
-                    NotificationPlanner.plan(items: items, now: .now, quietStartHour: q.0, quietEndHour: q.1)
+                    NotificationPlanner.plan(items: fresh, now: .now, quietStartHour: q.0, quietEndHour: q.1)
                 )
-                NotifState.notifiedIDs = alreadyNotified.union(fresh.map(\.alert.id))
+                NotifState.notifiedIDs = alreadyNotified.union(fresh.map(\.alertID))
             }
         }
 

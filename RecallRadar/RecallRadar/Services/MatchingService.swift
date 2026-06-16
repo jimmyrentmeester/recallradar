@@ -154,6 +154,10 @@ nonisolated enum MatchingService {
         }
     }
 
+    /// Ernstig gevaar? (voor "alleen ernstige"-pushes en de globale opt-in.)
+    static let seriousRisks: Set<String> = ["verstikking", "brand_hitte", "elektrisch", "beknelling", "verdrinking", "chemisch"]
+    static func isSerious(_ alert: RecallAlert) -> Bool { seriousRisks.contains(alert.riskType) }
+
     // MARK: - Merk/categorie-abonnementen (aparte tak, §6)
 
     /// brandFollows = genormaliseerde merknamen; categoryFollows = interne categoriecodes.

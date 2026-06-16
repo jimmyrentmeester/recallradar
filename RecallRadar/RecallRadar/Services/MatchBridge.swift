@@ -103,6 +103,65 @@ enum MatchBridge {
         return best
     }
 
+    // MARK: - Push-beslissing (welke nieuwe alerts → notificatie)
+
+    nonisolated struct MatchableFollow: Sendable {
+        let isBrand: Bool
+        let value: String   // genormaliseerd merk, of categoriecode
+        let scope: PushScope
+    }
+
+    @MainActor static func followSnapshot(_ subs: [Subscription]) -> [MatchableFollow] {
+        subs.map { s in
+            MatchableFollow(isBrand: s.kind == .brand,
+                            value: s.kind == .brand ? Normalizer.text(s.value) : s.value,
+                            scope: s.pushScope)
+        }
+    }
+
+    /// Bepaalt welke NIEUWE alerts een push verdienen, met het per-bron bereik (§feedback):
+    /// producten (HOOG altijd, MIDDEL als toegestaan), gevolgde categorie/merk per scope,
+    /// en een globale "alle ernstige"-opt-in. Ontdubbeld per alert op hoogste trede.
+    nonisolated static func pushItems(
+        alerts: [RecallAlert],
+        products: [MatchableProduct],
+        follows: [MatchableFollow],
+        config: MatchingConfig,
+        mediumEnabled: Bool,
+        allCritical: Bool
+    ) -> [NotifItem] {
+        var best: [String: MatchTier] = [:]
+        func bump(_ alert: RecallAlert, _ tier: MatchTier) {
+            guard tier > .none else { return }
+            if let e = best[alert.id], e >= tier { return }
+            best[alert.id] = tier
+        }
+        for alert in alerts {
+            // Eigen producten.
+            for p in products {
+                let t = MatchingService.evaluate(product: p, alert: alert, config: config).tier
+                if t == .high { bump(alert, .high) }
+                else if t == .medium, mediumEnabled { bump(alert, .medium) }
+            }
+            // Gevolgde categorieën/merken per scope.
+            for f in follows {
+                let matches = f.isBrand ? (alert.brand == f.value && !f.value.isEmpty) : (alert.category == f.value)
+                guard matches else { continue }
+                switch f.scope {
+                case .feed: break
+                case .all: bump(alert, .medium)
+                case .high: if MatchingService.isSerious(alert) { bump(alert, .high) }
+                }
+            }
+            // Globale opt-in: alle ernstige recalls.
+            if allCritical, MatchingService.isSerious(alert) { bump(alert, .high) }
+        }
+        return best.map { id, tier in
+            let a = alerts.first { $0.id == id }!
+            return NotifItem(alertID: id, title: a.displayTitle, tier: tier)
+        }
+    }
+
     /// Gemaks-wrapper (snapshot + compute) voor niet-UI-paden zoals de achtergrond-refresh.
     @MainActor static func personalMatches(
         products: [TrackedProduct], subscriptions: [Subscription],

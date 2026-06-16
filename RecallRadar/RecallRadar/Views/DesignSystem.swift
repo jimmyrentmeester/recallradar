@@ -79,7 +79,7 @@ struct RiskPill: View {
 /// Geruststellingskaart bovenaan de home — de emotionele kern (gemoedsrust).
 struct StatusHeroCard: View {
     enum Kind: Equatable {
-        case protected(products: Int, follows: Int)
+        case protected
         case attention(count: Int)
         case setup
     }
@@ -135,9 +135,8 @@ struct StatusHeroCard: View {
     }
     private var subtitle: String {
         switch kind {
-        case let .protected(products, follows):
-            "We houden \(products) product\(products == 1 ? "" : "en") en \(follows) gevolgd in de gaten."
-        case .attention: "Bekijk wat je moet doen."
+        case .protected: "We controleren je spullen elke dag tegen nieuwe recalls."
+        case .attention: "Bekijk hieronder wat je moet doen."
         case .setup: "Voeg een product toe of volg een categorie om bewaakt te worden."
         }
     }
