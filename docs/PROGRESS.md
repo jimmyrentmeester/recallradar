@@ -16,6 +16,17 @@
 - [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [x] F3 TestFlight — **build live op toestel** · [ ] F3 volledige App Store-release
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Feedback-ronde 2: Batch A + B)
+- **Batch A (toevoeg/bewerk-flow):**
+  - Producten **bewerken** — `AddProductView` doet nu add én edit (`editing:`-param, verwijder-knop), tikbare productrijen in de home (`.sheet(item:)`).
+  - **Directe recall-check bij toevoegen** (`MatchBridge.bestMatch`, off-main) → alert "Mogelijke recall gevonden" met confidence; surfacet óók LAAG (je voegde het bewust toe).
+  - **Naam-prompt** na barcode zonder index-match (focus + oranje hint).
+  - **Model-matching bevinding:** model-exact = 40 = LAAG, terwijl home alleen ≥ MIDDEL toont → daarom zag je geen melding bij handmatig model (barcode = 70 = MIDDEL wél). De directe check-bij-toevoegen lost dit op (toont vanaf LAAG). Tip aan gebruiker: kies de juiste categorie (model+categorie = 55 = MIDDEL).
+- **Batch B (data/tekst):**
+  - **"Wat moet je doen?" in NL** — `ingestion/src/lookups/measures.js` vertaalt de getemplate `measures_country` compositioneel (authority+rol+~dozijn acties, "Other:"-fallback). Index geregenereerd; +1 test (15 ingestion-tests). *Risico-omschrijving (vrije tekst) blijft voorlopig Engels — losse beslissing (DeepL incrementeel vs on-device Translation framework).*
+  - **Merk-autocomplete** — `RecallStore.brandNames` (1× uit index) voedt suggesties in `AddProductView` → minder typo's, betere matching.
+- Build SUCCEEDED; 38 app-tests + 15 ingestion-tests groen.
+
 ### 2026-06-16 (sessie 2 — Feedback-ronde 1: perf + hoofdpagina)
 - **Performance-fix:** matching draaide synchroon op de main thread over alle ~9.000 alerts bij elke her-render → trage Bewaar/"Ja, van mij". Nu: `MatchBridge.snapshot` (main, goedkoop) + `MatchBridge.compute` (`nonisolated`, off-main via `Task.detached`), resultaat gecachet in `@State` en herberekend via `.task(id: matchKey)` alleen bij input-wijziging. Modellen `Sendable` gemaakt.
 - **Hoofdpagina herinricht:** `ContentView` opent nu op de **persoonlijke home** (tab "Thuis"); de feed is tab "Verken" (zoeken/filter). Home heeft een samenvatting-header (producten · gevolgd · relevant) + "Voor jou". Build SUCCEEDED, 38 tests groen, visueel geverifieerd.
