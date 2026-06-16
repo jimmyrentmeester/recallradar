@@ -111,7 +111,7 @@ actor IndexService {
     }
 }
 
-extension RecallIndex {
+nonisolated extension RecallIndex {
     /// Geldige lege index voor de allereerste run zonder cache/bundle/netwerk.
     static var empty: RecallIndex {
         RecallIndex(

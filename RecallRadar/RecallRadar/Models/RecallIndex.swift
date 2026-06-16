@@ -9,7 +9,7 @@
 
 import Foundation
 
-struct RecallIndex: Codable {
+nonisolated struct RecallIndex: Codable {
     let schemaVersion: Int
     let generatedAt: Date
     let windowMonths: Int
@@ -47,7 +47,7 @@ struct RecallIndex: Codable {
 }
 
 /// Meta voor goedkope versie-checks (meta.json).
-struct RecallMeta: Codable {
+nonisolated struct RecallMeta: Codable {
     let generatedAt: Date
     let schemaVersion: Int
     let windowMonths: Int
@@ -63,7 +63,7 @@ struct RecallMeta: Codable {
 }
 
 /// Spiegelt `matching_config` uit de index. Gebruikt door de MatchingService (Blok D).
-struct MatchingConfig: Codable, Hashable {
+nonisolated struct MatchingConfig: Codable, Hashable {
     let weights: Weights
     let thresholds: Thresholds
     let brandAliases: [String: String]
@@ -92,7 +92,7 @@ struct MatchingConfig: Codable, Hashable {
     }
 }
 
-extension JSONDecoder {
+nonisolated extension JSONDecoder {
     /// Decoder afgestemd op de index: tolerante datums ("2026-06-12" én volledige
     /// ISO-8601 met/zonder fractionele seconden).
     static var recallIndex: JSONDecoder {
@@ -108,7 +108,7 @@ extension JSONDecoder {
     }
 }
 
-enum RecallDateParser {
+nonisolated enum RecallDateParser {
     private static let isoFractional: ISO8601DateFormatter = {
         let f = ISO8601DateFormatter()
         f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]

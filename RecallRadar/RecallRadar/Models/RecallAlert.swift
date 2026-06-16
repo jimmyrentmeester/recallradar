@@ -14,13 +14,13 @@
 
 import Foundation
 
-enum AlertSource: String, Codable, Hashable {
+nonisolated enum AlertSource: String, Codable, Hashable {
     case safetyGate = "safety_gate"
     case nvwa
     case rasff // food-ready (later)
 }
 
-struct RecallAlert: Codable, Identifiable, Hashable {
+nonisolated struct RecallAlert: Codable, Identifiable, Hashable {
     let id: String
     let source: AlertSource
     let alertNumber: String
@@ -80,7 +80,7 @@ struct RecallAlert: Codable, Identifiable, Hashable {
     }
 }
 
-extension RecallAlert {
+nonisolated extension RecallAlert {
     var sourceURL: URL? { URL(string: sourceURLString) }
     var imageURL: URL? { imageURLString.flatMap(URL.init(string:)) }
     var imageURLs: [URL] { (imageURLStrings ?? []).compactMap { URL(string: $0) } }
