@@ -14,6 +14,10 @@ import SwiftData
 struct AddProductView: View {
     let store: RecallStore
     var editing: TrackedProduct?
+    /// Open meteen de scanner (vanuit de Toevoegen-hub "Scan de barcode").
+    var autoScan: Bool = false
+    /// Aangeroepen na opslaan i.p.v. dismiss — sluit de hele Toevoegen-hub.
+    var onFinish: (() -> Void)? = nil
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
@@ -28,14 +32,18 @@ struct AddProductView: View {
     @State private var showMatchAlert = false
     @FocusState private var nameFocused: Bool
 
-    init(store: RecallStore, editing: TrackedProduct? = nil) {
+    init(store: RecallStore, editing: TrackedProduct? = nil, autoScan: Bool = false, onFinish: (() -> Void)? = nil) {
         self.store = store
         self.editing = editing
+        self.autoScan = autoScan
+        self.onFinish = onFinish
         _brand = State(initialValue: editing?.brand ?? "")
         _model = State(initialValue: editing?.model ?? "")
         _barcode = State(initialValue: editing?.barcode ?? "")
         _category = State(initialValue: editing?.category ?? "overig")
     }
+
+    private func finish() { if let onFinish { onFinish() } else { dismiss() } }
 
     private var categoryCodes: [String] {
         store.index.categories.keys.sorted { store.index.categoryLabel($0) < store.index.categoryLabel($1) }
@@ -121,10 +129,11 @@ struct AddProductView: View {
             }
             .sheet(isPresented: $showScanner) { scannerSheet }
             .alert("Mogelijke recall gevonden", isPresented: $showMatchAlert, presenting: matchResult) { _ in
-                Button("Oké") { dismiss() }
+                Button("Oké") { finish() }
             } message: { m in
                 Text("\(m.alert.displayTitle) — \(store.index.riskLabel(m.alert.riskType)).\n\(confidenceText(m.tier)) Bekijk 'm bij Voor jou of in Verken.")
             }
+            .onAppear { if autoScan, barcode.isEmpty, BarcodeScanner.isScanningAvailable { showScanner = true } }
         }
     }
 
@@ -183,9 +192,9 @@ struct AddProductView: View {
 
         if let hit {
             matchResult = hit
-            showMatchAlert = true   // dismiss gebeurt na "Oké"
+            showMatchAlert = true   // finish gebeurt na "Oké"
         } else {
-            dismiss()
+            finish()
         }
     }
 }

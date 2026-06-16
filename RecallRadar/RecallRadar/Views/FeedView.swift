@@ -8,12 +8,19 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct FeedView: View {
     let store: RecallStore
+    @Query private var subscriptions: [Subscription]
 
     @State private var selectedCategory: String? = nil // nil = alle
     @State private var searchText: String = ""
+    @State private var onlyFollowed = false
+
+    private var followedCategories: Set<String> {
+        Set(subscriptions.filter { $0.kind == .category }.map(\.value))
+    }
 
     var body: some View {
         NavigationStack {
@@ -97,6 +104,7 @@ struct FeedView: View {
     private var categoryBar: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
+                if !followedCategories.isEmpty { mineChip }
                 chip(code: nil, label: "Alle", count: store.alerts.count)
                 ForEach(categoryOptions, id: \.code) { opt in
                     chip(code: opt.code, label: store.index.categoryLabel(opt.code), count: opt.count)
@@ -106,6 +114,19 @@ struct FeedView: View {
             .padding(.vertical, 8)
         }
         .background(.bar)
+    }
+
+    /// Snelfilter: alleen recalls in je gevolgde categorieën.
+    private var mineChip: some View {
+        Button { withAnimation(.snappy) { onlyFollowed.toggle(); if onlyFollowed { selectedCategory = nil } } } label: {
+            Label("Mijn categorieën", systemImage: "star.fill")
+                .font(.subheadline.weight(onlyFollowed ? .semibold : .regular))
+                .padding(.horizontal, DS.Space.md).padding(.vertical, 7)
+                .background(onlyFollowed ? DS.Color.brandPrimaryMuted : DS.Color.bgSecondary, in: Capsule())
+                .foregroundStyle(onlyFollowed ? DS.Color.brandPrimary : DS.Color.textPrimary)
+                .overlay(Capsule().stroke(DS.Color.separator, lineWidth: onlyFollowed ? 0 : 1))
+        }
+        .buttonStyle(.plain)
     }
 
     private func chip(code: String?, label: String, count: Int) -> some View {
@@ -151,6 +172,7 @@ struct FeedView: View {
     private var filtered: [RecallAlert] {
         let q = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         return store.alerts.filter { a in
+            if onlyFollowed, !followedCategories.contains(a.category) { return false }
             if let cat = selectedCategory, a.category != cat { return false }
             if q.isEmpty { return true }
             return [a.brandRaw, a.brand, a.modelRaw, a.model, a.alertNumber]

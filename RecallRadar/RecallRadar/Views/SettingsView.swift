@@ -65,17 +65,26 @@ struct SettingsView: View {
         } header: {
             Text("Meldingen")
         } footer: {
-            Text("Bij ernstige recalls waarschuwen we je altijd. Buiten de rustige uren tonen we meldingen meteen; 's nachts bundelen we ze tot de ochtend.")
+            Text("""
+            • Ernstige recalls (HOOG) krijg je altijd — die kun je niet uitzetten.
+            • Mogelijke matches: zachte "is dit van jou?"-vraag bij twijfelgevallen.
+            • Maandelijkse geruststelling: één bericht per maand, ook als er níéts geraakt is.
+            • Rustige uren: 's nachts geen meldingen — we bundelen ze tot 08:00.
+            """)
         }
     }
 
     // MARK: - Privacy
 
     private var privacySection: some View {
-        Section("Privacy") {
+        Section {
             row("iphone", "Op je toestel", "Je producten en gevolgde merken/categorieën blijven op je toestel en in je eigen iCloud.")
             row("person.crop.circle.badge.xmark", "Geen account", "De kernfunctie werkt zonder in te loggen.")
             row("hand.raised", "Geen tracking", "We sturen je productlijst nooit naar ons. Geen tracking of advertentie-SDK.")
+        } header: {
+            Text("Privacy")
+        } footer: {
+            Text("Recall Radar haalt alleen de publieke recall-lijst óp; jouw spullen worden lokaal vergeleken en gaan nooit het toestel uit.")
         }
     }
 

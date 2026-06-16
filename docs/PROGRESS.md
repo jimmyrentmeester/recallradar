@@ -4,7 +4,7 @@
 
 ## Status (samenvatting)
 - **Fase:** Bouw deel 2 — **Blokken B–E + F1/F2 af**. App is functioneel + App Store-waardig; alleen F3 (release) resteert.
-- **Laatst gewerkt aan:** Design-systeem alignment (DESIGN/ASSETS) + restpunten (contrast, onboarding-privacy, AboutView weg).
+- **Laatst gewerkt aan:** UX-herstructurering — dashboard-home, 4 tabs, gebundelde Toevoegen-hub, Settings-uitleg, feed-filter.
 - **Volgende stap:** Eigenaar uploadt **TestFlight build 2** (Archive → Distribute → Upload) en test op toestel. Daarna volledige App Store-release óf P1.
 
 ## Huidige sprint / focus
@@ -16,6 +16,14 @@
 - [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [x] F3 TestFlight — **build live op toestel** · [ ] F3 volledige App Store-release
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — UX-herstructurering: dashboard + 4 tabs + Toevoegen-hub)
+- **4 tabs:** Thuis (dashboard) · Mijn spullen (beheer) · Verken (feed) · Instellingen. (`ContentView` met tab-selectie-binding.)
+- **Thuis = puur dashboard** (`HomeView`): status-hero, "is dit van jou?", "Voor jou", een "Je bewaakt X · Y"-regel die naar Mijn spullen springt, en één primaire **+ Toevoegen**. Beheer-UI (toggles/lijsten/merkveld) van de home gehaald.
+- **`ManageView` ("Mijn spullen"):** beheer van producten (tik=bewerken, veeg=verwijderen), gevolgde categorieën en merken, met lege staat + Toevoegen.
+- **Gebundelde Toevoegen-hub** (`AddHubView`): één overzicht met paden — Scan barcode · Handmatig product · Categorieën volgen (`FollowCategoriesView`) · Merk volgen (`FollowBrandView`, autocomplete). Sluit de hele hub na voltooien (`onFinish`); `AddProductView` kreeg `autoScan` + `onFinish`.
+- **Instellingen-uitleg** aangescherpt (per-trede meldingen + privacy-footers). **Verken:** snelfilter **"Mijn categorieën"**.
+- `MyStuffView` verwijderd. Tests groen; build SUCCEEDED; dashboard + hub visueel geverifieerd. Zit in **build 2**.
+
 ### 2026-06-16 (sessie 2 — Design-systeem alignment op DESIGN/ASSETS-docs)
 - **DESIGN_Recall-Radar.md + ASSETS_Recall-Radar.md gevonden** (zaten niet in de repo, ontbraken in de eerste kopieerlijst) → naar `docs/reference/` gekopieerd en geïnterpreteerd; app erop gealignd (volledige scope).
 - **Color Assets:** alle tokens uit ASSETS B (brand-teal, bg/text, risk- + reassure-tokens) als Color Sets met **light+dark**; `AccentColor` = brand-teal → app-breed teal accent. `DesignSystem.swift` mapt tokens + `DS.Space`/`DS.Radius` (4-grid, 8/12/20).
