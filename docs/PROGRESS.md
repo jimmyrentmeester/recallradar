@@ -3,16 +3,24 @@
 > Houd dit bij aan het einde van elke Claude Code-sessie, zodat de volgende sessie (of een verse context) direct verder kan. Zelfde workflow als je toddler-games.
 
 ## Status (samenvatting)
-- **Fase:** Bouw deel 2 — **C1+C2+C3 af, B6 live**. Feed draait in de Simulator op de live cloud-index.
-- **Laatst gewerkt aan:** C3 — browsebare feed met categoriefilter + zoeken + detailscherm.
-- **Volgende stap:** **C4** (recall-detail afronden: foto-galerij, delen, toegankelijkheid) — kern staat al. Daarna Blok D (toevoegen + matching). Eigenaar: iCloud-capability in Xcode bevestigen + C2/C3-commits pushen.
+- **Fase:** Bouw deel 2 — **Blok C af + D3 (MatchingService) af**. Feed live; matching-engine puur & getest.
+- **Laatst gewerkt aan:** D3 — `MatchingService` + `Normalizer` (Swift-port van util.js), 24 headless unit-tests groen.
+- **Volgende stap:** **D1** (onboarding merk/categorie volgen) + **D2** (product toevoegen + barcode-scan) + **D4** ("is dit van jou?"-bevestiging) — die hangen aan de nu-werkende MatchingService.
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
 - [x] Blok A — Xcode-project scaffold (door eigenaar in Xcode) ✅
 - [ ] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [x] C3 feed · [~] C4 detail (kern af)
+- [ ] Blok D — toevoegen & matching: [ ] D1 onboarding · [ ] D2 toevoegen+scan · [x] D3 MatchingService · [ ] D4 "is dit van jou?"
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Blok D3: MatchingService)
+- **`Services/Normalizer.swift`** — Swift-port van `ingestion/src/util.js` (tekst/model/barcode-normalisatie + Jaro-Winkler). MOET identiek aan util.js zijn, want alert-velden zijn al door util.js genormaliseerd.
+- **`Services/MatchingService.swift`** — puur & `nonisolated`, werkt op value-types (`MatchableProduct`, geen SwiftData). Scoring + tredes uit de `MatchingConfig` die in de index meereist. Feedback-loop: confirmed → HOOG, suppressed → GEEN. Aparte follow-tak (merk → MIDDEL, categorie → feed/LAAG).
+- **`MatchingTests/main.swift`** — 24 headless assertions, allemaal groen (buiten de app-target; draaien via `swiftc`). App-build blijft SUCCEEDED.
+- **Tuning-observatie:** barcode-exact = 70 → **MIDDEL** (HOOG-drempel is 75). Een kale barcode-scan vraagt dus "is dit van jou?"; barcode + categorie (uit de index, zoals de scan-flow vult) = 85 → HOOG. Bump `barcodeExact` naar 75 in `ingestion/src/config.js` als je scan-only wél wilt laten pushen.
+- GitHub-push gaat nu zonder prompt (token in macOS-keychain via osxkeychain-helper).
+
 ### 2026-06-16 (sessie 2 — Blok C3)
 - **C3 feed gebouwd:** `Views/FeedView.swift` (categoriefilter-chips, jonge-gezin-spits vooraan, `.searchable` op merk/model, states), `Views/RecallRow.swift` (thumbnail + categorie/risico/datum/bronbadge), `Views/RecallDetailView.swift` (handelingsadvies, foto, batch/lot, bronknop(pen), disclaimer — C4-kern), `Views/CategoryStyle.swift` (SF Symbols + risicokleur). `ContentView` host de feed in een NavigationStack.
 - **Concurrency-fix (belangrijk projectdetail):** project staat op **Swift 6.2 default main-actor isolation** → pure modellen/decoders gemarkeerd `nonisolated` (`RecallAlert`, `RecallIndex`, `MatchingConfig`, `RecallMeta`, `JSONDecoder.recallIndex`, `RecallDateParser`, `RecallIndex.empty`) zodat de `IndexService`-actor ze off-main kan decoderen. `swiftc -typecheck` mist dit; alleen een echte `xcodebuild build` vangt het. Vastgelegd in memory.
