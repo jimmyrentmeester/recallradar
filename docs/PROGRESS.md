@@ -3,17 +3,25 @@
 > Houd dit bij aan het einde van elke Claude Code-sessie, zodat de volgende sessie (of een verse context) direct verder kan. Zelfde workflow als je toddler-games.
 
 ## Status (samenvatting)
-- **Fase:** Bouw deel 2 — **Blok C + Blok D volledig af**. Index live; download/cache, SwiftData/CloudKit, feed+detail, onboarding/volgen/toevoegen/scan en matching+bevestiging werken.
-- **Laatst gewerkt aan:** D4 — "is dit van jou?"-bevestiging + "Voor jou" verfijnd (persoonlijke matches i.p.v. categorie-flood).
-- **Volgende stap:** **Blok E** — BGAppRefreshTask (dagelijkse refresh + match-only-nieuwe), lokale notificaties per trede + bundeling + rustige uren, maandelijkse geruststelling-digest (P0-6).
+- **Fase:** Bouw deel 2 — **Blokken B–E af**. Volledige P0-app: index live, on-device matching, feed/detail, onboarding/volgen/toevoegen/scan, bevestiging, notificaties + digest.
+- **Laatst gewerkt aan:** Blok E — BGAppRefreshTask + lokale notificaties + maandelijkse digest.
+- **Volgende stap:** **Blok F** — privacy-labels, camera-uitleg, disclaimer-scherm (F1); lege/foutstaten + "laatst bijgewerkt" (F2); TestFlight + App Store-listing (F3).
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
 - [x] Blok A — Xcode-project scaffold (door eigenaar in Xcode) ✅
 - [x] Blok C — app-kern: [x] C1 modellen+download/cache · [x] C2 SwiftData · [x] C3 feed · [x] C4 detail
 - [x] Blok D — toevoegen & matching: [x] D1 onboarding · [x] D2 toevoegen+scan · [x] D3 MatchingService · [x] D4 "is dit van jou?"
+- [x] Blok E — notificaties & retentie: [x] E1 BGAppRefreshTask · [x] E2 lokale notificaties (trede/bundel/rustige uren) · [x] E3 maandelijkse digest
 
 ## Logboek (nieuwste boven)
+### 2026-06-16 (sessie 2 — Blok E: notificaties & retentie)
+- **E1 `BackgroundRefresh`:** BGAppRefreshTask (`jire.RecallRadar.refresh`, in Info.plist) — registreert bij launch, plant ~1×/dag, ververst de index en matcht **alleen nieuwe/gewijzigde** alerts (watermark op `updatedAt`; eerste run = baseline, geen backlog-spam). Dedup van gepushte alert-ids in `NotifState` (UserDefaults).
+- **E2 notificaties:** `NotificationPlanner` (puur, getest) — bundeling per trede (HOOG alarm / MIDDEL zacht) + rustige uren (22–08 → uitstellen tot 08:00). `NotificationService` wrapt UNUserNotificationCenter. Permissie wordt gevraagd na onboarding + via een "Zet meldingen aan"-rij voor wie de onboarding oversloeg. **Permissie-prompt live geverifieerd in Simulator.**
+- **E3 digest:** maandelijkse geruststelling-digest in de refresh (≥28 dagen → "deze maand raakte geen enkele recall jouw N items"), ook bij nul matches.
+- **Tests:** +14 headless planner-assertions groen (totaal 38). App-build SUCCEEDED.
+- Visueel bevestigd: "Voor jou" toont nu correct de groene geruststelling (geen categorie-flood); permissie-prompt verschijnt en de "Zet meldingen aan"-rij verdwijnt na toestaan.
+
 ### 2026-06-16 (sessie 2 — Blok D4)
 - **"Is dit van jou?"-bevestiging:** nieuwe sectie in `MyStuffView` voor MIDDEL bezit-matches met Ja / Nee / Weet-ik-niet → schrijft naar `confirmedMatches`/`suppressedMatches` (Ja → toekomstig HOOG, Nee → onderdrukt). Logica gedekt door de bestaande matching-unit-tests.
 - **"Voor jou" verfijnd:** `MatchBridge.personalMatches` toont nu alleen bezit-matches (≥ MIDDEL) + gevolgde-merk-meldingen; **categorie-follows zijn eruit** (die horen in de feed). Een gebruiker die alleen categorieën volgt ziet de groene geruststelling + verwijzing naar de Feed.
