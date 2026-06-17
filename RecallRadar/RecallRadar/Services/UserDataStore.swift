@@ -49,6 +49,12 @@ struct UserDataStore {
         try? context.save()
     }
 
+    /// Verberg een afgehandelde match van het dashboard (recall blijft in detail/feed).
+    func dismissAlert(_ alertID: String) {
+        context.insert(DismissedAlert(alertID: alertID))
+        try? context.save()
+    }
+
     func allProducts() -> [TrackedProduct] {
         let descriptor = FetchDescriptor<TrackedProduct>(
             sortBy: [SortDescriptor(\.addedAt, order: .reverse)]

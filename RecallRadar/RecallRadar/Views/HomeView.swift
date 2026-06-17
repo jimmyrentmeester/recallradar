@@ -15,6 +15,7 @@ struct HomeView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \TrackedProduct.addedAt, order: .reverse) private var products: [TrackedProduct]
     @Query(sort: \Subscription.addedAt, order: .reverse) private var subscriptions: [Subscription]
+    @Query private var dismissedAlerts: [DismissedAlert]
 
     @State private var matches: [ScoredAlert] = []
     @State private var notifAuthorized = true
@@ -36,8 +37,13 @@ struct HomeView: View {
             MatchBridge.compute(products: snap.products, brandFollows: snap.brandFollows, alerts: alerts, config: config)
         }.value
     }
-    private var pending: [ScoredAlert] { matches.filter { $0.kind == .product && $0.tier == .medium } }
-    private var forYou: [ScoredAlert] { matches.filter { $0.tier == .high || $0.kind == .brandFollow } }
+    private var dismissedIDs: Set<String> { Set(dismissedAlerts.map(\.alertID)) }
+    private var pending: [ScoredAlert] {
+        matches.filter { $0.kind == .product && $0.tier == .medium && !dismissedIDs.contains($0.alert.id) }
+    }
+    private var forYou: [ScoredAlert] {
+        matches.filter { ($0.tier == .high || $0.kind == .brandFollow) && !dismissedIDs.contains($0.alert.id) }
+    }
     private func product(for s: ScoredAlert) -> TrackedProduct? {
         guard let pid = s.productID else { return nil }
         return products.first { $0.id.uuidString == pid }
@@ -134,15 +140,15 @@ struct HomeView: View {
                         Text("Lijkt op: \(p.displayName)").font(.caption).foregroundStyle(DS.Color.textSecondary)
                     }
                     NavigationLink(value: scored) { RecallRow(alert: scored.alert, index: store.index) }
-                    HStack {
+                    HStack(spacing: DS.Space.sm) {
                         Button { if let p = product(for: scored) { data.confirmMatch(p, alertID: scored.alert.id) } } label: {
-                            Label("Ja, van mij", systemImage: "checkmark")
-                        }.buttonStyle(.borderedProminent).controlSize(.small)
+                            Label("Ja, van mij", systemImage: "checkmark").frame(maxWidth: .infinity)
+                        }.buttonStyle(.borderedProminent)
                         Button { if let p = product(for: scored) { data.suppressMatch(p, alertID: scored.alert.id) } } label: {
-                            Label("Nee", systemImage: "xmark")
-                        }.buttonStyle(.bordered).controlSize(.small)
-                        Spacer()
+                            Label("Nee", systemImage: "xmark").frame(maxWidth: .infinity)
+                        }.buttonStyle(.bordered)
                     }
+                    .controlSize(.small)
                 }
                 .padding(.vertical, 2)
             }
@@ -154,7 +160,7 @@ struct HomeView: View {
     }
 
     private var matchesSection: some View {
-        Section("Voor jou") {
+        Section {
             ForEach(forYou.prefix(30)) { scored in
                 NavigationLink(value: scored) {
                     VStack(alignment: .leading, spacing: DS.Space.sm) {
@@ -162,7 +168,15 @@ struct HomeView: View {
                         RecallRow(alert: scored.alert, index: store.index)
                     }
                 }
+                .swipeActions(edge: .trailing) {
+                    Button { data.dismissAlert(scored.alert.id) } label: { Label("Gereed", systemImage: "checkmark") }
+                        .tint(DS.Color.reassureGreen)
+                }
             }
+        } header: {
+            Text("Voor jou")
+        } footer: {
+            Text("Afgehandeld? Veeg naar links en tik op Gereed om het hier te verbergen.")
         }
     }
 

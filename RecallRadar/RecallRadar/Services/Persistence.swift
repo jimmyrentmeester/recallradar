@@ -11,7 +11,7 @@ import Foundation
 import SwiftData
 
 enum Persistence {
-    static let schema = Schema([TrackedProduct.self, Subscription.self])
+    static let schema = Schema([TrackedProduct.self, Subscription.self, DismissedAlert.self])
 
     /// Probeert CloudKit; valt terug op lokaal bij ontbrekende capability/entitlement.
     static func makeContainer(inMemory: Bool = false) -> ModelContainer {
