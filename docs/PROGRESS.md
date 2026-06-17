@@ -3,9 +3,9 @@
 > Houd dit bij aan het einde van elke Claude Code-sessie, zodat de volgende sessie (of een verse context) direct verder kan. Zelfde workflow als je toddler-games.
 
 ## Status (samenvatting)
-- **Fase:** Bouw deel 2 — **Blokken B–E + F1/F2 af**. App is functioneel + App Store-waardig; alleen F3 (release) resteert.
-- **Laatst gewerkt aan:** UX-herstructurering — dashboard-home, 4 tabs, gebundelde Toevoegen-hub, Settings-uitleg, feed-filter.
-- **Volgende stap:** Eigenaar uploadt **TestFlight build 2** (Archive → Distribute → Upload) en test op toestel. Daarna volledige App Store-release óf P1.
+- **Fase:** P0 compleet + meerdere feedbackrondes; **P1 gestart** (OCR typeplaatje). Build 6.
+- **Laatst gewerkt aan:** dashboard-match afhandelen (swipe Gereed) + knop-uitlijning; P1 OCR typeplaatje-flow.
+- **Volgende stap:** Eigenaar uploadt **build 6** en test (vooral typeplaatje-scan op toestel). Daarna rest van P1 (bon-import, gezin-delen, widget, Pro).
 
 ## Huidige sprint / focus
 - [x] Blok B — ingestion tot geldige gepubliceerde index ✅
@@ -14,8 +14,16 @@
 - [x] Blok D — toevoegen & matching: [x] D1 onboarding · [x] D2 toevoegen+scan · [x] D3 MatchingService · [x] D4 "is dit van jou?"
 - [x] Blok E — notificaties & retentie: [x] E1 BGAppRefreshTask · [x] E2 lokale notificaties (trede/bundel/rustige uren) · [x] E3 maandelijkse digest
 - [ ] Blok F — afronding: [x] F1 disclaimer/privacy · [x] F2 lege/fout/offline-staten · [x] F3 TestFlight — **build live op toestel** · [ ] F3 volledige App Store-release
+- [ ] P1 (na launch): [~] OCR ([x] typeplaatje · [ ] bon-import) · [ ] gezin-delen · [ ] widget · [ ] Pro-unlock
 
 ## Logboek (nieuwste boven)
+### 2026-06-17 (sessie 2 — Feedback-fixes + P1-start: OCR typeplaatje)
+- **Dashboard-match afhandelen:** "Voor jou"-items hebben een swipe-actie **"Gereed"** → `DismissedAlert` (SwiftData/iCloud) verbergt ze van Thuis (recall blijft in detail/feed). pending/forYou filteren dismissed eruit.
+- **Knop-uitlijning:** "Ja, van mij" / "Nee" bij "is dit van jou?" nu gelijke breedte + gecentreerd.
+- **P1 — OCR typeplaatje:** `LabelScannerView` (VisionKit live tekst, tik-op-tekst) + `ScanLabelView` (tik merk → tik typenummer → voorgevuld `AddProductView` via nieuwe `prefillBrand/prefillModel`). Nieuwe hub-rij "Scan het typeplaatje". Device-gated met nette fallback op Simulator. Geverifieerd.
+- Build → 6. Tests groen; build SUCCEEDED.
+- *Open binnen OCR:* bon-import (foto/PDF → meerdere producten) als volgende sub-stap.
+
 ### 2026-06-16 (sessie 2 — Feedback: icoon, notificatie-bereik, dashboard-opschoning)
 - **App-icoon → "retour-doos"** (`shippingbox.and.arrow.backward`, gecentreerd, teal, light/dark/tinted, opaque) — sterker recall-thema dan de radar. Generator op AppKit+CoreGraphics.
 - **Notificatie-bereik per bron** (gekozen model): `Subscription.pushScope` = feed / alleen-ernstige / alles; per gevolgde categorie/merk instelbaar via menu in "Mijn spullen". Producten: HOOG pusht altijd, MIDDEL via toggle. Globale opt-in **"Alle ernstige recalls"** in Instellingen (`NotifPrefs.allCriticalEnabled`). Push-beslissing in `MatchBridge.pushItems` (+ `MatchingService.isSerious`); BackgroundRefresh gebruikt het. `pushEnabled` vervangen door scope.

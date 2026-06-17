@@ -22,6 +22,11 @@ struct AddHubView: View {
                         row("barcode.viewfinder", "Scan de barcode", "De snelste manier")
                     }
                     NavigationLink {
+                        ScanLabelView(store: store) { dismiss() }
+                    } label: {
+                        row("text.viewfinder", "Scan het typeplaatje", "Lees merk en typenummer")
+                    }
+                    NavigationLink {
                         AddProductView(store: store) { dismiss() }
                     } label: {
                         row("pencil.and.list.clipboard", "Handmatig invoeren", "Merk, model en categorie")

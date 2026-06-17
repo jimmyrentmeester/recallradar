@@ -32,13 +32,14 @@ struct AddProductView: View {
     @State private var showMatchAlert = false
     @FocusState private var nameFocused: Bool
 
-    init(store: RecallStore, editing: TrackedProduct? = nil, autoScan: Bool = false, onFinish: (() -> Void)? = nil) {
+    init(store: RecallStore, editing: TrackedProduct? = nil, autoScan: Bool = false,
+         prefillBrand: String? = nil, prefillModel: String? = nil, onFinish: (() -> Void)? = nil) {
         self.store = store
         self.editing = editing
         self.autoScan = autoScan
         self.onFinish = onFinish
-        _brand = State(initialValue: editing?.brand ?? "")
-        _model = State(initialValue: editing?.model ?? "")
+        _brand = State(initialValue: editing?.brand ?? prefillBrand ?? "")
+        _model = State(initialValue: editing?.model ?? prefillModel ?? "")
         _barcode = State(initialValue: editing?.barcode ?? "")
         _category = State(initialValue: editing?.category ?? "overig")
     }
