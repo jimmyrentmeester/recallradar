@@ -8,6 +8,7 @@
 //
 
 import SwiftUI
+import SwiftData
 import Translation
 
 struct RecallDetailView: View {
@@ -18,15 +19,20 @@ struct RecallDetailView: View {
     /// Gematchte signalen voor "Waarom zie ik dit?" (§3.6).
     var signals: [String] = []
 
+    @Environment(\.modelContext) private var context
+    @Query private var products: [TrackedProduct]
+
     // On-device vertaling van de Engelse risico-omschrijving (Safety Gate) → NL.
     @State private var translatedDesc: String?
     @State private var translationConfig: TranslationSession.Configuration?
+    @State private var justAdded = false
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 gallery
                 header
+                iHaveThis
                 actionAdvice
                 if !signals.isEmpty { confidence }
                 details
@@ -111,6 +117,38 @@ struct RecallDetailView: View {
     }
 
     private var shareURL: URL? { alert.sourceURL }
+
+    // "Ik heb dit product" — voegt het toe aan Mijn spullen én bevestigt de match,
+    // zodat het meteen bij "Voor jou" verschijnt (snel toevoegen vanuit de feed).
+    private var alreadyTracked: Bool {
+        products.contains { p in
+            if let pb = Normalizer.barcode(p.barcode), let ab = alert.barcode, pb == ab { return true }
+            let sameBrand = !Normalizer.text(p.brand).isEmpty && Normalizer.text(p.brand) == (alert.brand ?? "")
+            let sameModel = !Normalizer.model(p.model).isEmpty && Normalizer.model(p.model) == (alert.model ?? "")
+            return sameBrand && sameModel
+        }
+    }
+
+    @ViewBuilder private var iHaveThis: some View {
+        if justAdded || alreadyTracked {
+            Label("Staat in Mijn spullen", systemImage: "checkmark.circle.fill")
+                .font(.subheadline)
+                .foregroundStyle(DS.Color.reassureGreen)
+        } else {
+            Button {
+                let store = UserDataStore(context)
+                let p = store.addProduct(brand: alert.displayBrand, model: alert.displayModel,
+                                         category: alert.category, barcode: alert.barcode)
+                store.confirmMatch(p, alertID: alert.id)
+                justAdded = true
+            } label: {
+                Label("Ik heb dit product", systemImage: "plus.circle.fill")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+        }
+    }
 
     // Accent-header (§4.4): het enige scherm waar risicokleur prominent mag zijn.
     private var header: some View {

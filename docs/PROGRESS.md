@@ -17,6 +17,15 @@
 - [ ] P1 (na launch): [~] OCR ([x] typeplaatje · [ ] bon-import) · [ ] gezin-delen · [ ] widget · [ ] Pro-unlock
 
 ## Logboek (nieuwste boven)
+### 2026-06-17 (sessie 2 — Feedbackronde: onboarding v2, naamgeving, notif, feed-fix)
+- **"Typeplaatje" → "Scan merk en model"** (plainere taal) in hub + scanner-titel/prompts.
+- **Onboarding v2** — stapsgewijs (paged): wat-is-het + verwachtingen (3 scanbare bullets) · privacy · categorie-keuze · "Je radar staat aan" + meldingen-in-context. "Overslaan" altijd zichtbaar.
+- **"Rustige uren" verwijderd** — overbodig; iPhone Focus/Slaapstand regelt dit. Toggle + pref weg; pushes worden direct afgeleverd. Footer verwijst naar Focus.
+- **Feed-filter "Mijn categorieën" gefixt** — chips waren niet wederzijds-exclusief ("Alle" bleef ook geselecteerd, categorie-tik reset het filter niet). Nu: tikken op een categorie/Alle zet onlyFollowed uit; "Mijn categorieën" is een aparte exclusieve staat.
+- **Snel toevoegen vanuit de feed** — "Ik heb dit product"-knop in het recall-detail: voegt toe aan Mijn spullen **én bevestigt de match** → meteen bij "Voor jou". Toont "Staat in Mijn spullen" als het al bewaakt wordt.
+- **Refresh-interval verhoogd** — BGAppRefresh vroegst ~1u (i.p.v. 24u; 304's goedkoop via ETag); ingestion-cron **elke 6u** i.p.v. dagelijks (versere data; app kan nooit verser zijn dan de gepubliceerde index).
+- Build → 7. Tests groen; build SUCCEEDED; onboarding v2 visueel geverifieerd.
+
 ### 2026-06-17 (sessie 2 — Feedback-fixes + P1-start: OCR typeplaatje)
 - **Dashboard-match afhandelen:** "Voor jou"-items hebben een swipe-actie **"Gereed"** → `DismissedAlert` (SwiftData/iCloud) verbergt ze van Thuis (recall blijft in detail/feed). pending/forYou filteren dismissed eruit.
 - **Knop-uitlijning:** "Ja, van mij" / "Nee" bij "is dit van jou?" nu gelijke breedte + gecentreerd.

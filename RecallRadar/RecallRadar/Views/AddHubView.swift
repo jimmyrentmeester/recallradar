@@ -24,7 +24,7 @@ struct AddHubView: View {
                     NavigationLink {
                         ScanLabelView(store: store) { dismiss() }
                     } label: {
-                        row("text.viewfinder", "Scan het typeplaatje", "Lees merk en typenummer")
+                        row("text.viewfinder", "Scan merk en model", "Van het label of de sticker op het product")
                     }
                     NavigationLink {
                         AddProductView(store: store) { dismiss() }

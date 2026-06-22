@@ -1,9 +1,11 @@
 name: Ingestion (Safety Gate + NVWA → index.json)
 
-# Blok B6 — dagelijkse cron die de index bouwt en naar de gh-pages branch publiceert.
+# Blok B6 — cron die de index bouwt en naar de gh-pages branch publiceert.
+# Elke 6 uur → versere data (de bron ververst vaker dan dagelijks); de app kan
+# nooit versere data tonen dan de gepubliceerde index, dus dit is de echte limiet.
 on:
   schedule:
-    - cron: '0 4 * * *' # 04:00 UTC, 1×/dag
+    - cron: '0 */6 * * *' # elke 6 uur (4×/dag)
   workflow_dispatch: {} # handmatig draaien vanuit de Actions-tab
 
 permissions:

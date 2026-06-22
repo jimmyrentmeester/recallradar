@@ -29,7 +29,7 @@ struct ScanLabelView: View {
                 unavailable
             }
         }
-        .navigationTitle("Typeplaatje scannen")
+        .navigationTitle("Merk en model scannen")
         .navigationBarTitleDisplayMode(.inline)
     }
 
@@ -62,14 +62,14 @@ struct ScanLabelView: View {
         ContentUnavailableView {
             Label("Scannen niet beschikbaar", systemImage: "camera.fill")
         } description: {
-            Text("Het typeplaatje scannen werkt op een echt toestel met camera. Voer het product hier handmatig in.")
+            Text("Scannen werkt op een echt toestel met camera. Voer het product hier handmatig in.")
         } actions: {
             Button("Handmatig invoeren") { goToForm = true }.buttonStyle(.borderedProminent)
         }
     }
 
     private var prompt: String {
-        brand.isEmpty ? "Tik op het merk op het typeplaatje" : "Tik op het typenummer (of Klaar)"
+        brand.isEmpty ? "Tik op het merk op het label" : "Tik op het model- of typenummer (of Klaar)"
     }
 
     private func capture(_ text: String) {

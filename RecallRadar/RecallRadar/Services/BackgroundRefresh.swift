@@ -44,10 +44,6 @@ enum NotifPrefs {
         get { d.object(forKey: "pref.digest") as? Bool ?? true }
         set { d.set(newValue, forKey: "pref.digest") }
     }
-    static var quietHoursEnabled: Bool {
-        get { d.object(forKey: "pref.quiet") as? Bool ?? true }
-        set { d.set(newValue, forKey: "pref.quiet") }
-    }
     /// Globale opt-in: push álle ernstige recalls, ook buiten je spullen. Standaard uit.
     static var allCriticalEnabled: Bool {
         get { d.object(forKey: "pref.allCritical") as? Bool ?? false }
@@ -67,7 +63,9 @@ enum BackgroundRefresh {
 
     static func scheduleNext() {
         let request = BGAppRefreshTaskRequest(identifier: taskID)
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 24 * 60 * 60)
+        // Vroegst over ~1 uur; iOS plant de echte tijd op basis van gebruik. Goedkoop:
+        // ongewijzigde index → HTTP 304 dankzij de ETag.
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 60 * 60)
         try? BGTaskScheduler.shared.submit(request)
     }
 
@@ -106,9 +104,9 @@ enum BackgroundRefresh {
             let alreadyNotified = NotifState.notifiedIDs
             let fresh = items.filter { !alreadyNotified.contains($0.alertID) }
             if !fresh.isEmpty {
-                let q = NotifPrefs.quietHoursEnabled ? (22, 8) : (0, 0)
+                // Rustige uren overgelaten aan iPhone Focus/Slaapstand → direct afleveren.
                 await NotificationService.schedule(
-                    NotificationPlanner.plan(items: fresh, now: .now, quietStartHour: q.0, quietEndHour: q.1)
+                    NotificationPlanner.plan(items: fresh, now: .now, quietStartHour: 0, quietEndHour: 0)
                 )
                 NotifState.notifiedIDs = alreadyNotified.union(fresh.map(\.alertID))
             }

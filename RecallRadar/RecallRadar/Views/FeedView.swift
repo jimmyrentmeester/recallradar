@@ -130,9 +130,9 @@ struct FeedView: View {
     }
 
     private func chip(code: String?, label: String, count: Int) -> some View {
-        let selected = selectedCategory == code
+        let selected = selectedCategory == code && !onlyFollowed
         return Button {
-            withAnimation(.snappy) { selectedCategory = code }
+            withAnimation(.snappy) { selectedCategory = code; onlyFollowed = false }
         } label: {
             HStack(spacing: 5) {
                 if let code { Image(systemName: CategoryStyle.icon(code)) }
